@@ -184,7 +184,7 @@ class FunctionDescriptor(SymbolTableEntry):
 
     @staticmethod
     def create_datatype_tester(constructor_name: str, datatype_sort_descriptor: SortDescriptor):
-        tester_identifier = Identifier('is', [constructor_name])
+        tester_identifier = Identifier('is', constructor_name)
         result = FunctionDescriptor(tester_identifier)
         result.function_kind = FunctionKind.DATATYPE_TESTER
         result.introduced_type_parameters = None
@@ -310,6 +310,12 @@ class Resolver(ABC):
 
 
 class CoreResolver(Resolver):
+    _boolean_sort = SortDescriptor.create_sort('Bool', 0, SortKind.PRIMITIVE)
+
+    @classmethod
+    def get_boolean_sort(cls):
+        return cls._boolean_sort
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 
@@ -318,6 +324,12 @@ class CoreResolver(Resolver):
 
 
 class IntegerResolver(Resolver):
+    _integer_sort = SortDescriptor.create_sort('Int', 0, SortKind.PRIMITIVE)
+
+    @classmethod
+    def get_integer_sort(cls):
+        return cls._integer_sort
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 
@@ -326,6 +338,12 @@ class IntegerResolver(Resolver):
 
 
 class RealResolver(Resolver):
+    _real_sort = SortDescriptor.create_sort('Real', 0, SortKind.PRIMITIVE)
+
+    @classmethod
+    def get_real_sort(cls):
+        return cls._real_sort
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 
@@ -334,6 +352,12 @@ class RealResolver(Resolver):
 
 
 class ArrayResolver(Resolver):
+    _array_sort = SortDescriptor.create_sort('Array', 2, SortKind.PRIMITIVE)
+
+    @classmethod
+    def get_array_sort(cls):
+        return cls._array_sort
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 
@@ -342,6 +366,12 @@ class ArrayResolver(Resolver):
 
 
 class StringResolver(Resolver):
+    _string_sort = SortDescriptor.create_sort('String', 0, SortKind.PRIMITIVE)
+
+    @classmethod
+    def get_string_sort(cls):
+        return cls._string_sort
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 
@@ -350,6 +380,19 @@ class StringResolver(Resolver):
 
 
 class BitVectorResolver(Resolver):
+    _bit_vector_sorts: Dict[int, SortDescriptor] = {}
+
+    @classmethod
+    def get_bit_vector_sort(cls, size: int):
+        result = cls._bit_vector_sorts.get(size, None)
+
+        if result is None:
+            identifier = Identifier('BitVec', size)
+            result = SortDescriptor.create_sort(identifier, 0, SortKind.PRIMITIVE)
+            cls._bit_vector_sorts[size] = result
+
+        return result
+
     def resolve_sort_impl(self, identifier: Identifier):
         pass
 

@@ -2,7 +2,7 @@
 
 import sys
 from abc import abstractmethod
-from typing import Union
+from typing import Union, List
 
 if __name__ == '__main__':
     print('This file is intended to be used as a library module.')
@@ -70,7 +70,7 @@ class Hashable(object):
 class Identifier(Hashable):
     __slots__ = ('symbol', 'indices', '_hash')
 
-    def __init__(self, symbol, indices=None):
+    def __init__(self, symbol: str, *indices: Union[str, int]):
         super().__init__()
         self.symbol = symbol
         if indices is not None and len(indices) > 0:
