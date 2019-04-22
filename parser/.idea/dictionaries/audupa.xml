@@ -2,11 +2,58 @@
   <dictionary name="audupa">
     <words>
       <w>arities</w>
+      <w>binconst</w>
+      <w>boolconst</w>
+      <w>bvadd</w>
+      <w>bvand</w>
+      <w>bvashr</w>
+      <w>bvcomp</w>
+      <w>bvlshr</w>
+      <w>bvmul</w>
+      <w>bvnand</w>
+      <w>bvneg</w>
+      <w>bvnor</w>
+      <w>bvnot</w>
+      <w>bvor</w>
+      <w>bvsdiv</w>
+      <w>bvsge</w>
+      <w>bvsgt</w>
+      <w>bvshl</w>
+      <w>bvsle</w>
+      <w>bvslt</w>
+      <w>bvsmod</w>
+      <w>bvsrem</w>
+      <w>bvsub</w>
+      <w>bvudiv</w>
+      <w>bvuge</w>
+      <w>bvugt</w>
+      <w>bvule</w>
+      <w>bvult</w>
+      <w>bvurem</w>
+      <w>bvxnor</w>
+      <w>bvxor</w>
       <w>canonicalize</w>
+      <w>chainable</w>
       <w>datatype</w>
       <w>datatypes</w>
+      <w>decl</w>
+      <w>descs</w>
+      <w>forall</w>
+      <w>gterm</w>
+      <w>hexconst</w>
+      <w>hexdigit</w>
+      <w>indexof</w>
+      <w>lparen</w>
       <w>nonterminal</w>
       <w>nonterminals</w>
+      <w>prefixof</w>
+      <w>reals</w>
+      <w>rparen</w>
+      <w>stringconst</w>
+      <w>substr</w>
+      <w>suffixof</w>
+      <w>sygus</w>
+      <w>symbolcc</w>
       <w>synth</w>
       <w>synthfun</w>
       <w>synthinv</w>
