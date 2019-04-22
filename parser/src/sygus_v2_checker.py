@@ -1,9 +1,8 @@
 #!/usr/bin/python
 
 import argparse
-from sygus_v2_parser import SygusV2Parser
-from sygus_v2_lexer import SygusV2Lexer
-from visitors import SymbolTableBuilder
+from lib.sygus_v2_parser import SygusV2Parser
+from lib.visitors import SymbolTableBuilder
 
 
 def _parse_args():
@@ -17,10 +16,6 @@ def _main():
 
     with open(args.input_file, 'r') as f:
         contents = f.read()
-
-    # lexer = SygusV2Lexer()
-    # for tok in lexer.lex(contents):
-    #     print(tok)
 
     parser = SygusV2Parser()
     program = parser.parse(contents)

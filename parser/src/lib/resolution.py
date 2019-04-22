@@ -1,13 +1,14 @@
 #!/usr/bin/python
 
 import inspect
-import utilities
-from utilities import Identifier, Hashable
 from typing import Union, List, Tuple, Dict, Set
 from enum import Enum
 from abc import ABC, abstractmethod
-import ast
-import exceptions
+
+from . import ast
+from . import utilities
+from .utilities import Identifier, Hashable
+from . import exceptions
 
 
 class SymbolTableEntryKind(Enum):
@@ -498,7 +499,7 @@ class CachedResolver(Resolver):
             # first, try resolving with just one arg to see if we have something that's chainable
             key = CacheKey(identifier, [arg_sorts[0]])
             desc = self._function_resolution_cache.get(key, None)
-            if desc is not None and desc.can_apply(arg_sorts) is not None:
+            if desc is not None and desc.can_apply(list(arg_sorts)) is not None:
                 return desc
 
         key = CacheKey(identifier, list(arg_sorts))

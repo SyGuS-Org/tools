@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
-import utilities
-import sygus_v2_lexer
-import ast
 import ply.yacc
-import sys
+
+from . import utilities
+from . import sygus_v2_lexer
+from . import ast
 
 
+# noinspection PyMethodMayBeStatic
 class SygusV2Parser(object):
     tokens = sygus_v2_lexer.SygusV2Lexer.tokens
 
@@ -302,7 +303,7 @@ class SygusV2Parser(object):
             p[0] = p[1] + [p[2]]
 
     def p_binding(self, p):
-        "binding : TK_LPAREN TK_SYMBOL term TK_RPAREN"
+        """binding : TK_LPAREN TK_SYMBOL term TK_RPAREN"""
         p[0] = (p[1], p[2])
 
     def _p_literal_common(self, p, kind):

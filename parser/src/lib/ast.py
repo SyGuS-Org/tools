@@ -1,10 +1,11 @@
 #!/usr/bin/python
 
-from utilities import Identifier, Location
-import utilities
 from abc import abstractmethod, ABC
 from typing import Union, List, Tuple, Dict
 from enum import Enum
+
+from .utilities import Identifier, Location
+from . import utilities
 
 
 class ASTVisitor(object):

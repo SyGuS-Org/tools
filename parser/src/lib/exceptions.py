@@ -1,7 +1,8 @@
 #!/usr/bin/python
 
-import utilities
 from typing import Union
+
+from . import utilities
 
 
 class _LocationTaggedException(Exception):

@@ -1,9 +1,11 @@
 #!/usr/bin/python
 
 import ply.lex
-import utilities, exceptions
+
+from . import utilities, exceptions
 
 
+# noinspection PyPep8Naming,PyMethodMayBeStatic,PySingleQuotedDocstring
 class SygusV2Lexer(object):
     reserved = {
         'define-sort': 'TK_DEFINE_SORT',
