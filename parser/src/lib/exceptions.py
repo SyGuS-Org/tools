@@ -34,3 +34,9 @@ class ResolutionException(_LocationTaggedException):
     def __init__(self, msg: str, start_location: Union[utilities.Location, None],
                  end_location: Union[utilities.Location, None]):
         super().__init__("Error resolving name:\n%s" % msg, start_location, end_location)
+
+
+class UnsupportedFeatureException(_LocationTaggedException):
+    def __init__(self, msg: str, start_location: Union[utilities.Location, None],
+                 end_location: Union[utilities.Location, None]):
+        super().__init__("This feature isn't supported yet:\n%s" % msg, start_location, end_location)

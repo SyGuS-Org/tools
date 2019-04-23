@@ -114,7 +114,7 @@ class SygusV2Lexer(object):
         return t
 
     @ply.lex.TOKEN(_stringconst)
-    def t_TK_STRING_CONST(self, t):
+    def t_TK_STRING_LITERAL(self, t):
         # strip away the quotes
         t.value = t.value[1:(len(t.value) - 1)]
         return t

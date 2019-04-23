@@ -146,12 +146,12 @@ class FunctionKind(Enum):
     USER_DEFINED = 4
     DATATYPE_CONSTRUCTOR = 5
     DATATYPE_TESTER = 6
-    THEORY = 7
+    DATATYPE_SELECTOR = 7
+    THEORY = 8
 
 
 class FunctionDescriptor(SymbolTableEntry):
-    __slots__ = ('function_kind', 'argument_sorts', 'argument_names',
-                 'introduced_sort_placeholders', 'range_sort',
+    __slots__ = ('function_kind', 'argument_sorts', 'argument_names', 'range_sort',
                  'function_body', 'synthesis_grammar', 'is_chainable')
 
     def __init__(self, identifier: Union[Identifier, str]):
@@ -166,7 +166,6 @@ class FunctionDescriptor(SymbolTableEntry):
         result.argument_sorts = list(arg_sorts)
         result.argument_names = None
         result.range_sort = range_sort
-        result.introduced_sort_placeholders = None
         result.function_body = None
         result.synthesis_grammar = None
         result.is_chainable = False
@@ -187,7 +186,6 @@ class FunctionDescriptor(SymbolTableEntry):
         result.argument_sorts = [x[1] for x in parameters]
         result.argument_names = [x[0] for x in parameters]
         result.range_sort = range_sort
-        result.introduced_sort_placeholders = None
         result.function_body = None
         result.synthesis_grammar: ast.Grammar = synthesis_grammar
         result.is_chainable = False
@@ -204,46 +202,50 @@ class FunctionDescriptor(SymbolTableEntry):
         result.argument_names = [x[0] for x in parameters]
         result.range_sort = range_sort
         result.function_body = function_body
-        result.introduced_sort_placeholders = None
         result.synthesis_grammar = None
         result.is_chainable = False
         return result
 
     @staticmethod
-    def create_datatype_constructor(identifier: str,
-                                    introduced_sort_placeholders: List[SortDescriptor],
-                                    parameters: List[Tuple[str, SortDescriptor]],
-                                    datatype_sort: SortDescriptor) -> 'FunctionDescriptor':
-        result = FunctionDescriptor(identifier)
-        result.function_kind = FunctionKind.DATATYPE_CONSTRUCTOR
-        result.introduced_sort_placeholders = list(introduced_sort_placeholders)
-        result.argument_names = [x[0] for x in parameters]
-        result.argument_sorts: List[Union[SortDescriptor, str]] = []
+    def create_datatype_constructor_and_helpers(identifier: str,
+                                                parameters: List[Tuple[str, SortDescriptor]],
+                                                datatype_sort: SortDescriptor) -> Tuple['FunctionDescriptor',
+                                                                                        'FunctionDescriptor',
+                                                                                        List['FunctionDescriptor']]:
+        constructor = FunctionDescriptor(identifier)
+        constructor.function_kind = FunctionKind.DATATYPE_CONSTRUCTOR
+        constructor.argument_names = [x[0] for x in parameters]
+        constructor.argument_sorts = [x[1] for x in parameters]
+        constructor.range_sort = datatype_sort
+        constructor.function_body = None
+        constructor.synthesis_grammar = None
+        constructor.is_chainable = False
 
+        tester_identifier = Identifier('is', identifier)
+        tester = FunctionDescriptor(tester_identifier)
+        tester.function_kind = FunctionKind.DATATYPE_TESTER
+        tester.argument_names = None
+        tester.argument_sorts = [datatype_sort]
+        tester.range_sort = CoreResolver.get_boolean_sort()
+        tester.function_body = None
+        tester.synthesis_grammar = None
+        tester.is_chainable = False
+
+        selectors: List['FunctionDescriptor'] = []
         for parameter in parameters:
-            if parameter[1].sort_kind == SortKind.PLACEHOLDER and parameter[1] not in introduced_sort_placeholders:
-                raise ValueError('Unresolved type name: ' + str(parameter[1].identifier))
-            result.argument_sorts.append(parameter[1])
+            param_name = parameter[0]
+            param_sort = parameter[1]
+            selector = FunctionDescriptor(param_name)
+            selector.function_kind = FunctionKind.DATATYPE_SELECTOR
+            selector.argument_names = None
+            selector.argument_sorts = [datatype_sort]
+            selector.range_sort = param_sort
+            selector.function_body = None
+            selector.synthesis_grammar = None
+            selector.is_chainable = False
+            selectors.append(selector)
 
-        result.range_sort = datatype_sort
-        result.function_body = None
-        result.synthesis_grammar = None
-        result.is_chainable = False
-        return result
-
-    @staticmethod
-    def create_datatype_tester(constructor_name: str, datatype_sort_descriptor: SortDescriptor) -> 'FunctionDescriptor':
-        tester_identifier = Identifier('is', constructor_name)
-        result = FunctionDescriptor(tester_identifier)
-        result.function_kind = FunctionKind.DATATYPE_TESTER
-        result.introduced_sort_placeholders = None
-        result.argument_names = None
-        result.argument_sorts = [datatype_sort_descriptor]
-        result.range_sort = CoreResolver.get_boolean_sort()
-        result.function_body = None
-        result.synthesis_grammar = None
-        result.is_chainable = False
-        return result
+        return constructor, tester, selectors
 
     @staticmethod
     def create_theory_function(identifier: Union[Identifier, str],
@@ -253,7 +255,6 @@ class FunctionDescriptor(SymbolTableEntry):
         identifier = utilities.canonicalize_identifier(identifier)
         result = FunctionDescriptor(identifier)
         result.function_kind: FunctionKind = FunctionKind.THEORY
-        result.introduced_sort_placeholders = None
         result.argument_names = None
         result.argument_sorts = list(arg_sorts)
         result.range_sort = range_sort
@@ -265,20 +266,16 @@ class FunctionDescriptor(SymbolTableEntry):
         return result
 
     def can_apply(self, arg_sorts: List[SortDescriptor]) -> Union[SortDescriptor, None]:
-        if self.introduced_sort_placeholders is not None and len(self.introduced_sort_placeholders) > 0:
-            subst_map = {}
-            for i in range(self.argument_sorts):
-                if self.argument_sorts[i].sort_kind == SortKind.PLACEHOLDER:
-                    subst_map[self.argument_sorts[i]] = arg_sorts[i]
-            return self.range_sort.substitute(subst_map)
-        elif not self.is_chainable:
+        if not self.is_chainable:
             if utilities.first_discrepancy(self.argument_sorts, arg_sorts) is None:
                 return self.range_sort
-            return None
-        else:
-            if utilities.are_all_elements_equal(arg_sorts, self.argument_sorts[0]):
-                return self.range_sort
-            return None
+            else:
+                return None
+
+        # this function is chainable
+        if len(arg_sorts) >= 2 and utilities.are_all_elements_equal(arg_sorts, self.argument_sorts[0]):
+            return self.range_sort
+        return None
 
 
 class SymbolKind(Enum):
@@ -504,7 +501,7 @@ class CachedResolver(Resolver):
 
         key = CacheKey(identifier, list(arg_sorts))
         desc = self._function_resolution_cache.get(key, None)
-        if desc is not None:
+        if desc is not None and desc.can_apply(list(arg_sorts)) is not None:
             return desc
 
         desc = self._resolve_function_impl_(identifier, *arg_sorts)
@@ -556,8 +553,7 @@ class CoreResolver(CachedResolver):
             if len(arg_sorts) != 3 or arg_sorts[0] != self.get_boolean_sort() or arg_sorts[1] != arg_sorts[2]:
                 return None
 
-            return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts),
-                                                             self.get_boolean_sort(), False)
+            return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts), arg_sorts[1], False)
 
         return None
 
@@ -572,11 +568,14 @@ class IntegerResolver(CachedResolver):
 
         self._add_sort(int_sort)
 
-        self._add_function(FunctionDescriptor.create_theory_function('-', [int_sort], int_sort, False))
+        self.unary_minus = FunctionDescriptor.create_theory_function('-', [int_sort], int_sort, False)
+        self.binary_minus = FunctionDescriptor.create_theory_function('-', [int_sort], int_sort, True)
+
+        self._add_function(self.unary_minus)
         self._add_function(FunctionDescriptor.create_theory_function('abs', [int_sort], int_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('mod', [int_sort, int_sort], int_sort, False))
 
-        self._add_function(FunctionDescriptor.create_theory_function('-', [int_sort], int_sort, True))
+        self._add_function(self.binary_minus)
         self._add_function(FunctionDescriptor.create_theory_function('+', [int_sort], int_sort, True))
         self._add_function(FunctionDescriptor.create_theory_function('*', [int_sort], int_sort, True))
         self._add_function(FunctionDescriptor.create_theory_function('div', [int_sort], int_sort, True))
@@ -596,7 +595,10 @@ class IntegerResolver(CachedResolver):
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def _resolve_function_impl_(self, identifier: Identifier, *arg_sorts: SortDescriptor):
-        return None
+        if str(identifier) == '-' and len(arg_sorts) == 1:
+            return self.unary_minus
+        elif str(identifier) == '-' and len(arg_sorts) > 1:
+            return self.binary_minus
 
 
 class RealResolver(CachedResolver):
@@ -607,9 +609,12 @@ class RealResolver(CachedResolver):
         real_sort = self.get_real_sort()
         bool_sort = CoreResolver.get_boolean_sort()
 
-        self._add_function(FunctionDescriptor.create_theory_function('-', [real_sort], real_sort, False))
+        self.unary_minus = FunctionDescriptor.create_theory_function('-', [real_sort], real_sort, False)
+        self.binary_minus = FunctionDescriptor.create_theory_function('-', [real_sort], real_sort, True)
 
-        self._add_function(FunctionDescriptor.create_theory_function('-', [real_sort], real_sort, True))
+        self._add_function(self.unary_minus)
+
+        self._add_function(self.binary_minus)
         self._add_function(FunctionDescriptor.create_theory_function('+', [real_sort], real_sort, True))
         self._add_function(FunctionDescriptor.create_theory_function('*', [real_sort], real_sort, True))
         self._add_function(FunctionDescriptor.create_theory_function('/', [real_sort], real_sort, True))
@@ -629,7 +634,10 @@ class RealResolver(CachedResolver):
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def _resolve_function_impl_(self, identifier: Identifier, *arg_sorts: SortDescriptor):
-        return None
+        if str(identifier) == '-' and len(arg_sorts) == 1:
+            return self.unary_minus
+        elif str(identifier) == '-' and len(arg_sorts) > 1:
+            return self.binary_minus
 
 
 class ArrayResolver(CachedResolver):
@@ -680,10 +688,15 @@ class StringResolver(CachedResolver):
         self._add_function(FunctionDescriptor.create_theory_function('str.at', [string_sort, int_sort],
                                                                      string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.from-int', [int_sort], string_sort, False))
+        # audupa: alias for str.from-int: there's some confusion about which version is final,
+        # until the confusion is resolved, we'll support both versions
+        self._add_function(FunctionDescriptor.create_theory_function('int.to.str', [int_sort], string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.substr', [string_sort, int_sort, int_sort],
                                                                      string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.len', [string_sort], int_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.to-int', [string_sort], int_sort, False))
+        # audupa: alias for str.to-int. Same confusion, so we support both until someone advises otherwise.
+        self._add_function(FunctionDescriptor.create_theory_function('str.to.int', [string_sort], int_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.indexof',
                                                                      [string_sort, string_sort, int_sort],
                                                                      int_sort, False))
@@ -719,6 +732,14 @@ class BitVectorResolver(CachedResolver):
             return identifier.indices[0]
         return None
 
+    @staticmethod
+    def get_bit_vector_size_from_sort(sort_descriptor: SortDescriptor) -> Union[int, None]:
+        if (sort_descriptor.identifier.is_indexed() and sort_descriptor.identifier.symbol == 'BitVec' and
+                len(sort_descriptor.identifier.indices) == 1 and
+                isinstance(sort_descriptor.identifier.indices[0], int)):
+            return sort_descriptor.identifier.indices[0]
+        return None
+
     @classmethod
     def get_bit_vector_sort(cls, size: int):
         result = cls._bit_vector_sorts.get(size, None)
@@ -732,7 +753,7 @@ class BitVectorResolver(CachedResolver):
 
     def _resolve_sort_impl_(self, identifier: Identifier):
         size = self.get_bit_vector_size(identifier)
-        return None if size is None else self.get_bit_vector_size(size)
+        return None if size is None else self.get_bit_vector_sort(size)
 
     def _resolve_function_impl_(self, identifier: Identifier, *arg_sorts: SortDescriptor):
         if len(arg_sorts) < 1:
@@ -757,5 +778,40 @@ class BitVectorResolver(CachedResolver):
                 len(arg_sorts) >= 2 and utilities.are_all_elements_equal(arg_sorts)):
             return FunctionDescriptor.create_theory_function(identifier, [arg_sorts[0]],
                                                              CoreResolver.get_boolean_sort(), True)
+
+        if str(identifier) == 'concat':
+            # check if all the arguments are bit vectors
+            if len(arg_sorts) < 2:
+                return None
+            sizes = []
+            for arg_sort in arg_sorts:
+                size = self.get_bit_vector_size_from_sort(arg_sort)
+                if size is None:
+                    return None
+                sizes.append(size)
+            sum_of_sizes = sum(sizes)
+            return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts),
+                                                             self.get_bit_vector_sort(sum_of_sizes),
+                                                             False)
+
+        if (identifier.symbol == 'extract' and identifier.is_indexed() and len(arg_sorts) == 1 and
+                len(identifier.indices) == 2 and isinstance(identifier.indices[0], int) and
+                isinstance(identifier.indices[1], int)):
+            # check that the indices are within the range of the size of the bit vector
+            bv_size = self.get_bit_vector_size_from_sort(arg_sorts[0])
+            if bv_size is None:
+                return None
+
+            low_index = identifier.indices[1]
+            high_index = identifier.indices[0]
+
+            if high_index < low_index or high_index >= bv_size or low_index >= bv_size:
+                return None
+
+            result_size = high_index - low_index + 1
+            result_sort = self.get_bit_vector_sort(result_size)
+
+            return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts),
+                                                             result_sort, False)
 
         return None

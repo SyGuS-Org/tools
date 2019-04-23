@@ -1,6 +1,8 @@
 #!/usr/bin/python
 
 import argparse
+import sys
+
 from lib.sygus_v2_parser import SygusV2Parser
 from lib.visitors import SymbolTableBuilder
 
@@ -19,6 +21,11 @@ def _main():
 
     parser = SygusV2Parser()
     program = parser.parse(contents)
+
+    if program is None:
+        print('Failed to parse.')
+        sys.exit(1)
+
     SymbolTableBuilder.run(program)
 
 

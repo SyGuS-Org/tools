@@ -5,7 +5,7 @@ from typing import Union
 from . import ast
 from .resolution import SymbolTable, SortDescriptor, SortKind, FunctionDescriptor
 from . import resolution
-from .exceptions import ResolutionException
+from .exceptions import ResolutionException, UnsupportedFeatureException
 from . import utilities
 
 
@@ -151,6 +151,10 @@ class SymbolTableBuilder(ast.ASTVisitor):
         if self.symbol_table.lookup_symbol(declare_var_command.symbol) is not None:
             raise ValueError(f'Redeclaration of symbol: {declare_var_command.symbol}.\n' +
                              f'At: {declare_var_command.start_location} -- {declare_var_command.end_location}')
+        symbol_desc = resolution.SymbolDescriptor(resolution.SymbolKind.UNIVERSAL_VARIABLE,
+                                                  declare_var_command.symbol,
+                                                  declare_var_command.sort_expression.accept(self))
+        self.symbol_table.add_symbol(symbol_desc)
 
     def visit_inv_constraint_command(self, inv_constraint_command: ast.InvConstraintCommand):
         inv_fun_id = utilities.canonicalize_identifier(inv_constraint_command.inv_fun_symbol)
@@ -365,42 +369,36 @@ class SymbolTableBuilder(ast.ASTVisitor):
         raise NotImplementedError
 
     def visit_datatype_constructor_list(self, datatype_constructor_list: ast.DatatypeConstructorList):
-        sort_placeholders = [SortDescriptor.create_placeholder(x)
-                             for x in datatype_constructor_list.introduced_sort_placeholders]
+        if len(datatype_constructor_list.introduced_sort_placeholders) != 0:
+            raise UnsupportedFeatureException('Parametric datatypes are not (yet) supported.',
+                                              datatype_constructor_list.start_location,
+                                              datatype_constructor_list.end_location)
 
-        self.symbol_table.push_scope()
-        for placeholder in sort_placeholders:
-            self.symbol_table.add_sort(placeholder)
-
-        scope = self.symbol_table.pop_scope()
-
-        if len(sort_placeholders) > 0:
-            constructor_range_type = self.current_datatype_sort.instantiate(sort_placeholders)
-        else:
-            constructor_range_type = self.current_datatype_sort
+        constructor_range_type = self.current_datatype_sort
 
         for constructor in datatype_constructor_list.constructors:
             name = constructor.constructor_name
             params = constructor.constructor_parameters
             param_names = [x[0] for x in params]
-
-            self.symbol_table.push_scope(scope)
             param_sort_descs = [x[1].accept(self) for x in params]
-            scope = self.symbol_table.pop_scope()
-
             resolved_params = list(zip(param_names, param_sort_descs))
 
-            func_desc = FunctionDescriptor.create_datatype_constructor(name, sort_placeholders,
-                                                                       resolved_params,
-                                                                       constructor_range_type)
-            self.symbol_table.add_function(func_desc)
-
-            tester_desc = FunctionDescriptor.create_datatype_tester(name, self.current_datatype_sort)
-            self.symbol_table.add_function(tester_desc)
+            constructor, tester, selectors = \
+                FunctionDescriptor.create_datatype_constructor_and_helpers(name, resolved_params,
+                                                                           constructor_range_type)
+            self.symbol_table.add_function(constructor)
+            self.symbol_table.add_function(tester)
+            for selector in selectors:
+                self.symbol_table.add_function(selector)
 
     def visit_declare_datatypes_command(self, declare_datatypes_command: ast.DeclareDatatypesCommand):
         sort_names_and_arities = declare_datatypes_command.sort_names_and_arities
-        sort_descriptors = [SortDescriptor.create_sort(x[0], x[1], SortKind.DATATYPE) for x in sort_names_and_arities]
+        if any(x[1] != 0 for x in sort_names_and_arities):
+            raise UnsupportedFeatureException('Parametric datatypes are not (yet) supported',
+                                              declare_datatypes_command.start_location,
+                                              declare_datatypes_command.end_location)
+
+        sort_descriptors = [SortDescriptor.create_sort(x[0], 0, SortKind.DATATYPE) for x in sort_names_and_arities]
 
         for sort_descriptor in sort_descriptors:
             self.symbol_table.add_sort(sort_descriptor)
@@ -410,6 +408,11 @@ class SymbolTableBuilder(ast.ASTVisitor):
             declare_datatypes_command.datatype_constructor_lists[i].accept(self)
 
     def visit_declare_datatype_command(self, declare_datatype_command: ast.DeclareDatatypeCommand):
+        if declare_datatype_command.sort_arity != 0:
+            raise UnsupportedFeatureException('Parametric datatypes are not (yet) supported',
+                                              declare_datatype_command.start_location,
+                                              declare_datatype_command.end_location)
+
         sort_desc = SortDescriptor.create_sort(declare_datatype_command.sort_name,
                                                declare_datatype_command.sort_arity,
                                                SortKind.DATATYPE)
