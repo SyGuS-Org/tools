@@ -19,6 +19,10 @@ class ASTVisitor(object):
         raise NotImplemented
 
     @abstractmethod
+    def visit_enum_sort_expression(self, enum_sort_expression: 'EnumSortExpression'):
+        raise NotImplemented
+
+    @abstractmethod
     def visit_identifier_term(self, identifier_term: 'IdentifierTerm'):
         raise NotImplemented
 
@@ -51,6 +55,10 @@ class ASTVisitor(object):
         raise NotImplemented
 
     @abstractmethod
+    def visit_declare_primed_var_command(self, declare_primed_var_command: 'DeclarePrimedVarCommand'):
+        raise NotImplemented
+
+    @abstractmethod
     def visit_inv_constraint_command(self, inv_constraint_command: 'InvConstraintCommand'):
         raise NotImplemented
 
@@ -60,6 +68,10 @@ class ASTVisitor(object):
 
     @abstractmethod
     def visit_set_option_command(self, set_option_command: 'SetOptionCommand'):
+        raise NotImplemented
+
+    @abstractmethod
+    def visit_set_options_command(self, set_options_command: 'SetOptionsCommand'):
         raise NotImplemented
 
     @abstractmethod
@@ -92,6 +104,10 @@ class ASTVisitor(object):
 
     @abstractmethod
     def visit_define_fun_command(self, define_fun_command: 'DefineFunCommand'):
+        raise NotImplemented
+
+    @abstractmethod
+    def visit_declare_fun_command(self, declare_fun_command: 'DeclareFunCommand'):
         raise NotImplemented
 
     @abstractmethod
@@ -144,6 +160,34 @@ class SortExpression(AST):
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_sort_expression(self)
 
+    def __eq__(self, other):
+        if other is None:
+            return False
+        if self is other:
+            return True
+        if not isinstance(other, SortExpression):
+            return False
+        return (self.identifier == other.identifier and
+                len(self.sort_arguments) == len(other.sort_arguments) and
+                all(t[0] == t[1] for t in zip(self.sort_arguments, other.sort_arguments)))
+
+    def __hash__(self):
+        return utilities.hash_sequence(self.sort_arguments, hash(self.identifier) * 317)
+
+
+# Used only in V1 grammars!
+class EnumSortExpression(AST):
+    __slots__ = ('enum_name', 'enum_constructors')
+
+    def __init__(self, enum_name: str, enum_constructors: List[str],
+                 start_location: Location, end_location: Location):
+        super().__init__(start_location, end_location)
+        self.enum_name = enum_name
+        self.enum_constructors = list(enum_constructors)
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_enum_sort_expression(self)
+
 
 class LiteralKind(Enum):
     NUMERAL = 1
@@ -152,6 +196,9 @@ class LiteralKind(Enum):
     HEXADECIMAL = 4
     BINARY = 5
     STRING = 6
+
+    # Used only by V1 grammars/ASTs
+    ENUMERATED = 7
 
 
 class Literal(AST):
@@ -233,13 +280,15 @@ class QuantifiedTerm(Term):
 
 
 class LetTerm(Term):
-    __slots__ = ('variable_bindings', 'let_body')
+    __slots__ = ('variable_bindings', 'let_body', 'type_annotations')
 
     def __init__(self, bindings: List[Tuple[str, Term]], let_body: Term,
-                 start_location: Location, end_location: Location):
+                 start_location: Location, end_location: Location,
+                 type_annotations: Dict[str, SortExpression] = None):
         super().__init__(start_location, end_location)
         self.variable_bindings = list(bindings)
         self.let_body = let_body
+        self.type_annotations: Dict[str, SortExpression] = type_annotations
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_let_term(self)
@@ -249,17 +298,20 @@ class CommandKind(Enum):
     CHECK_SYNTH = 1
     CONSTRAINT = 2
     DECLARE_VAR = 3
-    INV_CONSTRAINT = 4
-    SET_FEATURE = 5
-    SET_OPTION = 6
-    SET_LOGIC = 7
-    SYNTH_FUN = 8
-    SYNTH_INV = 9
-    DECLARE_SORT = 10
-    DEFINE_FUN = 11
-    DEFINE_SORT = 12
-    DECLARE_DATATYPES = 13
-    DECLARE_DATATYPE = 14
+    DECLARE_PRIMED_VAR = 4
+    INV_CONSTRAINT = 5
+    SET_FEATURE = 6
+    SET_OPTION = 7
+    SET_OPTIONS = 8
+    SET_LOGIC = 9
+    SYNTH_FUN = 10
+    SYNTH_INV = 11
+    DECLARE_SORT = 12
+    DEFINE_FUN = 13
+    DECLARE_FUN = 14
+    DEFINE_SORT = 15
+    DECLARE_DATATYPES = 16
+    DECLARE_DATATYPE = 17
 
 
 class Command(AST, ABC):
@@ -302,6 +354,20 @@ class DeclareVarCommand(Command):
         return visitor.visit_declare_var_command(self)
 
 
+# Used only with V1 grammars!
+class DeclarePrimedVarCommand(Command):
+    __slots__ = ('symbol', 'sort_expression')
+
+    def __init__(self, symbol: str, sort_expression: SortExpression,
+                 start_location: Location, end_location: Location):
+        super().__init__(CommandKind.DECLARE_PRIMED_VAR, start_location, end_location)
+        self.symbol = symbol
+        self.sort_expression = sort_expression
+
+    def accept(self, visitor: ASTVisitor):
+        visitor.visit_declare_primed_var_command(self)
+
+
 class InvConstraintCommand(Command):
     __slots__ = ('inv_fun_symbol', 'pre_symbol', 'trans_symbol', 'post_symbol')
 
@@ -339,6 +405,18 @@ class SetOptionCommand(Command):
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_set_option_command(self)
+
+
+# For v1 grammars only!!
+class SetOptionsCommand(Command):
+    __slots__ = ('option_names_and_values',)
+
+    def __init__(self, option_names_and_values: Tuple[str, str], start_location: Location, end_location: Location):
+        super().__init__(CommandKind.SET_OPTIONS, start_location, end_location)
+        self.option_names_and_values = list(option_names_and_values)
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_set_options_command(self)
 
 
 class SetLogicCommand(Command):
@@ -490,6 +568,21 @@ class DefineFunCommand(Command):
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_define_fun_command(self)
+
+
+# This is for the V1 parser ONLY!
+class DeclareFunCommand(Command):
+    __slots__ = ('function_name', 'parameter_sorts', 'function_range_sort')
+
+    def __init__(self, function_name: str, parameter_sorts: List[SortExpression], range_sort: SortExpression,
+                 start_location: Location, end_location: Location):
+        super().__init__(CommandKind.DECLARE_FUN, start_location, end_location)
+        self.function_name = function_name
+        self.parameter_sorts = list(parameter_sorts)
+        self.function_range_sort = range_sort
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_declare_fun_command(self)
 
 
 class DefineSortCommand(Command):

@@ -6,15 +6,17 @@ from . import utilities, exceptions
 
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic,PySingleQuotedDocstring
-class SygusV2Lexer(object):
+class SygusLexer(object):
     reserved = {
         'define-sort': 'TK_DEFINE_SORT',
         'define-fun': 'TK_DEFINE_FUN',
         'set-option': 'TK_SET_OPTION',
+        'set-options': 'TK_SET_OPTIONS',
         'set-feature': 'TK_SET_FEATURE',
         'check-synth': 'TK_CHECK_SYNTH',
         'synth-fun': 'TK_SYNTH_FUN',
         'declare-var': 'TK_DECLARE_VAR',
+        'declare-primed-var': 'TK_DECLARE_PRIMED_VAR',
         'inv-constraint': 'TK_INV_CONSTRAINT',
         'synth-inv': 'TK_SYNTH_INV',
         'set-logic': 'TK_SET_LOGIC',

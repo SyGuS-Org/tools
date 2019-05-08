@@ -32,11 +32,13 @@ class SortKind(Enum):
     FUNCTION = 4
     ALIAS = 5
     PLACEHOLDER = 6
+    # Used in V1 grammars and ASTs ONLY!
+    ENUMERATED = 7
 
 
 class SortDescriptor(SymbolTableEntry, Hashable):
     __slots__ = ('sort_kind', 'num_parameters', 'alias_target', 'sort_arguments',
-                 'introduced_placeholders')
+                 'introduced_placeholders', 'enum_constructors')
 
     def __init__(self, identifier: Union[Identifier, str]):
         super().__init__(SymbolTableEntryKind.SORT_DESCRIPTOR, identifier)
@@ -50,6 +52,7 @@ class SortDescriptor(SymbolTableEntry, Hashable):
         result.introduced_placeholders = []
         result.sort_kind = sort_kind
         result.alias_target = None
+        result.enum_constructors = None
         return result
 
     @staticmethod
@@ -60,6 +63,7 @@ class SortDescriptor(SymbolTableEntry, Hashable):
         result.introduced_placeholders = []
         result.sort_kind = SortKind.PLACEHOLDER
         result.alias_target = None
+        result.enum_constructors = None
         return result
 
     @staticmethod
@@ -74,7 +78,18 @@ class SortDescriptor(SymbolTableEntry, Hashable):
         result.sort_arguments = []
         result.alias_target: SortDescriptor = alias_target
         result.introduced_placeholders = list(introduced_placeholders)
+        result.enum_constructors = None
         return result
+
+    @staticmethod
+    def create_enumerated_sort(identifier: str, enum_constructors: List[str]):
+        result = SortDescriptor(identifier)
+        result.sort_kind = SortKind.ENUMERATED
+        result.num_parameters = 0
+        result.sort_arguments = []
+        result.alias_target = None
+        result.introduced_placeholders = []
+        result.enum_constructors = list(enum_constructors)
 
     def _check_unbound_sort_arguments(self, allowed_placeholders: List['SortDescriptor']):
         for sort_argument in self.sort_arguments:

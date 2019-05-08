@@ -10,6 +10,35 @@ from . import utilities
 
 
 class SymbolTableBuilder(ast.ASTVisitor):
+    # V1 only!
+    def visit_enum_sort_expression(self, enum_sort_expression: ast.EnumSortExpression):
+        return SortDescriptor.create_enumerated_sort(enum_sort_expression.enum_name,
+                                                     enum_sort_expression.enum_constructors)
+
+    # V1 only!
+    def visit_declare_primed_var_command(self, declare_primed_var_command: ast.DeclarePrimedVarCommand):
+        symbol = declare_primed_var_command.symbol
+        sort_descriptor = declare_primed_var_command.sort_expression.accept(self)
+        primed_symbol = declare_primed_var_command.symbol + '!'
+        symbol_desc = resolution.SymbolDescriptor(resolution.SymbolKind.UNIVERSAL_VARIABLE,
+                                                  symbol, sort_descriptor)
+        primed_desc = resolution.SymbolDescriptor(resolution.SymbolKind.UNIVERSAL_VARIABLE,
+                                                  primed_symbol, sort_descriptor)
+        self.symbol_table.add_symbol(symbol_desc)
+        self.symbol_table.add_symbol(primed_desc)
+
+    # V1 only!
+    def visit_set_options_command(self, set_options_command: ast.SetOptionsCommand):
+        pass
+
+    # V1 only!
+    def visit_declare_fun_command(self, declare_fun_command: ast.DeclareFunCommand):
+        func_descriptor = \
+            resolution.FunctionDescriptor.create_uninterpreted_function(declare_fun_command.function_name,
+                                                                        declare_fun_command.parameter_sorts,
+                                                                        declare_fun_command.function_range_sort)
+        self.symbol_table.add_function(func_descriptor)
+
     def __init__(self):
         super().__init__("SymbolTableBuilder")
         self.symbol_table: SymbolTable = SymbolTable()
