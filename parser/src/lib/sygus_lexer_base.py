@@ -6,49 +6,37 @@ from . import utilities, exceptions
 
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic,PySingleQuotedDocstring
-class SygusLexer(object):
-    reserved = {
+class _SygusLexerBase(object):
+    _reserved = {
         'define-sort': 'TK_DEFINE_SORT',
         'define-fun': 'TK_DEFINE_FUN',
-        'set-option': 'TK_SET_OPTION',
-        'set-options': 'TK_SET_OPTIONS',
-        'set-feature': 'TK_SET_FEATURE',
         'check-synth': 'TK_CHECK_SYNTH',
         'synth-fun': 'TK_SYNTH_FUN',
         'declare-var': 'TK_DECLARE_VAR',
-        'declare-primed-var': 'TK_DECLARE_PRIMED_VAR',
         'inv-constraint': 'TK_INV_CONSTRAINT',
         'synth-inv': 'TK_SYNTH_INV',
         'set-logic': 'TK_SET_LOGIC',
-        'par': 'TK_PAR',
         'constraint': 'TK_CONSTRAINT',
-        'declare-datatype': 'TK_DECLARE_DATATYPE',
-        'declare-datatypes': 'TK_DECLARE_DATATYPES',
         'Constant': 'TK_CONSTANT',
         'Variable': 'TK_VARIABLE',
         'let': 'TK_LET',
-        'exists': 'TK_EXISTS',
-        'forall': 'TK_FORALL',
-        'declare-sort': 'TK_DECLARE_SORT'
+        'true': 'TK_BOOL_CONST',
+        'false': 'TK_BOOL_CONST',
     }
 
-    tokens = [
+    _tokens = [
         'TK_LPAREN',
         'TK_RPAREN',
-        'TK_COLON',
-        'TK_UNDERSCORE',
-        'TK_BOOL_CONST',
         'TK_NUMERAL',
         'TK_DECIMAL',
         'TK_HEX_CONST',
         'TK_BIN_CONST',
         'TK_STRING_LITERAL',
         'TK_SYMBOL',
-    ] + list(reserved.values())
+    ]
 
     t_TK_LPAREN = r'\('
     t_TK_RPAREN = r'\)'
-    t_TK_COLON = r':'
 
     _letter = r'[a-zA-Z_]'
     _zero = r'0'
@@ -59,7 +47,7 @@ class SygusLexer(object):
     _numeral = f'(?:{_zero})|(?:{_nonzero}(?:{_digit})*)'
     _decimal = f'{_numeral}\\.(?:{_digit})+'
     _hexconst = f'[#]x(?:{_hexdigit})+'
-    _binconst = f'[#]x(?:{_bit})+'
+    _binconst = f'[#]b(?:{_bit})+'
     _symbolcc = r'(?:[a-zA-Z_&!~<>=/%]|\+|-|\*|\||\?|\.|\$|\^)'
     _symbol = f'{_symbolcc}(?:(?:{_symbolcc})|(?:{_digit}))*'
     _stringconst = r'\"(?:[^\"]*(?:\"\")?)*\"'
@@ -92,12 +80,6 @@ class SygusLexer(object):
         r';.*'
         pass
 
-    def t_TK_BOOL_CONST(self, t):
-        r'(?:true)|(?:false)'
-        raw = t.value
-        t.value = True if raw == 'true' else False
-        return t
-
     @ply.lex.TOKEN(_numeral)
     def t_TK_NUMERAL(self, t):
         t.value = int(t.value)
@@ -121,24 +103,13 @@ class SygusLexer(object):
         t.value = t.value[1:(len(t.value) - 1)]
         return t
 
-    @ply.lex.TOKEN(_symbol)
-    def t_TK_SYMBOL(self, t):
-        if t.value == '_':
-            t.type = 'TK_UNDERSCORE'
-        else:
-            t.type = self.reserved.get(t.value, 'TK_SYMBOL')
-        return t
-
     def t_error(self, t):
         start_location, end_location = self._get_locations(t)
         raise exceptions.ParseException('Could not figure out what to do with string:\"%s\"' % t.value,
                                         start_location, end_location)
 
-    def build(self, **kwargs):
-        self.lexer = ply.lex.lex(object=self, **kwargs)
-
-    def __init__(self, **kwargs):
-        self.lexer = ply.lex.lex(object=self, debug=False, **kwargs)
+    def __init__(self):
+        self.lexer = ply.lex.lex(object=self, debug=False)
 
     def lex(self, input_string):
         self.lexer.input(input_string)

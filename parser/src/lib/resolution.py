@@ -781,7 +781,7 @@ class BitVectorResolver(CachedResolver):
             return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts), arg_sorts[0], False)
 
         if (str(identifier) in ['bvurem', 'bvsrem', 'bvsmod', 'bvshl', 'bvlshr', 'bvashr'] and len(arg_sorts) == 2 and
-                arg_sorts[1] == arg_sorts[2]):
+                arg_sorts[0] == arg_sorts[1]):
             return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts), arg_sorts[0], False)
 
         if (str(identifier) in ['bvand', 'bvor', 'bvnand', 'bvnor', 'bvxor', 'bvxnor',

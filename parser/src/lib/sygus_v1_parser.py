@@ -3,14 +3,14 @@
 import ply.yacc
 
 from . import utilities
-from . import sygus_lexer
+from . import sygus_v1_lexer
 from . import ast
 from . import exceptions
 
 
 # noinspection PyMethodMayBeStatic
 class SygusV1Parser(object):
-    tokens = sygus_lexer.SygusLexer.tokens
+    tokens = sygus_v1_lexer.SygusV1Lexer.tokens
 
     def _get_position(self, line: int, pos: int) -> utilities.Location:
         line_start = self.input_string.rfind('\n', 0, pos) + 1
@@ -51,6 +51,12 @@ class SygusV1Parser(object):
                    | primed_var_decl_command"""
         p[0] = p[1]
 
+    def p_set_logic_command(self, p):
+        """set_logic_command : TK_LPAREN TK_SET_LOGIC TK_SYMBOL TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        p[0] = ast.SetLogicCommand(p[3], start_position, end_position)
+
     def p_fun_def_command(self, p):
         """fun_def_command : TK_LPAREN TK_DEFINE_FUN symbol arg_list sort_expr term TK_RPAREN"""
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
@@ -82,8 +88,8 @@ class SygusV1Parser(object):
         p[0] = ast.SynthFunCommand(p[3], p[4], p[5], grammar, start_position, end_position)
 
     def p_synth_inv_command(self, p):
-        """"synth_inv_command : TK_LPAREN TK_SYNTH_INV symbol arg_list TK_LPAREN nonterminal_def_plus TK_RPAREN TK_RPAREN
-                              | TK_LPAREN TK_SYNTH_INV symbol arg_list TK_RPAREN"""
+        """synth_inv_command : TK_LPAREN TK_SYNTH_INV symbol arg_list TK_LPAREN nonterminal_def_plus TK_RPAREN TK_RPAREN
+                            | TK_LPAREN TK_SYNTH_INV symbol arg_list TK_RPAREN"""
         if len(p) == 9:
             grammar_start_position = self._get_position(p.lineno(5), p.lexpos(5) - 1)
             grammar_end_position = self._get_position(p.lineno(7), p.lexpos(7))
@@ -138,45 +144,66 @@ class SygusV1Parser(object):
     def p_primed_var_decl_command(self, p):
         """primed_var_decl_command : TK_LPAREN TK_DECLARE_PRIMED_VAR symbol sort_expr TK_RPAREN"""
 
-    def p_sort_expr(self, p):
-        """sort_expr : TK_LPAREN symbol TK_NUMERAL TK_RPAREN
-                     | symbol
-                     | TK_LPAREN symbol sort_expr sort_expr TK_RPAREN
-                     | TK_LPAREN symbol enum_constructor_list TK_RPAREN"""
-        if len(p) == 5 and isinstance(p[3], int):
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-            end_position = self._get_position(p.lineno(4), p.lexpos(4))
-            if p[2] != 'BitVec':
-                raise exceptions.ParseException('Parsing error', start_position, end_position)
-            p[0] = ast.SortExpression(ast.Identifier('BitVec', p[3]), [], start_position, end_position)
-        elif len(p) == 2:
-            start_position = self._get_position(p.lineno(1), p.lexpos(1))
-            p[0] = ast.SortExpression(p[1], [], start_position, start_position)
-        elif len(p) == 6:
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-            end_position = self._get_position(p.lineno(5), p.lexpos(5))
-            if p[2] != 'Array':
-                raise exceptions.ParseException('Parsing error', start_position, end_position)
-            p[0] = ast.SortExpression('Array', [p[3], p[4]], start_position, end_position)
-        elif len(p) == 5 and isinstance(p[3], list):
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-            end_position = self._get_position(p.lineno(4), p.lexpos(4))
-            p[0] = ast.EnumSortExpression(p[2], p[3], start_position, end_position)
-        else:
-            raise NotImplemented
+    def p_sort_expr_bit_vector(self, p):
+        """sort_expr : TK_LPAREN TK_BV TK_NUMERAL TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        p[0] = ast.SortExpression(ast.Identifier('BitVec', p[3]), [], start_position, end_position)
+
+    def p_sort_expr_int(self, p):
+        """sort_expr : TK_INT"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(p[1]))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        p[0] = ast.SortExpression('Int', [], start_position, end_position)
+
+    def p_sort_expr_bool(self, p):
+        """sort_expr : TK_BOOL"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(p[1]))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        p[0] = ast.SortExpression('Bool', [], start_position, end_position)
+
+    def p_sort_expr_real(self, p):
+        """sort_expr : TK_REAL"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(p[1]))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        p[0] = ast.SortExpression('Real', [], start_position, end_position)
+
+    def p_sort_expr_string(self, p):
+        """sort_expr : TK_STRING"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(p[1]))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        p[0] = ast.SortExpression('String', [], start_position, end_position)
+
+    def p_sort_expr_enum(self, p):
+        """sort_expr : TK_LPAREN TK_ENUM enum_constructor_list TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        p[0] = ast.EnumSortExpression(p[3], start_position, end_position)
+
+    def p_sort_expr_array(self, p):
+        """sort_expr : TK_LPAREN TK_ARRAY sort_expr sort_expr TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(5), p.lexpos(5))
+        p[0] = ast.SortExpression('Array', [p[3], p[4]], start_position, end_position)
+
+    def p_sort_expr_symbol(self, p):
+        """sort_expr : TK_SYMBOL"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(p[1]))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        p[0] = ast.SortExpression(p[1], [], start_position, end_position)
 
     def p_symbol(self, p):
         """symbol : TK_SYMBOL"""
         p[0] = p[1]
 
     def p_enum_constructor_list(self, p):
-        """enum_constructor_list : TK_LPAREN symbol_plus TK_RPAREN"""
+        """enum_constructor_list : TK_LPAREN symbol_plus_close_paren"""
         p[0] = p[2]
 
-    def p_symbol_plus(self, p):
-        """symbol_plus : symbol_plus symbol
-                       | symbol"""
-        if len(p) == 2:
+    def p_symbol_plus_close_paren(self, p):
+        """symbol_plus_close_paren : symbol_plus_close_paren symbol TK_RPAREN
+                                   | symbol TK_RPAREN"""
+        if len(p) == 3:
             p[0] = [p[1]]
         else:
             p[0] = p[1] + [p[2]]
@@ -276,6 +303,10 @@ class SygusV1Parser(object):
         """literal : TK_STRING_LITERAL"""
         self._p_literal_common(p, ast.LiteralKind.STRING)
 
+    def p_enum_const(self, p):
+        """enum_const : TK_SYMBOL TK_DOUBLE_COLON TK_SYMBOL"""
+        p[0] = p[1] + '::' + p[3]
+
     def p_sort_star(self, p):
         """sort_star : sort_star sort_expr
                      | """
@@ -322,36 +353,40 @@ class SygusV1Parser(object):
         else:
             p[0] = [p[1]]
 
-    def p_grammar_term(self, p):
-        """grammar_term : symbol
-                        | literal
-                        | TK_LPAREN symbol grammar_term_star TK_RPAREN
-                        | TK_LPAREN symbol sort_expr TK_RPAREN
-                        | let_grammar_term"""
-        if len(p) == 2 and isinstance(p[1], str):
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(str(p[1])))
-            end_position = self._get_position(p.lineno(1), p.lexpos(1))
-            term = ast.IdentifierTerm(p[1], start_position, end_position)
-            p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
-        elif len(p) == 2 and isinstance(p[1], ast.Literal):
-            term = ast.LiteralTerm(p[1], p[1].start_location, p[1].end_location)
-            p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
-        elif len(p) == 5 and isinstance(p[3], list):
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-            end_position = self._get_position(p.lineno(4), p.lexpos(4))
-            term = ast.FunctionApplicationTerm(p[2], p[3], start_position, end_position)
-            p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
-        elif len(p) == 5 and isinstance(p[3], ast.SortExpression):
-            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-            end_position = self._get_position(p.lineno(4), p.lexpos(4))
-            if p[2] in ['InputVariable', 'Variable', 'LocalVariable']:
-                p[0] = ast.GrammarTerm.create_variable_term(p[3], start_position, end_position)
-            elif p[2] == 'Constant':
-                p[0] = ast.GrammarTerm.create_constant_term(p[3], start_position, end_position)
-            else:
-                raise exceptions.ParseException('Parse error', start_position, end_position)
-        else:
-            raise NotImplemented
+    def p_grammar_term_symbol(self, p):
+        """grammar_term : TK_SYMBOL"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(str(p[1])))
+        end_position = self._get_position(p.lineno(1), p.lexpos(1))
+        term = ast.IdentifierTerm(p[1], start_position, end_position)
+        p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
+
+    def p_grammar_term_literal(self, p):
+        """grammar_term : literal"""
+        term = ast.LiteralTerm(p[1], p[1].start_location, p[1].end_location)
+        p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
+
+    def p_grammar_term_function_application(self, p):
+        """grammar_term : TK_LPAREN symbol grammar_term_star TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        term = ast.FunctionApplicationTerm(p[2], p[3], start_position, end_position)
+        p[0] = ast.GrammarTerm.create_binder_free_grammar_term(term, term.start_location, term.end_location)
+
+    def p_grammar_term_constant(self, p):
+        """grammar_term : TK_LPAREN TK_CONSTANT sort_expr TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        p[0] = ast.GrammarTerm.create_constant_term(p[3], start_position, end_position)
+
+    def p_grammar_term_variable(self, p):
+        """grammar_term : TK_LPAREN TK_VARIABLE sort_expr TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(4), p.lexpos(4))
+        p[0] = ast.GrammarTerm.create_variable_term(p[3], start_position, end_position)
+
+    def p_grammar_term_let(self, p):
+        """grammar_term : let_grammar_term"""
+        p[0] = p[1]
 
     def p_let_grammar_term(self, p):
         """let_grammar_term : TK_LPAREN TK_LET grammar_let_binding_plus TK_RPAREN grammar_term TK_RPAREN"""
@@ -379,6 +414,15 @@ class SygusV1Parser(object):
         else:
             p[0] = []
 
+    def p_error(self, p):
+        if p:
+            print("Syntax error at token", p.type, p.value)
+            print('Location:', self._get_position(p.lineno, p.lexpos))
+            self.parser.errok()
+            # sys.exit(1)
+        else:
+            print("Syntax error at EOF")
+
     def __init__(self):
         self.parser = ply.yacc.yacc(module=self, tabmodule='sygus_v1_parser_tab')
         self.input_string = None
@@ -387,7 +431,7 @@ class SygusV1Parser(object):
 
     def parse(self, input_string):
         self.input_string = input_string
-        self.lexer = sygus_lexer.SygusLexer()
+        self.lexer = sygus_v1_lexer.SygusV1Lexer()
         self.parser.parse(input_string, lexer=self.lexer.lexer)
         self.input_string = None
         result = self._ast_root

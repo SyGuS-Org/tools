@@ -177,12 +177,11 @@ class SortExpression(AST):
 
 # Used only in V1 grammars!
 class EnumSortExpression(AST):
-    __slots__ = ('enum_name', 'enum_constructors')
+    __slots__ = ('enum_constructors',)
 
-    def __init__(self, enum_name: str, enum_constructors: List[str],
+    def __init__(self, enum_constructors: List[str],
                  start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
-        self.enum_name = enum_name
         self.enum_constructors = list(enum_constructors)
 
     def accept(self, visitor: ASTVisitor):
