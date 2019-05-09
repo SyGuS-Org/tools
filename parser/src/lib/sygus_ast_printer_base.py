@@ -63,6 +63,9 @@ class IndentedStream(object):
     def push_scope_at_custom_indent(self, custom_indent_position: int):
         return IndentScope(self, custom_indent_position)
 
+    def get_value(self):
+        return self.buffer.getvalue()
+
 
 class SygusASTPrinterBase(ast.ASTVisitor):
     def __init__(self, name: str):
