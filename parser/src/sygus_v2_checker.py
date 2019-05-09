@@ -4,7 +4,7 @@ import argparse
 import sys
 
 from lib.sygus_v2_parser import SygusV2Parser
-from lib.visitors import SymbolTableBuilder
+from lib.symbol_table_builder import SymbolTableBuilder
 
 
 def _parse_args():
