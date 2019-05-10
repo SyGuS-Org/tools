@@ -15,8 +15,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/ast.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="408">
-              <caret line="496" column="23" selection-start-line="496" selection-start-column="23" selection-end-line="496" selection-end-column="23" />
+            <state relative-caret-position="257">
+              <caret line="524" selection-start-line="524" selection-end-line="524" />
               <folding>
                 <element signature="e#19#54#0" expanded="true" />
               </folding>
@@ -27,8 +27,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/symbol_table_builder.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="374">
-              <caret line="28" selection-start-line="28" selection-end-line="28" />
+            <state relative-caret-position="654">
+              <caret line="453" selection-start-line="453" selection-end-line="453" />
               <folding>
                 <element signature="e#19#43#0" expanded="true" />
               </folding>
@@ -36,11 +36,23 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lib/sygus_v2_lexer.py">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_parser.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="612">
-              <caret line="37" selection-start-line="37" selection-end-line="37" />
+            <state relative-caret-position="569">
+              <caret line="105" column="85" lean-forward="true" selection-start-line="105" selection-start-column="85" selection-end-line="105" selection-end-column="85" />
+              <folding>
+                <element signature="e#19#34#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_lexer.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="544">
+              <caret line="32" column="16" lean-forward="true" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
               <folding>
                 <element signature="e#0#14#0" expanded="true" />
               </folding>
@@ -49,24 +61,12 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lib/sygus_v2_parser.py">
+        <entry file="file://$PROJECT_DIR$/src/lib/sygus_lexer_base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1156">
-              <caret line="72" column="18" selection-start-line="72" selection-start-column="18" selection-end-line="72" selection-end-column="18" />
+            <state relative-caret-position="-274">
+              <caret line="49" column="22" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
               <folding>
-                <element signature="e#19#34#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_parser.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="6528">
-              <caret line="389" selection-start-line="389" selection-end-line="389" />
-              <folding>
-                <element signature="e#19#34#0" expanded="true" />
+                <element signature="e#19#33#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -75,8 +75,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sygus_v1_checker.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="30" selection-end-line="33" />
+            <state relative-caret-position="136">
+              <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
               <folding>
                 <element signature="e#19#34#0" expanded="true" />
               </folding>
@@ -92,17 +92,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/sygus_ast_printer_base.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="799">
+            <state relative-caret-position="15">
               <caret line="66" column="37" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/lib/sygus_v2_ast_printer.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="289">
-              <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
+            <state relative-caret-position="357">
+              <caret line="21" column="25" lean-forward="true" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
               <folding>
                 <element signature="e#0#19#0" expanded="true" />
               </folding>
@@ -113,8 +113,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="578">
-              <caret line="34" selection-start-line="34" selection-end-line="34" />
+            <state relative-caret-position="406">
+              <caret line="80" column="58" lean-forward="true" selection-start-line="80" selection-start-column="58" selection-end-line="80" selection-end-column="58" />
               <folding>
                 <element signature="e#19#34#0" expanded="true" />
               </folding>
@@ -193,14 +193,14 @@
         <option value="$PROJECT_DIR$/src/sygus_v1_checker.py" />
         <option value="$PROJECT_DIR$/src/lib/sygus_v2_lexer.py" />
         <option value="$PROJECT_DIR$/src/lib/sygus_lexer_base.py" />
-        <option value="$PROJECT_DIR$/src/lib/sygus_v1_lexer.py" />
         <option value="$PROJECT_DIR$/src/lib/ast.py" />
-        <option value="$PROJECT_DIR$/src/lib/sygus_v1_parser.py" />
         <option value="$PROJECT_DIR$/src/lib/resolution.py" />
         <option value="$PROJECT_DIR$/src/lib/sygus_v1_ast_printer.py" />
-        <option value="$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py" />
         <option value="$PROJECT_DIR$/src/lib/sygus_ast_printer_base.py" />
+        <option value="$PROJECT_DIR$/src/lib/sygus_v1_lexer.py" />
         <option value="$PROJECT_DIR$/src/lib/sygus_v2_ast_printer.py" />
+        <option value="$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py" />
+        <option value="$PROJECT_DIR$/src/lib/sygus_v1_parser.py" />
       </list>
     </option>
   </component>
@@ -240,7 +240,7 @@
   <component name="PropertiesComponent">
     <property name="ASKED_SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/sygus_v1_checker.py" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py" />
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
   </component>
   <component name="RecentsManager">
@@ -261,7 +261,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Python.sygus_v1_checker">
+  <component name="RunManager" selected="Python.sygus_v1_to_v2_converter">
     <configuration name="sygus_v1_checker" type="PythonConfigurationType" factoryName="Python">
       <module name="parser" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -276,6 +276,27 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sygus_v1_checker.py" />
       <option name="PARAMETERS" value="D:\Source\Repos\sygus\benchmarks\v1\General_Track\btr-solution-0.sl" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="sygus_v1_to_v2_converter" type="PythonConfigurationType" factoryName="Python">
+      <module name="parser" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="D:\Source\Repos\sygus\tools\parser\src\venv\Scripts\python.exe" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py" />
+      <option name="PARAMETERS" value="D:\Source\Repos\sygus\benchmarks\v1\Inv_Track\anfp-new.sl" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
       <option name="MODULE_MODE" value="false" />
@@ -307,6 +328,7 @@
     <list>
       <item itemvalue="Python.sygus_v2_checker" />
       <item itemvalue="Python.sygus_v1_checker" />
+      <item itemvalue="Python.sygus_v1_to_v2_converter" />
     </list>
   </component>
   <component name="SvnConfiguration">
@@ -352,6 +374,11 @@
           <url>file://$USER_HOME$/work-all/Penn/git/sygus/tools/parser/src/parsing/visitors.py</url>
           <line>229</line>
           <option name="timeStamp" value="19" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" suspend="THREAD" type="python-line">
+          <url>file://$PROJECT_DIR$/src/lib/symbol_table_builder.py</url>
+          <line>334</line>
+          <option name="timeStamp" value="20" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
@@ -436,26 +463,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_lexer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="425">
-          <caret line="25" column="43" lean-forward="true" selection-start-line="25" selection-start-column="43" selection-end-line="25" selection-end-column="43" />
-          <folding>
-            <element signature="e#0#6#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_lexer_base.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-274">
-          <caret line="49" column="22" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
-          <folding>
-            <element signature="e#19#33#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/lib/resolution.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4694">
@@ -472,16 +479,6 @@
           <caret line="61" selection-start-line="61" selection-end-line="61" />
           <folding>
             <element signature="e#19#49#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/symbol_table_builder.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="374">
-          <caret line="28" selection-start-line="28" selection-end-line="28" />
-          <folding>
-            <element signature="e#19#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -506,10 +503,60 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_parser.py">
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_ast_printer.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_lexer_base.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="6528">
-          <caret line="389" selection-start-line="389" selection-end-line="389" />
+        <state relative-caret-position="-274">
+          <caret line="49" column="22" selection-start-line="49" selection-start-column="22" selection-end-line="49" selection-end-column="22" />
+          <folding>
+            <element signature="e#19#33#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_lexer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="544">
+          <caret line="32" column="16" lean-forward="true" selection-start-line="32" selection-start-column="16" selection-end-line="32" selection-end-column="16" />
+          <folding>
+            <element signature="e#0#14#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_ast_printer_base.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="66" column="37" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v2_ast_printer.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="357">
+          <caret line="21" column="25" lean-forward="true" selection-start-line="21" selection-start-column="25" selection-end-line="21" selection-end-column="25" />
+          <folding>
+            <element signature="e#0#19#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sygus_v1_checker.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="136">
+          <caret line="8" lean-forward="true" selection-start-line="8" selection-end-line="8" />
+          <folding>
+            <element signature="e#19#34#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="406">
+          <caret line="80" column="58" lean-forward="true" selection-start-line="80" selection-start-column="58" selection-end-line="80" selection-end-column="58" />
           <folding>
             <element signature="e#19#34#0" expanded="true" />
           </folding>
@@ -518,50 +565,30 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/lib/ast.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="408">
-          <caret line="496" column="23" selection-start-line="496" selection-start-column="23" selection-end-line="496" selection-end-column="23" />
+        <state relative-caret-position="257">
+          <caret line="524" selection-start-line="524" selection-end-line="524" />
           <folding>
             <element signature="e#19#54#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/sygus_v1_checker.py">
+    <entry file="file://$PROJECT_DIR$/src/lib/symbol_table_builder.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="30" selection-end-line="33" />
+        <state relative-caret-position="654">
+          <caret line="453" selection-start-line="453" selection-end-line="453" />
           <folding>
-            <element signature="e#19#34#0" expanded="true" />
+            <element signature="e#19#43#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_ast_printer_base.py">
+    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_parser.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="799">
-          <caret line="66" column="37" selection-start-line="66" selection-start-column="37" selection-end-line="66" selection-end-column="37" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v1_ast_printer.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/sygus_v1_to_v2_converter.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="578">
-          <caret line="34" selection-start-line="34" selection-end-line="34" />
+        <state relative-caret-position="569">
+          <caret line="105" column="85" lean-forward="true" selection-start-line="105" selection-start-column="85" selection-end-line="105" selection-end-column="85" />
           <folding>
             <element signature="e#19#34#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/lib/sygus_v2_ast_printer.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="289">
-          <caret line="113" column="8" selection-start-line="113" selection-start-column="8" selection-end-line="113" selection-end-column="8" />
-          <folding>
-            <element signature="e#0#19#0" expanded="true" />
           </folding>
         </state>
       </provider>

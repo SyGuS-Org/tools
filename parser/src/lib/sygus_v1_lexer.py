@@ -1,4 +1,5 @@
 import ply.lex
+import re
 from .sygus_lexer_base import _SygusLexerBase
 
 
@@ -26,6 +27,9 @@ class SygusV1Lexer(_SygusLexerBase):
     @ply.lex.TOKEN(_SygusLexerBase._symbol)
     def t_TK_SYMBOL(self, t):
         t.type = self.reserved.get(t.value, 'TK_SYMBOL')
+        if t.type == 'TK_SYMBOL' and re.fullmatch(r'-\d+', t.value):
+            t.value = int(t.value)
+            t.type = 'TK_NUMERAL'
         return t
 
     def __init__(self):

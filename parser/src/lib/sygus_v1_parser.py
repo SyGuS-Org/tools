@@ -103,7 +103,7 @@ class SygusV1Parser(object):
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
             end_position = self._get_position(p.lineno(5), p.lexpos(5))
 
-        p[0] = ast.SynthFunCommand(p[3], p[4], p[5], grammar, start_position, end_position)
+        p[0] = ast.SynthInvCommand(p[3], p[4], grammar, start_position, end_position)
 
     def p_check_synth_command(self, p):
         """check_synth_command : TK_LPAREN TK_CHECK_SYNTH TK_RPAREN"""

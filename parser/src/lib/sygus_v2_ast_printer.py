@@ -4,7 +4,10 @@ from . import sygus_ast_printer_base
 
 class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
     def visit_literal_term(self, literal_term: ast.LiteralTerm):
-        self.stream.write(str(literal_term.literal.literal_value))
+        if literal_term.literal.literal_kind == ast.LiteralKind.NUMERAL and literal_term.literal.literal_value < 0:
+            self.stream.write(f'(- {-literal_term.literal.literal_value})')
+        else:
+            self.stream.write(str(literal_term.literal.literal_value))
 
     def visit_enum_sort_expression(self, enum_sort_expression: ast.EnumSortExpression):
         raise NotImplemented
