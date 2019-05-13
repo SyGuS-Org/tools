@@ -1,10 +1,12 @@
 #!/usr/bin/python
 
 import ply.yacc
+from io import StringIO
 
 from . import utilities
 from . import sygus_v2_lexer
 from . import ast
+from . import exceptions
 
 
 # noinspection PyMethodMayBeStatic
@@ -139,7 +141,7 @@ class SygusV2Parser(object):
     def p_term(self, p):
         """term : identifier
                 | literal
-                | TK_LPAREN identifier term_plus TK_RPAREN
+                | TK_LPAREN identifier term_star TK_RPAREN
                 | TK_LPAREN TK_EXISTS TK_LPAREN sorted_symbol_plus TK_RPAREN term TK_RPAREN
                 | TK_LPAREN TK_FORALL TK_LPAREN sorted_symbol_plus TK_RPAREN term TK_RPAREN
                 | TK_LPAREN TK_LET TK_LPAREN binding_plus TK_RPAREN term TK_RPAREN"""
@@ -151,10 +153,10 @@ class SygusV2Parser(object):
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
             end_position = self._get_position(p.lineno(4), p.lexpos(4))
             p[0] = ast.FunctionApplicationTerm(p[2], p[3], start_position, end_position)
-        elif len(p) == 8 and (p[2].value == 'forall' or p[2].value == 'exists'):
+        elif len(p) == 8 and (p[2] == 'forall' or p[2] == 'exists'):
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
             end_position = self._get_position(p.lineno(7), p.lexpos(7))
-            quantifier_kind = ast.QuantifierKind.FORALL if p[2].value == 'forall' else ast.QuantifierKind.EXISTS
+            quantifier_kind = ast.QuantifierKind.FORALL if p[2] == 'forall' else ast.QuantifierKind.EXISTS
             p[0] = ast.QuantifiedTerm(quantifier_kind, p[4], p[6], start_position, end_position)
         else:
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
@@ -178,6 +180,14 @@ class SygusV2Parser(object):
             p[0] = [p[1]]
         else:
             p[0] = p[1] + [p[2]]
+
+    def p_term_star(self, p):
+        """term_star : term_plus
+                     | """
+        if len(p) == 1:
+            p[0] = []
+        else:
+            p[0] = p[1]
 
     def p_sort_expr_plus(self, p):
         """sort_expr_plus : sort_expr_plus sort_expr
@@ -250,7 +260,7 @@ class SygusV2Parser(object):
         if len(p) == 5:
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
             end_position = self._get_position(p.lineno(4), p.lexpos(4))
-            if p[2].value == 'Constant':
+            if p[2] == 'Constant':
                 p[0] = ast.GrammarTerm.create_constant_term(p[3], start_position, end_position)
             else:
                 p[0] = ast.GrammarTerm.create_variable_term(p[3], start_position, end_position)
@@ -304,7 +314,7 @@ class SygusV2Parser(object):
 
     def p_binding(self, p):
         """binding : TK_LPAREN TK_SYMBOL term TK_RPAREN"""
-        p[0] = (p[1], p[2])
+        p[0] = (p[2], p[3])
 
     def _p_literal_common(self, p, kind):
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(str(p[1])))
@@ -417,12 +427,12 @@ class SygusV2Parser(object):
 
     def p_error(self, p):
         if p:
-            print("Syntax error at token", p.type, p.value)
-            print('Location:', self._get_position(p.lineno, p.lexpos))
-            self.parser.errok()
-            # sys.exit(1)
+            f = StringIO()
+            f.write('Syntax error at token: %s, %s' % (str(p.type), str(p.value)))
+            location = self._get_position(p.lineno, p.lexpos)
+            raise exceptions.ParseException(f.getvalue(), location, location)
         else:
-            print("Syntax error at EOF")
+            raise SyntaxError()
 
     def __init__(self):
         self.parser = ply.yacc.yacc(module=self, tabmodule='sygus_v2_parser_tab')

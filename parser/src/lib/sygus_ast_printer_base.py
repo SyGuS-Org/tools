@@ -118,7 +118,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
 
     def visit_declare_var_command(self, declare_var_command: ast.DeclareVarCommand):
         self.stream.write('(declare-var ')
-        self.stream.write(declare_var_command.symbol)
+        self.stream.write(f'{declare_var_command.symbol} ')
         declare_var_command.sort_expression.accept(self)
         self.stream.write(')')
 
@@ -184,6 +184,8 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             param[1].accept(self)
             self.stream.write(')')
         self.stream.write(') ')
+        define_fun_command.function_range_sort.accept(self)
+        self.stream.write(' ')
         define_fun_command.function_body.accept(self)
         self.stream.write(')')
 

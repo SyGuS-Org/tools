@@ -6,6 +6,8 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
     def visit_literal_term(self, literal_term: ast.LiteralTerm):
         if literal_term.literal.literal_kind == ast.LiteralKind.NUMERAL and literal_term.literal.literal_value < 0:
             self.stream.write(f'(- {-literal_term.literal.literal_value})')
+        elif literal_term.literal.literal_kind == ast.LiteralKind.STRING:
+            self.stream.write(f'"{literal_term.literal.literal_value}"')
         else:
             self.stream.write(str(literal_term.literal.literal_value))
 
@@ -121,7 +123,7 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
                 self.stream.write(' ')
             first = False
             expansion.accept(self)
-        self.stream.write(')')
+        self.stream.write('))')
 
     def visit_grammar(self, grammar: ast.Grammar):
         self.stream.write('(')

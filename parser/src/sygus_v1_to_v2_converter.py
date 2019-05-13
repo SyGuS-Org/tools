@@ -27,7 +27,7 @@ def _convert_one_file(input_path, output_path):
     program = parser.parse(contents)
 
     if program is None:
-        raise ParseException('Failed to parse program.', None, None)
+        raise ParseException('Failed to parse V1 program.', None, None)
 
     SymbolTableBuilder.run(program)
     result = SygusV2ASTPrinter.run(program)

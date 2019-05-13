@@ -1,12 +1,12 @@
 #!/usr/bin/python
 
 import ply.yacc
+from io import StringIO
 
 from . import utilities
 from . import sygus_v1_lexer
 from . import ast
 from . import exceptions
-
 
 # noinspection PyMethodMayBeStatic
 class SygusV1Parser(object):
@@ -419,12 +419,12 @@ class SygusV1Parser(object):
 
     def p_error(self, p):
         if p:
-            print("Syntax error at token", p.type, p.value)
-            print('Location:', self._get_position(p.lineno, p.lexpos))
-            self.parser.errok()
-            # sys.exit(1)
+            f = StringIO()
+            f.write('Syntax error at token: %s, %s' % (str(p.type), str(p.value)))
+            location = self._get_position(p.lineno, p.lexpos)
+            raise exceptions.ParseException(f.getvalue(), location, location)
         else:
-            print("Syntax error at EOF")
+            raise SyntaxError()
 
     def __init__(self):
         self.parser = ply.yacc.yacc(module=self, tabmodule='sygus_v1_parser_tab')
