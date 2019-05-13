@@ -143,6 +143,9 @@ class SygusV1Parser(object):
 
     def p_primed_var_decl_command(self, p):
         """primed_var_decl_command : TK_LPAREN TK_DECLARE_PRIMED_VAR symbol sort_expr TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(5), p.lexpos(5))
+        p[0] = ast.DeclarePrimedVarCommand(p[3], p[4], start_position, end_position)
 
     def p_sort_expr_bit_vector(self, p):
         """sort_expr : TK_LPAREN TK_BV TK_NUMERAL TK_RPAREN"""
