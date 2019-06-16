@@ -1,15 +1,16 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import argparse
-import sys
 import os
-from io import StringIO
+import sys
 import traceback
 
-from lib.sygus_v1_parser import SygusV1Parser
-from lib.symbol_table_builder import SymbolTableBuilder
-from lib.sygus_v2_ast_printer import SygusV2ASTPrinter
-from lib.exceptions import ParseException
+from io import StringIO
+
+from .lib.exceptions import ParseException
+from .lib.sygus_v1_parser import SygusV1Parser
+from .lib.sygus_v2_ast_printer import SygusV2ASTPrinter
+from .lib.symbol_table_builder import SymbolTableBuilder
 
 
 def _parse_args():

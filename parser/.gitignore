@@ -1,4 +1,8 @@
-venv/
+venv
+__pycache__
+
 *.pyc
 *.pyo
 *.pyx
+
+parser.out

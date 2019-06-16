@@ -1,12 +1,7 @@
-#!/usr/bin/python
-
 import ply.yacc
 from io import StringIO
 
-from . import utilities
-from . import sygus_v1_lexer
-from . import ast
-from . import exceptions
+from . import ast,  exceptions, sygus_v1_lexer, utilities
 
 # noinspection PyMethodMayBeStatic
 class SygusV1Parser(object):
@@ -25,7 +20,7 @@ class SygusV1Parser(object):
         elif len(p) == 2:
             p[0] = ast.Program(p[1])
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
         self._ast_root = p[0]
 

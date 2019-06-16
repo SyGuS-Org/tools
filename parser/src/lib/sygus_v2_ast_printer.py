@@ -1,5 +1,4 @@
-from lib import ast
-from . import sygus_ast_printer_base
+from . import ast, sygus_ast_printer_base
 
 
 class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
@@ -12,7 +11,7 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
             self.stream.write(str(literal_term.literal.literal_value))
 
     def visit_enum_sort_expression(self, enum_sort_expression: ast.EnumSortExpression):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_quantified_term(self, quantified_term: ast.QuantifiedTerm):
         if quantified_term.quantifier_kind == ast.QuantifierKind.EXISTS:
@@ -59,7 +58,7 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
         self.stream.write(f' {str(set_option_command.option_value.literal_value)})')
 
     def visit_set_options_command(self, set_options_command: ast.SetOptionCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_synth_fun_command(self, synth_fun_command: ast.SynthFunCommand):
         self.stream.write(f'(synth-fun {str(synth_fun_command.function_symbol)} (')
@@ -111,7 +110,7 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
         elif grammar_term.grammar_term_kind == ast.GrammarTermKind.BINDER_FREE:
             grammar_term.binder_free_term.accept(self)
         else:
-            raise NotImplemented
+            raise NotImplementedError
 
     def visit_grouped_rule_list(self, grouped_rule_list: ast.GroupedRuleList):
         self.stream.write(f'({grouped_rule_list.head_symbol} ')
@@ -146,25 +145,25 @@ class SygusV2ASTPrinter(sygus_ast_printer_base.SygusASTPrinterBase):
         self.stream.write(')')
 
     def visit_declare_sort_command(self, declare_sort_command: ast.DeclareSortCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_declare_fun_command(self, declare_fun_command: ast.DeclareFunCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_define_sort_command(self, define_sort_command: ast.DefineSortCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_datatype_constructor(self, datatype_constructor: ast.DatatypeConstructor):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_datatype_constructor_list(self, datatype_constructor_list: ast.DatatypeConstructorList):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_declare_datatypes_command(self, declare_datatypes_command: ast.DeclareDatatypesCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_declare_datatype_command(self, declare_datatypes_command: ast.DeclareDatatypeCommand):
-        raise NotImplemented
+        raise NotImplementedError
 
     def visit_program(self, program: ast.Program):
         for command in program.commands:

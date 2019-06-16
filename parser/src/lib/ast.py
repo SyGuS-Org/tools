@@ -1,12 +1,10 @@
-#!/usr/bin/python
-
-from abc import abstractmethod, ABC
-from typing import Union, List, Tuple, Dict
+from abc import ABC, abstractmethod
 from enum import Enum
+from typing import Dict, List, Tuple, Union
 
-from .utilities import Identifier, Location
 from . import utilities
 
+from .utilities import Identifier, Location
 
 class ASTVisitor(object):
     __slots__ = ('name',)
@@ -16,123 +14,123 @@ class ASTVisitor(object):
 
     @abstractmethod
     def visit_sort_expression(self, sort_expression: 'SortExpression'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_enum_sort_expression(self, enum_sort_expression: 'EnumSortExpression'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_identifier_term(self, identifier_term: 'IdentifierTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_literal_term(self, literal_term: 'LiteralTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_function_application_term(self, function_application_term: 'FunctionApplicationTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_quantified_term(self, quantified_term: 'QuantifiedTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_let_term(self, let_term: 'LetTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_check_synth_command(self, check_synth_command: 'CheckSynthCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_constraint_command(self, constraint_command: 'ConstraintCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_var_command(self, declare_var_command: 'DeclareVarCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_primed_var_command(self, declare_primed_var_command: 'DeclarePrimedVarCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_inv_constraint_command(self, inv_constraint_command: 'InvConstraintCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_set_feature_command(self, set_feature_command: 'SetFeatureCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_set_option_command(self, set_option_command: 'SetOptionCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_set_options_command(self, set_options_command: 'SetOptionsCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_set_logic_command(self, set_logic_command: 'SetLogicCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_synth_fun_command(self, synth_fun_command: 'SynthFunCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_synth_inv_command(self, synth_inv_command: 'SynthInvCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_grammar_term(self, grammar_term: 'GrammarTerm'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_grouped_rule_list(self, grouped_rule_list: 'GroupedRuleList'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_grammar(self, grammar: 'Grammar'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_sort_command(self, declare_sort_command: 'DeclareSortCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_define_fun_command(self, define_fun_command: 'DefineFunCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_fun_command(self, declare_fun_command: 'DeclareFunCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_define_sort_command(self, define_sort_command: 'DefineSortCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_datatype_constructor(self, datatype_constructor: 'DatatypeConstructor'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_datatype_constructor_list(self, datatype_constructor_list: 'DatatypeConstructorList'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_datatypes_command(self, declare_datatypes_command: 'DeclareDatatypesCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_declare_datatype_command(self, declare_datatypes_command: 'DeclareDatatypeCommand'):
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def visit_program(self, program: 'Program'):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class AST(object):
@@ -144,7 +142,7 @@ class AST(object):
 
     @abstractmethod
     def accept(self, visitor: ASTVisitor):
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class SortExpression(AST):

@@ -1,12 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import argparse
 import os
-from io import StringIO
 import traceback
 
-from lib.sygus_v2_parser import SygusV2Parser
-from lib.symbol_table_builder import SymbolTableBuilder
+from io import StringIO
+
+from .lib.sygus_v2_parser import SygusV2Parser
+from .lib.symbol_table_builder import SymbolTableBuilder
 
 
 def _parse_args():
@@ -34,7 +35,7 @@ def _main():
     failed_files = []
     if os.path.isdir(args.input_file_or_directory):
         file_count = 0
-        for dir_path, dir_names, file_names in os.walk(args.input_file_or_directory):
+        for dir_path, _, file_names in os.walk(args.input_file_or_directory):
             for file_name in file_names:
                 _, extension = os.path.splitext(file_name)
                 if extension not in ['.sl', '.sygus']:

@@ -1,12 +1,8 @@
-#!/usr/bin/python
-
 import ply.yacc
+
 from io import StringIO
 
-from . import utilities
-from . import sygus_v2_lexer
-from . import ast
-from . import exceptions
+from . import ast, exceptions, sygus_v2_lexer, utilities
 
 
 # noinspection PyMethodMayBeStatic

@@ -1,14 +1,12 @@
-#!/usr/bin/python
-
 import inspect
-from typing import Union, List, Tuple, Dict, Set
-from enum import Enum
-from abc import ABC, abstractmethod
 
-from . import ast
-from . import utilities
-from .utilities import Identifier, Hashable
-from . import exceptions
+from abc import ABC, abstractmethod
+from enum import Enum
+from typing import Dict, List, Set, Tuple, Union
+
+from . import ast, exceptions, utilities
+
+from .utilities import Hashable, Identifier
 
 
 class SymbolTableEntryKind(Enum):
@@ -451,11 +449,11 @@ class Resolver(ABC):
 
     @abstractmethod
     def _resolve_sort_impl(self, identifier: Identifier) -> SortDescriptor:
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _resolve_function_impl(self, identifier: Identifier, *arg_sorts: SortDescriptor) -> FunctionDescriptor:
-        raise NotImplemented
+        raise NotImplementedError
 
 
 class CacheKey(object):
@@ -487,11 +485,11 @@ class CachedResolver(Resolver):
 
     @abstractmethod
     def _resolve_sort_impl_(self, identifier: Identifier) -> SortDescriptor:
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _resolve_function_impl_(self, identifier: Identifier, *arg_sorts: SortDescriptor) -> FunctionDescriptor:
-        raise NotImplemented
+        raise NotImplementedError
 
     def _resolve_sort_impl(self, identifier: Identifier) -> SortDescriptor:
         desc = self._sort_resolution_cache.get(identifier, None)

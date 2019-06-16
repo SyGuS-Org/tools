@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from abc import abstractmethod
 from typing import Union
 
@@ -47,11 +45,11 @@ class Hashable(object):
 
     @abstractmethod
     def _compute_hash(self) -> int:
-        raise NotImplemented
+        raise NotImplementedError
 
     @abstractmethod
     def _compute_equals(self, other):
-        raise NotImplemented
+        raise NotImplementedError
 
     def __hash__(self):
         if self._hash is None:

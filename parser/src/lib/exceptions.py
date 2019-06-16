@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 from typing import Union
 
 from . import utilities

@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 import ply.lex
 
 from . import utilities, exceptions

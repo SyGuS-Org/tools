@@ -1,12 +1,13 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 
 import argparse
 import os
-from io import StringIO
 import traceback
 
-from lib.sygus_v1_parser import SygusV1Parser
-from lib.symbol_table_builder import SymbolTableBuilder
+from io import StringIO
+
+from .lib.sygus_v1_parser import SygusV1Parser
+from .lib.symbol_table_builder import SymbolTableBuilder
 
 
 def _parse_args():

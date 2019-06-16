@@ -1,5 +1,6 @@
 import ply.lex
 import re
+
 from .sygus_lexer_base import _SygusLexerBase
 
 

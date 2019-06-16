@@ -1,12 +1,9 @@
-#!/usr/bin/python
-
 from typing import Union
 
-from . import ast
-from .resolution import SymbolTable, SortDescriptor, SortKind, FunctionDescriptor
-from . import resolution
+from . import ast, resolution, utilities
+
 from .exceptions import ResolutionException, UnsupportedFeatureException
-from . import utilities
+from .resolution import SymbolTable, SortDescriptor, SortKind, FunctionDescriptor
 
 
 class SymbolTableBuilder(ast.ASTVisitor):
