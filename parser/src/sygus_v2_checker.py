@@ -6,7 +6,7 @@ import traceback
 
 from io import StringIO
 
-from .lib.sygus_v2_parser import SygusV2Parser
+from .lib.v2.parser import SygusV2Parser
 from .lib.symbol_table_builder import SymbolTableBuilder
 
 

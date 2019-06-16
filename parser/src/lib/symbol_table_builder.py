@@ -339,7 +339,7 @@ class SymbolTableBuilder(ast.ASTVisitor):
         for nonterminal_symbol in nonterminal_symbols.values():
             self.symbol_table.add_symbol(nonterminal_symbol)
 
-        for head_symbol, expansion in grammar.grouped_rule_lists.items():
+        for _, expansion in grammar.grouped_rule_lists.items():
             expansion.accept(self)
             if expansion.head_symbol_sort_descriptor != nonterminal_symbols[expansion.head_symbol].symbol_sort:
                 raise TypeError('Actual type of expansion does not match declared type.\n' +

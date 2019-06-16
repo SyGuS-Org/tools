@@ -6,7 +6,7 @@ import traceback
 
 from io import StringIO
 
-from .lib.sygus_v1_parser import SygusV1Parser
+from .lib.v1.parser import SygusV1Parser
 from .lib.symbol_table_builder import SymbolTableBuilder
 
 
@@ -35,7 +35,7 @@ def _main():
     failed_files = []
     if os.path.isdir(args.input_file_or_directory):
         file_count = 0
-        for dir_path, dir_names, file_names in os.walk(args.input_file_or_directory):
+        for dir_path, _, file_names in os.walk(args.input_file_or_directory):
             for file_name in file_names:
                 _, extension = os.path.splitext(file_name)
                 if extension not in ['.sl', '.sygus']:

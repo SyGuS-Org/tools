@@ -2,12 +2,14 @@ import ply.yacc
 
 from io import StringIO
 
-from . import ast, exceptions, sygus_v2_lexer, utilities
+from .. import ast, exceptions, utilities
+
+from .lexer import SygusV2Lexer
 
 
 # noinspection PyMethodMayBeStatic
 class SygusV2Parser(object):
-    tokens = sygus_v2_lexer.SygusV2Lexer.tokens
+    tokens = SygusV2Lexer.tokens
 
     def _get_position(self, line: int, pos: int) -> utilities.Location:
         line_start = self.input_string.rfind('\n', 0, pos) + 1
@@ -438,7 +440,7 @@ class SygusV2Parser(object):
 
     def parse(self, input_string):
         self.input_string = input_string
-        self.lexer = sygus_v2_lexer.SygusV2Lexer()
+        self.lexer = SygusV2Lexer()
         self.parser.parse(input_string, lexer=self.lexer.lexer)
         self.input_string = None
         result = self._ast_root

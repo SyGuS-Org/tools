@@ -8,8 +8,8 @@ import traceback
 from io import StringIO
 
 from .lib.exceptions import ParseException
-from .lib.sygus_v1_parser import SygusV1Parser
-from .lib.sygus_v2_ast_printer import SygusV2ASTPrinter
+from .lib.v1.parser import SygusV1Parser
+from .lib.v2.printer import SygusV2ASTPrinter
 from .lib.symbol_table_builder import SymbolTableBuilder
 
 
@@ -57,7 +57,7 @@ def _convert_directory(args):
         print('Cannot output to stdout when a directory is provided as input!')
         sys.exit(1)
 
-    for (dir_path, dir_names, file_names) in os.walk(input_dir):
+    for (dir_path, _, file_names) in os.walk(input_dir):
         for file_name in file_names:
 
             _, extension = os.path.splitext(file_name)

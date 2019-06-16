@@ -1,7 +1,7 @@
 import ply.lex
 import re
 
-from .sygus_lexer_base import _SygusLexerBase
+from ..base_lexer import _SygusLexerBase
 
 
 # noinspection PyPep8Naming
