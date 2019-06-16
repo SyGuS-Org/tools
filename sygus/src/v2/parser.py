@@ -433,7 +433,7 @@ class SygusV2Parser(object):
             raise SyntaxError()
 
     def __init__(self):
-        self.parser = ply.yacc.yacc(module=self, tabmodule='sygus_v2_parser_tab')
+        self.parser = ply.yacc.yacc(debug=False, optimize=True, module=self)
         self.input_string = None
         self.lexer = None
         self._ast_root = None

@@ -103,11 +103,12 @@ class _SygusLexerBase(object):
 
     def t_error(self, t):
         start_location, end_location = self._get_locations(t)
-        raise exceptions.ParseException('Could not figure out what to do with string:\"%s\"' % t.value,
-                                        start_location, end_location)
+        raise exceptions.ParseException(
+            f'Could not figure out what to do with string: \"{t.value}\"',
+            start_location, end_location)
 
     def __init__(self):
-        self.lexer = ply.lex.lex(object=self, debug=False)
+        self.lexer = ply.lex.lex(object=self, debug=False, optimize=True)
 
     def lex(self, input_string):
         self.lexer.input(input_string)
