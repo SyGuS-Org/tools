@@ -2,7 +2,7 @@ from .. import ast
 from ..base.printer import SygusASTPrinterBase
 
 
-class SygusV2ASTPrinter(SygusASTPrinterBase):
+class SygusV1ASTPrinter(SygusASTPrinterBase):
     def visit_literal_term(self, literal_term: ast.LiteralTerm):
         if literal_term.literal.literal_kind == ast.LiteralKind.NUMERAL and literal_term.literal.literal_value < 0:
             self.stream.write(f'(- {-literal_term.literal.literal_value})')
@@ -85,10 +85,10 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         self.stream.write(')')
 
     def __init__(self):
-        super().__init__('SygusV2ASTPrinter')
+        super().__init__('SygusV1ASTPrinter')
 
     @staticmethod
     def run(program: ast.Program) -> str:
-        writer = SygusV2ASTPrinter()
+        writer = SygusV1ASTPrinter()
         program.accept(writer)
         return writer.stream.get_value()

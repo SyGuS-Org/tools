@@ -6,13 +6,13 @@ This repository contains tools to parse and manipulate [SyGuS] files.
 while  pull requests with fixes for the bugs are even more highly appreciated!
 
 
-## Checkers and Convertors
+## Checkers and Converters
 
 1. Checking if a file conforms to the [SyGuS language standard]:
 ```bash
 # Check if /path/to/file.sl is a valid SyGuS v2 file
 
-python3 -m sygus.bin.check -s 2 <path_to_file>
+python3 -m sygus.bin.check -s 2 /path/to/file.sl
 ```
 
 2. Converting a file to a different version of the [SyGuS language standard]:

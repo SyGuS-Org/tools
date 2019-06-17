@@ -1,13 +1,13 @@
 import ply.lex
 import re
 
-from ..base_lexer import _SygusLexerBase
+from ..base.lexer import SygusLexerBase
 
 
 # noinspection PyPep8Naming
-class SygusV1Lexer(_SygusLexerBase):
-    tokens = _SygusLexerBase._tokens
-    reserved = _SygusLexerBase._reserved
+class SygusV1Lexer(SygusLexerBase):
+    tokens = SygusLexerBase.tokens
+    reserved = SygusLexerBase.reserved
 
     reserved['declare-fun'] = 'TK_DECLARE_FUN'
     reserved['set-options'] = 'TK_SET_OPTIONS'
@@ -25,7 +25,7 @@ class SygusV1Lexer(_SygusLexerBase):
 
     t_TK_DOUBLE_COLON = r'::'
 
-    @ply.lex.TOKEN(_SygusLexerBase._symbol)
+    @ply.lex.TOKEN(SygusLexerBase._symbol)
     def t_TK_SYMBOL(self, t):
         t.type = self.reserved.get(t.value, 'TK_SYMBOL')
         if t.type == 'TK_SYMBOL' and re.fullmatch(r'-\d+', t.value):

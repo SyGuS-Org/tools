@@ -3,12 +3,13 @@ import ply.yacc
 from io import StringIO
 
 from .. import ast,  exceptions, utilities
+from ..base.parser import SygusParserBase
 
 from .lexer import SygusV1Lexer
 
 
 # noinspection PyMethodMayBeStatic
-class SygusV1Parser(object):
+class SygusV1Parser(SygusParserBase):
     tokens = SygusV1Lexer.tokens
 
     def _get_position(self, line: int, pos: int) -> utilities.Location:
@@ -49,12 +50,6 @@ class SygusV1Parser(object):
                    | var_decl_command
                    | primed_var_decl_command"""
         p[0] = p[1]
-
-    def p_set_logic_command(self, p):
-        """set_logic_command : TK_LPAREN TK_SET_LOGIC TK_SYMBOL TK_RPAREN"""
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-        end_position = self._get_position(p.lineno(4), p.lexpos(4))
-        p[0] = ast.SetLogicCommand(p[3], start_position, end_position)
 
     def p_fun_def_command(self, p):
         """fun_def_command : TK_LPAREN TK_DEFINE_FUN symbol arg_list sort_expr term TK_RPAREN"""
@@ -104,24 +99,6 @@ class SygusV1Parser(object):
 
         p[0] = ast.SynthInvCommand(p[3], p[4], grammar, start_position, end_position)
 
-    def p_check_synth_command(self, p):
-        """check_synth_command : TK_LPAREN TK_CHECK_SYNTH TK_RPAREN"""
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-        end_position = self._get_position(p.lineno(3), p.lexpos(3))
-        p[0] = ast.CheckSynthCommand(start_position, end_position)
-
-    def p_constraint_command(self, p):
-        """constraint_command : TK_LPAREN TK_CONSTRAINT term TK_RPAREN"""
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-        end_position = self._get_position(p.lineno(4), p.lexpos(4))
-        p[0] = ast.ConstraintCommand(p[3], start_position, end_position)
-
-    def p_inv_constraint_command(self, p):
-        """inv_constraint_command : TK_LPAREN TK_INV_CONSTRAINT symbol symbol symbol symbol TK_RPAREN"""
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-        end_position = self._get_position(p.lineno(7), p.lexpos(7))
-        p[0] = ast.InvConstraintCommand(p[3], p[4], p[5], p[6], start_position, end_position)
-
     def p_sort_def_command(self, p):
         """sort_def_command : TK_LPAREN TK_DEFINE_SORT symbol sort_expr TK_RPAREN"""
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
@@ -133,12 +110,6 @@ class SygusV1Parser(object):
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
         end_position = self._get_position(p.lineno(4), p.lexpos(4))
         p[0] = ast.SetOptionsCommand(p[3], start_position, end_position)
-
-    def p_var_decl_command(self, p):
-        """var_decl_command : TK_LPAREN TK_DECLARE_VAR symbol sort_expr TK_RPAREN"""
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
-        end_position = self._get_position(p.lineno(5), p.lexpos(5))
-        p[0] = ast.DeclareVarCommand(p[3], p[4], start_position, end_position)
 
     def p_primed_var_decl_command(self, p):
         """primed_var_decl_command : TK_LPAREN TK_DECLARE_PRIMED_VAR symbol sort_expr TK_RPAREN"""
@@ -272,38 +243,9 @@ class SygusV1Parser(object):
         else:
             p[0] = []
 
-    def _p_literal_common(self, p, kind):
-        start_position = self._get_position(p.lineno(1), p.lexpos(1) - len(str(p[1])))
-        end_position = self._get_position(p.lineno(1), p.lexpos(1))
-        p[0] = ast.Literal(kind, p[1], start_position, end_position)
-
-    def p_literal_numeral(self, p):
-        """literal : TK_NUMERAL"""
-        self._p_literal_common(p, ast.LiteralKind.NUMERAL)
-
-    def p_literal_bool_const(self, p):
-        """literal : TK_BOOL_CONST"""
-        self._p_literal_common(p, ast.LiteralKind.BOOLEAN)
-
-    def p_literal_hex_const(self, p):
-        """literal : TK_HEX_CONST"""
-        self._p_literal_common(p, ast.LiteralKind.HEXADECIMAL)
-
-    def p_literal_bin_const(self, p):
-        """literal : TK_BIN_CONST"""
-        self._p_literal_common(p, ast.LiteralKind.BINARY)
-
     def p_literal_enum_const(self, p):
         """literal : enum_const"""
         self._p_literal_common(p, ast.LiteralKind.ENUMERATED)
-
-    def p_literal_decimal(self, p):
-        """literal : TK_DECIMAL"""
-        self._p_literal_common(p, ast.LiteralKind.DECIMAL)
-
-    def p_literal_string(self, p):
-        """literal : TK_STRING_LITERAL"""
-        self._p_literal_common(p, ast.LiteralKind.STRING)
 
     def p_enum_const(self, p):
         """enum_const : TK_SYMBOL TK_DOUBLE_COLON TK_SYMBOL"""
@@ -416,20 +358,8 @@ class SygusV1Parser(object):
         else:
             p[0] = []
 
-    def p_error(self, p):
-        if p:
-            f = StringIO()
-            f.write('Syntax error at token: %s, %s' % (str(p.type), str(p.value)))
-            location = self._get_position(p.lineno, p.lexpos)
-            raise exceptions.ParseException(f.getvalue(), location, location)
-        else:
-            raise SyntaxError()
-
     def __init__(self):
-        self.parser = ply.yacc.yacc(debug=False, optimize=True, module=self)
-        self.input_string = None
-        self.lexer = None
-        self._ast_root = None
+        super().__init__()
 
     def parse(self, input_string):
         self.input_string = input_string

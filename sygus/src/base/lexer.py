@@ -1,11 +1,11 @@
 import ply.lex
 
-from . import utilities, exceptions
+from .. import utilities, exceptions
 
 
 # noinspection PyPep8Naming,PyMethodMayBeStatic,PySingleQuotedDocstring
-class _SygusLexerBase(object):
-    _reserved = {
+class SygusLexerBase(object):
+    reserved = {
         'define-sort': 'TK_DEFINE_SORT',
         'define-fun': 'TK_DEFINE_FUN',
         'check-synth': 'TK_CHECK_SYNTH',
@@ -22,7 +22,7 @@ class _SygusLexerBase(object):
         'false': 'TK_BOOL_CONST',
     }
 
-    _tokens = [
+    tokens = [
         'TK_LPAREN',
         'TK_RPAREN',
         'TK_NUMERAL',
@@ -108,7 +108,7 @@ class _SygusLexerBase(object):
             start_location, end_location)
 
     def __init__(self):
-        self.lexer = ply.lex.lex(object=self, debug=False, optimize=True)
+        self.lexer = ply.lex.lex(object=self, debug=False)
 
     def lex(self, input_string):
         self.lexer.input(input_string)

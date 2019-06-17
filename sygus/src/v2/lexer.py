@@ -1,13 +1,13 @@
 import ply.lex
 
-from ..base_lexer import _SygusLexerBase
+from ..base.lexer import SygusLexerBase
 
 
 # noinspection PyPep8Naming
-class SygusV2Lexer(_SygusLexerBase):
-    tokens = _SygusLexerBase._tokens
+class SygusV2Lexer(SygusLexerBase):
+    tokens = SygusLexerBase.tokens
+    reserved = SygusLexerBase.reserved
 
-    reserved = _SygusLexerBase._reserved
     reserved['declare-datatype'] = 'TK_DECLARE_DATATYPE'
     reserved['declare-datatypes'] = 'TK_DECLARE_DATATYPES'
     reserved['declare-sort'] = 'TK_DECLARE_SORT'
@@ -19,7 +19,7 @@ class SygusV2Lexer(_SygusLexerBase):
 
     tokens += list(set(reserved.values()))
 
-    @ply.lex.TOKEN(_SygusLexerBase._symbol)
+    @ply.lex.TOKEN(SygusLexerBase._symbol)
     def t_TK_SYMBOL(self, t):
         if t.value == '_':
             t.type = 'TK_UNDERSCORE'

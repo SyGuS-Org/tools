@@ -1,7 +1,7 @@
 from abc import abstractmethod
 from io import StringIO
 
-from . import ast
+from .. import ast
 
 
 class IndentScope(object):
@@ -100,9 +100,25 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             arg.accept(self)
         self.stream.write(')')
 
-    @abstractmethod
+    def _write_params_and_sorts(self, parameters_and_sorts):
+        first = True
+        for param in parameters_and_sorts:
+            if not first:
+                self.stream.write(' ')
+            first = False
+            self.stream.write(f'({param[0]} ')
+            param[1].accept(self)
+            self.stream.write(')')
+
     def visit_quantified_term(self, quantified_term: ast.QuantifiedTerm):
-        raise NotImplementedError
+        if quantified_term.quantifier_kind == ast.QuantifierKind.EXISTS:
+            self.stream.write('(exists (')
+        else:
+            self.stream.write('(forall (')
+        self._write_params_and_sorts(quantified_term.quantified_variables)
+        self.stream.write(') ')
+        quantified_term.term_body.accept(self)
+        self.stream.write(')')
 
     @abstractmethod
     def visit_let_term(self, let_term: ast.LetTerm):
@@ -149,13 +165,29 @@ class SygusASTPrinterBase(ast.ASTVisitor):
     def visit_set_logic_command(self, set_logic_command: ast.SetLogicCommand):
         self.stream.write(f'(set-logic {set_logic_command.logic_name})')
 
-    @abstractmethod
     def visit_synth_fun_command(self, synth_fun_command: ast.SynthFunCommand):
-        raise NotImplementedError
+        self.stream.write(f'(synth-fun {str(synth_fun_command.function_symbol)} (')
+        self._write_params_and_sorts(synth_fun_command.parameters_and_sorts)
+        self.stream.write(') ')
+        synth_fun_command.range_sort_expression.accept(self)
 
-    @abstractmethod
+        with self.stream.push_scope() as _:
+            if synth_fun_command.synthesis_grammar is not None:
+                self.stream.write('\n')
+                synth_fun_command.synthesis_grammar.accept(self)
+
+        self.stream.write(')')
+
     def visit_synth_inv_command(self, synth_inv_command: ast.SynthInvCommand):
-        raise NotImplementedError
+        self.stream.write(f'(synth-inv {str(synth_inv_command.function_symbol)} (')
+        self._write_params_and_sorts(synth_inv_command.parameters_and_sorts)
+        self.stream.write(') ')
+
+        if synth_inv_command.synthesis_grammar is not None:
+            self.stream.write('\n')
+            synth_inv_command.synthesis_grammar.accept(self)
+
+        self.stream.write(')')
 
     @abstractmethod
     def visit_grammar_term(self, grammar_term: ast.GrammarTerm):
@@ -175,14 +207,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
 
     def visit_define_fun_command(self, define_fun_command: ast.DefineFunCommand):
         self.stream.write(f'(define-fun {str(define_fun_command.function_name)} (')
-        first = True
-        for param in define_fun_command.function_parameters:
-            if not first:
-                self.stream.write(' ')
-            first = False
-            self.stream.write(f'({param[0]} ')
-            param[1].accept(self)
-            self.stream.write(')')
+        self._write_params_and_sorts(define_fun_command.function_parameters)
         self.stream.write(') ')
         define_fun_command.function_range_sort.accept(self)
         self.stream.write(' ')
@@ -213,6 +238,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
     def visit_declare_datatype_command(self, declare_datatypes_command: ast.DeclareDatatypeCommand):
         raise NotImplementedError
 
-    @abstractmethod
     def visit_program(self, program: ast.Program):
-        raise NotImplementedError
+        for command in program.commands:
+            command.accept(self)
+            self.stream.write('\n')
