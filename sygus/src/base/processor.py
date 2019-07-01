@@ -26,8 +26,9 @@ class SygusProcessorBase(ast.ASTVisitor):
         for variable_binding in let_term.variable_bindings:
             variable_binding[1].accept(self)
         let_term.let_body.accept(self)
-        for type_annotation in let_term.type_annotations.values():
-            type_annotation.accept(self)
+        if let_term.type_annotations is not None:
+            for type_annotation in let_term.type_annotations.values():
+                type_annotation.accept(self)
 
     def visit_check_synth_command(self, check_synth_command: ast.CheckSynthCommand):
         pass

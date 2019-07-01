@@ -29,6 +29,14 @@ class SygusV1Processor(SygusProcessorBase):
     def visit_declare_datatype_command(self, declare_datatypes_command: ast.DeclareDatatypeCommand):
         raise NotImplementedError
 
+    def visit_let_term(self, let_term: ast.LetTerm):
+        let_term.type_annotations = dict()
+        for binding in let_term.variable_bindings:
+            binding_sort = binding[1].sort_descriptor
+            sort_expression = ast.SortExpression(binding_sort.identifier, binding_sort.sort_arguments, None, None)
+            let_term.type_annotations[binding[0]] = sort_expression
+        SygusProcessorBase.visit_let_term(self, let_term)
+
     def visit_grammar(self, grammar: ast.Grammar):
         if grammar.nonterminals[0][0] != 'Start':
             grammar_term = ast.GrammarTerm.create_binder_free_grammar_term( ast.IdentifierTerm(grammar.nonterminals[0][0], None, None), None, None)

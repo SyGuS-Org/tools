@@ -17,6 +17,8 @@ class SygusV1ASTPrinter(SygusASTPrinterBase):
                 self.stream.write(' ')
             first = False
             self.stream.write(f'({binding[0]} ')
+            let_term.type_annotations[binding[0]].accept(self)
+            self.stream.write(' ')
             binding[1].accept(self)
             self.stream.write(')')
         self.stream.write(') ')
