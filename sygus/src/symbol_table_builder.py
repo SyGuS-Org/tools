@@ -36,17 +36,6 @@ class SymbolTableBuilder(ast.ASTVisitor):
                                                                         declare_fun_command.function_range_sort)
         self.symbol_table.add_function(func_descriptor)
 
-    def __init__(self):
-        super().__init__("SymbolTableBuilder")
-        self.symbol_table: SymbolTable = SymbolTable()
-        self.current_datatype_sort: Union[SortDescriptor, None] = None
-
-    @staticmethod
-    def run(program: ast.Program):
-        builder = SymbolTableBuilder()
-        program.accept(builder)
-        return builder.symbol_table
-
     def visit_sort_expression(self, sort_expression: ast.SortExpression) -> SortDescriptor:
         sort_descriptor = self.symbol_table.lookup_or_resolve_sort(sort_expression.identifier)
         if sort_descriptor is None:
@@ -449,3 +438,14 @@ class SymbolTableBuilder(ast.ASTVisitor):
     def visit_program(self, program: ast.Program):
         for command in program.commands:
             command.accept(self)
+
+    def __init__(self):
+        super().__init__("SymbolTableBuilder")
+        self.symbol_table: SymbolTable = SymbolTable()
+        self.current_datatype_sort: Union[SortDescriptor, None] = None
+
+    @staticmethod
+    def run(program: ast.Program):
+        builder = SymbolTableBuilder()
+        program.accept(builder)
+        return builder.symbol_table

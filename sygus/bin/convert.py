@@ -6,10 +6,7 @@ from ..src.symbol_table_builder import SymbolTableBuilder
 
 
 def main(args):
-    if args.source_sygus_standard == args.target_sygus_standard:
-        print(args.input_file.read())
-        return
-
+    # Step 1: Parse the program
     if args.source_sygus_standard == '1':
         from ..src.v1.parser import SygusV1Parser
         parser = SygusV1Parser()
@@ -19,6 +16,21 @@ def main(args):
     else:
         raise NotImplementedError
 
+    program = parser.parse(args.input_file.read())
+    symbol_table = SymbolTableBuilder.run(program)
+
+    # Step 2: Postprocess the program, if needed
+    if args.target_sygus_standard != args.source_sygus_standard:
+        if args.target_sygus_standard == '1':
+            from ..src.v1.processor import SygusV1Processor as processor
+        if args.target_sygus_standard == '2':
+            from ..src.v2.processor import SygusV2Processor as processor
+        processor.run(program, symbol_table)
+
+    # TODO: May be we don't need this again.
+    SymbolTableBuilder.run(program)
+
+    # Step 3: Print the converted program
     if args.target_sygus_standard == '1':
         from ..src.v1.printer import SygusV1ASTPrinter as printer
     elif args.target_sygus_standard == '2':
@@ -26,8 +38,6 @@ def main(args):
     else:
         raise NotImplementedError
 
-    program = parser.parse(args.input_file.read())
-    SymbolTableBuilder.run(program)
     print(printer.run(program))
 
 

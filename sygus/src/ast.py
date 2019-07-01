@@ -125,7 +125,7 @@ class ASTVisitor(object):
         raise NotImplementedError
 
     @abstractmethod
-    def visit_declare_datatype_command(self, declare_datatypes_command: 'DeclareDatatypeCommand'):
+    def visit_declare_datatype_command(self, declare_datatype_command: 'DeclareDatatypeCommand'):
         raise NotImplementedError
 
     @abstractmethod
@@ -221,7 +221,7 @@ class Term(AST, ABC):
 
 
 class IdentifierTerm(Term):
-    __slots__ = ('identifier',)
+    __slots__ = ('identifier')
 
     def __init__(self, identifier: Union[Identifier, str],
                  start_location: Location, end_location: Location):
@@ -233,7 +233,7 @@ class IdentifierTerm(Term):
 
 
 class LiteralTerm(Term):
-    __slots__ = ('literal',)
+    __slots__ = ('literal')
 
     def __init__(self, literal: Literal, start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
@@ -657,7 +657,7 @@ class DeclareDatatypeCommand(Command):
 
 
 class Program(AST):
-    __slots__ = ('commands',)
+    __slots__ = ('commands')
 
     def __init__(self, commands: List[Command]):
         super().__init__(commands[0].start_location, commands[-1].end_location)

@@ -6,10 +6,8 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
     def visit_literal_term(self, literal_term: ast.LiteralTerm):
         if literal_term.literal.literal_kind == ast.LiteralKind.NUMERAL and literal_term.literal.literal_value < 0:
             self.stream.write(f'(- {-literal_term.literal.literal_value})')
-        elif literal_term.literal.literal_kind == ast.LiteralKind.STRING:
-            self.stream.write(f'"{literal_term.literal.literal_value}"')
         else:
-            self.stream.write(str(literal_term.literal.literal_value))
+            SygusASTPrinterBase.visit_literal_term(self, literal_term)
 
     def visit_let_term(self, let_term: ast.LetTerm):
         self.stream.write('(let (')
@@ -25,9 +23,6 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         let_term.let_body.accept(self)
         self.stream.write(')')
 
-    def visit_declare_primed_var_command(self, declare_primed_var_command: ast.DeclarePrimedVarCommand):
-        pass
-
     def visit_set_feature_command(self, set_feature_command: ast.SetFeatureCommand):
         self.stream.write('(set-feature :')
         self.stream.write(set_feature_command.feature_name)
@@ -37,32 +32,6 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         self.stream.write('(set-option :')
         self.stream.write(set_option_command.option_name)
         self.stream.write(f' {str(set_option_command.option_value.literal_value)})')
-
-    def visit_grammar_term(self, grammar_term: ast.GrammarTerm):
-        if grammar_term.grammar_term_kind == ast.GrammarTermKind.CONSTANT:
-            self.stream.write('(Constant ')
-            grammar_term.sort_expression.accept(self)
-            self.stream.write(')')
-        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.VARIABLE:
-            self.stream.write('(Variable ')
-            grammar_term.sort_expression.accept(self)
-            self.stream.write(')')
-        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.BINDER_FREE:
-            grammar_term.binder_free_term.accept(self)
-        else:
-            raise NotImplementedError
-
-    def visit_grouped_rule_list(self, grouped_rule_list: ast.GroupedRuleList):
-        self.stream.write(f'({grouped_rule_list.head_symbol} ')
-        grouped_rule_list.head_symbol_sort_expression.accept(self)
-        self.stream.write(' (')
-        first = True
-        for expansion in grouped_rule_list.expansion_rules:
-            if not first:
-                self.stream.write(' ')
-            first = False
-            expansion.accept(self)
-        self.stream.write('))')
 
     def visit_grammar(self, grammar: ast.Grammar):
         self.stream.write('(')

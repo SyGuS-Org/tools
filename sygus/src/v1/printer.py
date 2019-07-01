@@ -3,13 +3,11 @@ from ..base.printer import SygusASTPrinterBase
 
 
 class SygusV1ASTPrinter(SygusASTPrinterBase):
-    def visit_literal_term(self, literal_term: ast.LiteralTerm):
-        if literal_term.literal.literal_kind == ast.LiteralKind.NUMERAL and literal_term.literal.literal_value < 0:
-            self.stream.write(f'(- {-literal_term.literal.literal_value})')
-        elif literal_term.literal.literal_kind == ast.LiteralKind.STRING:
-            self.stream.write(f'"{literal_term.literal.literal_value}"')
+    def visit_sort_expression(self, sort_expression: ast.SortExpression):
+        if sort_expression.identifier.is_indexed and sort_expression.identifier.symbol == 'BitVec':
+            self.stream.write(f'(BitVec {sort_expression.identifier.indices[0]})')
         else:
-            self.stream.write(str(literal_term.literal.literal_value))
+            SygusASTPrinterBase.visit_sort_expression(self, sort_expression)
 
     def visit_let_term(self, let_term: ast.LetTerm):
         self.stream.write('(let (')
@@ -26,56 +24,19 @@ class SygusV1ASTPrinter(SygusASTPrinterBase):
         self.stream.write(')')
 
     def visit_declare_primed_var_command(self, declare_primed_var_command: ast.DeclarePrimedVarCommand):
-        pass
+        self.stream.write('(declare-primed-var ')
+        self.stream.write(f'{declare_primed_var_command.symbol} ')
+        declare_primed_var_command.sort_expression.accept(self)
+        self.stream.write(')')
 
-    def visit_set_feature_command(self, set_feature_command: ast.SetFeatureCommand):
-        self.stream.write('(set-feature :')
-        self.stream.write(set_feature_command.feature_name)
-        self.stream.write(f' {str(set_feature_command.feature_value).lower()})')
-
-    def visit_set_option_command(self, set_option_command: ast.SetOptionCommand):
-        self.stream.write('(set-option :')
-        self.stream.write(set_option_command.option_name)
-        self.stream.write(f' {str(set_option_command.option_value.literal_value)})')
-
-    def visit_grammar_term(self, grammar_term: ast.GrammarTerm):
-        if grammar_term.grammar_term_kind == ast.GrammarTermKind.CONSTANT:
-            self.stream.write('(Constant ')
-            grammar_term.sort_expression.accept(self)
-            self.stream.write(')')
-        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.VARIABLE:
-            self.stream.write('(Variable ')
-            grammar_term.sort_expression.accept(self)
-            self.stream.write(')')
-        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.BINDER_FREE:
-            grammar_term.binder_free_term.accept(self)
-        else:
-            raise NotImplementedError
-
-    def visit_grouped_rule_list(self, grouped_rule_list: ast.GroupedRuleList):
-        self.stream.write(f'({grouped_rule_list.head_symbol} ')
-        grouped_rule_list.head_symbol_sort_expression.accept(self)
-        self.stream.write(' (')
-        first = True
-        for expansion in grouped_rule_list.expansion_rules:
-            if not first:
-                self.stream.write(' ')
-            first = False
-            expansion.accept(self)
+    def visit_set_options_command(self, set_options_command: ast.SetOptionsCommand):
+        self.stream.write('(set-options (')
+        for option_name_and_value in set_options_command.option_names_and_values:
+            self.stream.write(f'({option_name_and_value[0]} {option_name_and_value[1]})')
         self.stream.write('))')
 
     def visit_grammar(self, grammar: ast.Grammar):
         self.stream.write('(')
-        first = True
-        for nonterminal in grammar.nonterminals:
-            if not first:
-                self.stream.write(' ')
-            first = False
-            self.stream.write(f'({nonterminal[0]} ')
-            nonterminal[1].accept(self)
-            self.stream.write(')')
-        self.stream.write(')\n(')
-
         first = True
         for grouped_rule_list in grammar.grouped_rule_lists.values():
             if not first:

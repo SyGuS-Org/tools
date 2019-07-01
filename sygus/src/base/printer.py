@@ -76,7 +76,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         if sort_expression.sort_arguments is None or len(sort_expression.sort_arguments) == 0:
             self.stream.write(str(sort_expression.identifier))
         else:
-            self.stream.write(f'({str(sort_expression.identifier)}')
+            self.stream.write(f'({sort_expression.identifier}')
             for param_sort in sort_expression.sort_arguments:
                 self.stream.write(' ')
                 param_sort.accept(self)
@@ -89,9 +89,11 @@ class SygusASTPrinterBase(ast.ASTVisitor):
     def visit_identifier_term(self, identifier_term: ast.IdentifierTerm):
         self.stream.write(str(identifier_term.identifier))
 
-    @abstractmethod
     def visit_literal_term(self, literal_term: ast.LiteralTerm):
-        raise NotImplementedError
+        if literal_term.literal.literal_kind == ast.LiteralKind.STRING:
+            self.stream.write(f'"{literal_term.literal.literal_value}"')
+        else:
+            self.stream.write(str(literal_term.literal.literal_value))
 
     def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
         self.stream.write(f'({str(function_application_term.function_identifier)}')
@@ -143,11 +145,11 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         raise NotImplementedError
 
     def visit_inv_constraint_command(self, inv_constraint_command: ast.InvConstraintCommand):
-        self.stream.write('(inv-constraint ')
+        self.stream.write('\n(inv-constraint ')
         self.stream.write(f'{inv_constraint_command.inv_fun_symbol} ')
         self.stream.write(f'{inv_constraint_command.pre_symbol} ')
         self.stream.write(f'{inv_constraint_command.trans_symbol} ')
-        self.stream.write(f'{inv_constraint_command.post_symbol} ')
+        self.stream.write(f'{inv_constraint_command.post_symbol}')
         self.stream.write(')')
 
     @abstractmethod
@@ -159,11 +161,11 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         raise NotImplementedError
 
     @abstractmethod
-    def visit_set_options_command(self, set_options_command: ast.SetOptionCommand):
+    def visit_set_options_command(self, set_options_command: ast.SetOptionsCommand):
         raise NotImplementedError
 
     def visit_set_logic_command(self, set_logic_command: ast.SetLogicCommand):
-        self.stream.write(f'(set-logic {set_logic_command.logic_name})')
+        self.stream.write(f'(set-logic {set_logic_command.logic_name})\n')
 
     def visit_synth_fun_command(self, synth_fun_command: ast.SynthFunCommand):
         self.stream.write(f'(synth-fun {str(synth_fun_command.function_symbol)} (')
@@ -176,26 +178,44 @@ class SygusASTPrinterBase(ast.ASTVisitor):
                 self.stream.write('\n')
                 synth_fun_command.synthesis_grammar.accept(self)
 
-        self.stream.write(')')
+        self.stream.write(')\n')
 
     def visit_synth_inv_command(self, synth_inv_command: ast.SynthInvCommand):
         self.stream.write(f'(synth-inv {str(synth_inv_command.function_symbol)} (')
         self._write_params_and_sorts(synth_inv_command.parameters_and_sorts)
-        self.stream.write(') ')
+        self.stream.write(')')
 
         if synth_inv_command.synthesis_grammar is not None:
             self.stream.write('\n')
             synth_inv_command.synthesis_grammar.accept(self)
 
-        self.stream.write(')')
+        self.stream.write(')\n')
 
-    @abstractmethod
     def visit_grammar_term(self, grammar_term: ast.GrammarTerm):
-        raise NotImplementedError
+        if grammar_term.grammar_term_kind == ast.GrammarTermKind.CONSTANT:
+            self.stream.write('(Constant ')
+            grammar_term.sort_expression.accept(self)
+            self.stream.write(')')
+        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.VARIABLE:
+            self.stream.write('(Variable ')
+            grammar_term.sort_expression.accept(self)
+            self.stream.write(')')
+        elif grammar_term.grammar_term_kind == ast.GrammarTermKind.BINDER_FREE:
+            grammar_term.binder_free_term.accept(self)
+        else:
+            raise NotImplementedError
 
-    @abstractmethod
     def visit_grouped_rule_list(self, grouped_rule_list: ast.GroupedRuleList):
-        raise NotImplementedError
+        self.stream.write(f'({grouped_rule_list.head_symbol} ')
+        grouped_rule_list.head_symbol_sort_expression.accept(self)
+        self.stream.write(' (')
+        first = True
+        for expansion in grouped_rule_list.expansion_rules:
+            if not first:
+                self.stream.write(' ')
+            first = False
+            expansion.accept(self)
+        self.stream.write('))')
 
     @abstractmethod
     def visit_grammar(self, grammar: ast.Grammar):
