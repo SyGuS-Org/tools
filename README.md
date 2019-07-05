@@ -26,7 +26,7 @@ python3 -m sygus.bin.convert -s 1 -t 2 /path/to/file.sl
 ```
 
 
-## [Scripts for Batch Processing](tree/master/scripts)
+## Scripts for Batch Processing
 
 1. Use the `batch-check.sh` script to check entire directories (recursively):
 ```bash
