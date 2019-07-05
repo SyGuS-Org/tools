@@ -127,7 +127,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         raise NotImplementedError
 
     def visit_check_synth_command(self, check_synth_command: ast.CheckSynthCommand):
-        self.stream.write('(check-synth)')
+        self.stream.write('\n(check-synth)')
 
     def visit_constraint_command(self, constraint_command: ast.ConstraintCommand):
         self.stream.write('(constraint ')
@@ -230,8 +230,9 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         self._write_params_and_sorts(define_fun_command.function_parameters)
         self.stream.write(') ')
         define_fun_command.function_range_sort.accept(self)
-        self.stream.write(' ')
-        define_fun_command.function_body.accept(self)
+        with self.stream.push_scope() as _:
+            self.stream.write('\n')
+            define_fun_command.function_body.accept(self)
         self.stream.write(')')
 
     @abstractmethod

@@ -23,12 +23,13 @@ def main(args):
     if args.target_sygus_standard != args.source_sygus_standard:
         if args.target_sygus_standard == '1':
             from ..src.v1.processor import SygusV1Processor as processor
-        if args.target_sygus_standard == '2':
+        elif args.target_sygus_standard == '2':
             from ..src.v2.processor import SygusV2Processor as processor
-        processor.run(program, symbol_table)
+        else:
+            raise NotImplementedError
 
-    # TODO: May be we don't need this again.
-    SymbolTableBuilder.run(program)
+        processor.run(program, symbol_table)
+        SymbolTableBuilder.run(program)
 
     # Step 3: Print the converted program
     if args.target_sygus_standard == '1':
