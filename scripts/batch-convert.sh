@@ -14,6 +14,7 @@ TARGET_SYGUS_STANDARD="2"
 IS_VERBOSE=""
 DO_COLLECT_ERRORS=""
 OUTPUT_DIR=""
+INTERNAL_OPTIONS=""
 
 usage() {
   if [ -n "$1" ]; then echo -e "\nERROR: $1" >&2 ; fi
@@ -24,9 +25,10 @@ Parameters:
     [--output-dir, -o]          The output directory for converted files
 
 Options:
-    [--extension, -e]           The extension for SyGuS files               (default = $SYGUS_EXTENSION)
-    [--source-standard, -s]     The SyGuS standard for the source files     (default = $SOURCE_SYGUS_STANDARD)
-    [--target-standard, -t]     The SyGuS standard for the target files     (default = $TARGET_SYGUS_STANDARD)
+    [--internal-options, -I]    Additional options to be passed to sygus.bin.convert    (default = $INTERNAL_OPTIONS)
+    [--extension, -e]           The extension for SyGuS files                           (default = $SYGUS_EXTENSION)
+    [--source-standard, -s]     The SyGuS standard for the source files                 (default = $SOURCE_SYGUS_STANDARD)
+    [--target-standard, -t]     The SyGuS standard for the target files                 (default = $TARGET_SYGUS_STANDARD)
 
 Flags:
     [--verbose, -v]             Increase output verbosity (list PASSsed files too)
@@ -37,6 +39,7 @@ for opt in "$@"; do
   shift
   case "$opt" in
     "--extension")          set -- "$@" "-e" ;;
+    "--internal-options")   set -- "$@" "-I" ;;
     "--output-dir")         set -- "$@" "-o" ;;
     "--source-standard")    set -- "$@" "-s" ;;
     "--target-standard")    set -- "$@" "-t" ;;
@@ -49,9 +52,11 @@ for opt in "$@"; do
 done
 
 OPTIND=1
-while getopts ':e:o:s:t:v' OPTION ; do
+while getopts ':e:I:o:s:t:v' OPTION ; do
   case "$OPTION" in
     "e" ) SYGUS_EXTENSION="$OPTARG"
+          ;;
+    "I" ) INTERNAL_OPTIONS="$OPTARG"
           ;;
     "o" ) OUTPUT_DIR="$OPTARG"
           ;;
@@ -79,7 +84,8 @@ for FILE in $(find "$SRC_DIR" -name *".$SYGUS_EXTENSION" | sort) ; do
     FILE_REL_PATH="${FILE#$SRC_DIR/}"
     mkdir -p "$OUTPUT_DIR/$(dirname $FILE_REL_PATH)"
 
-    python3 -m sygus.bin.convert -s "$SOURCE_SYGUS_STANDARD" -t "$TARGET_SYGUS_STANDARD" "$FILE" \
+    python3 -m sygus.bin.convert -s "$SOURCE_SYGUS_STANDARD" -t "$TARGET_SYGUS_STANDARD"  \
+            $INTERNAL_OPTIONS "$FILE"                                                     \
             2> "$OUTPUT_DIR/$FILE_REL_PATH.err" > "$OUTPUT_DIR/$FILE_REL_PATH"
 
     if [ "$?" -eq "0" ]; then
