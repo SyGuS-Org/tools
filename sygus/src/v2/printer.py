@@ -53,11 +53,11 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
             grouped_rule_list.accept(self)
         self.stream.write(')')
 
-    def __init__(self):
-        super().__init__('SygusV2ASTPrinter')
+    def __init__(self, symbol_table: SymbolTable, convert_chains_to_binary: bool = False):
+        super().__init__('SygusV2ASTPrinter', symbol_table, convert_chains_to_binary)
 
     @staticmethod
-    def run(program: ast.Program) -> str:
-        writer = SygusV2ASTPrinter()
+    def run(program: ast.Program, symbol_table: SymbolTable, convert_chains_to_binary: bool = False) -> str:
+        writer = SygusV2ASTPrinter(symbol_table, convert_chains_to_binary)
         program.accept(writer)
         return writer.stream.get_value()

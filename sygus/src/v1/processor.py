@@ -3,7 +3,7 @@ from ..resolution import SymbolTable
 from ..base.processor import SygusProcessorBase
 
 class SygusV1Processor(SygusProcessorBase):
-    __slots__ = ('new_decls', 'symbol_table')
+    __slots__ = ['new_decls', 'symbol_table']
 
     def visit_quantified_term(self, quantified_term: ast.QuantifiedTerm):
         raise NotImplementedError

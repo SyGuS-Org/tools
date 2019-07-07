@@ -1,5 +1,6 @@
 from .. import ast
 from ..base.printer import SygusASTPrinterBase
+from ..resolution import SymbolTable
 
 
 class SygusV1ASTPrinter(SygusASTPrinterBase):
@@ -47,11 +48,11 @@ class SygusV1ASTPrinter(SygusASTPrinterBase):
             grouped_rule_list.accept(self)
         self.stream.write(')')
 
-    def __init__(self):
-        super().__init__('SygusV1ASTPrinter')
+    def __init__(self, symbol_table: SymbolTable, convert_chains_to_binary: bool = False):
+        super().__init__('SygusV1ASTPrinter', symbol_table, convert_chains_to_binary)
 
     @staticmethod
-    def run(program: ast.Program) -> str:
-        writer = SygusV1ASTPrinter()
+    def run(program: ast.Program, symbol_table: SymbolTable, convert_chains_to_binary: bool = False) -> str:
+        writer = SygusV1ASTPrinter(symbol_table, convert_chains_to_binary)
         program.accept(writer)
         return writer.stream.get_value()

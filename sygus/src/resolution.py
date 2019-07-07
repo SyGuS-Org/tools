@@ -16,7 +16,7 @@ class SymbolTableEntryKind(Enum):
 
 
 class SymbolTableEntry(ABC):
-    __slots__ = ('entry_kind', 'identifier')
+    __slots__ = ['entry_kind', 'identifier']
 
     def __init__(self, kind: SymbolTableEntryKind, identifier: Union[Identifier, str]):
         self.entry_kind: SymbolTableEntryKind = kind
@@ -35,8 +35,8 @@ class SortKind(Enum):
 
 
 class SortDescriptor(SymbolTableEntry, Hashable):
-    __slots__ = ('sort_kind', 'num_parameters', 'alias_target', 'sort_arguments',
-                 'introduced_placeholders', 'enum_constructors')
+    __slots__ = ['sort_kind', 'num_parameters', 'alias_target', 'sort_arguments',
+                 'introduced_placeholders', 'enum_constructors']
 
     def __init__(self, identifier: Union[Identifier, str]):
         super().__init__(SymbolTableEntryKind.SORT_DESCRIPTOR, identifier)
@@ -164,8 +164,8 @@ class FunctionKind(Enum):
 
 
 class FunctionDescriptor(SymbolTableEntry):
-    __slots__ = ('function_kind', 'argument_sorts', 'argument_names', 'range_sort',
-                 'function_body', 'synthesis_grammar', 'is_chainable')
+    __slots__ = ['function_kind', 'argument_sorts', 'argument_names', 'range_sort',
+                 'function_body', 'synthesis_grammar', 'is_chainable']
 
     def __init__(self, identifier: Union[Identifier, str]):
         super().__init__(SymbolTableEntryKind.FUNCTION_DESCRIPTOR, identifier)
@@ -300,7 +300,7 @@ class SymbolKind(Enum):
 
 
 class SymbolDescriptor(SymbolTableEntry):
-    __slots__ = ('symbol_sort', 'symbol_kind')
+    __slots__ = ['symbol_sort', 'symbol_kind']
 
     def __init__(self, symbol_kind: SymbolKind, symbol: str, symbol_sort: SortDescriptor):
         super().__init__(SymbolTableEntryKind.SYMBOL_DESCRIPTOR, symbol)
@@ -309,8 +309,8 @@ class SymbolDescriptor(SymbolTableEntry):
 
 
 class SymbolTable(object):
-    __slots__ = ('scope_stack', 'logic_name', 'enabled_features', 'options',
-                 'inv_functions', 'synth_functions', 'user_defined_functions')
+    __slots__ = ['scope_stack', 'logic_name', 'enabled_features', 'options',
+                 'inv_functions', 'synth_functions', 'user_defined_functions']
 
     def __init__(self):
         self.scope_stack = [{}]
@@ -399,7 +399,7 @@ class SymbolTable(object):
 
 
 class Resolver(ABC):
-    __slots__ = ('name',)
+    __slots__ = ['name']
 
     _resolver_types: List[type] = []
     _resolvers: List['Resolver'] = None
@@ -457,7 +457,7 @@ class Resolver(ABC):
 
 
 class CacheKey(object):
-    __slots__ = ('identifier', 'arg_sorts')
+    __slots__ = ['identifier', 'arg_sorts']
 
     def __init__(self, identifier: Identifier, arg_sorts: List[SortDescriptor]):
         self.identifier = identifier
@@ -476,7 +476,7 @@ class CacheKey(object):
 
 
 class CachedResolver(Resolver):
-    __slots__ = ('_function_resolution_cache', '_sort_resolution_cache')
+    __slots__ = ['_function_resolution_cache', '_sort_resolution_cache']
 
     def __init__(self, name):
         super().__init__(name)

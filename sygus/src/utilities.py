@@ -65,7 +65,7 @@ class Hashable(object):
 
 
 class Location(Hashable):
-    __slots__ = ('line', 'col')
+    __slots__ = ['line', 'col']
 
     def __init__(self, line, col):
         super().__init__()
@@ -83,7 +83,7 @@ class Location(Hashable):
 
 
 class Identifier(Hashable):
-    __slots__ = ('symbol', 'indices', 'start_location', 'end_location')
+    __slots__ = ['symbol', 'indices', 'start_location', 'end_location']
 
     def __init__(self, symbol: str, *indices: Union[str, int]):
         super().__init__()

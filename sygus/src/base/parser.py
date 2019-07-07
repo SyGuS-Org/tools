@@ -4,8 +4,10 @@ from abc import abstractmethod
 from io import StringIO
 
 from .. import ast, exceptions, utilities
+from ..symbol_table_builder import SymbolTableBuilder
 
 from .lexer import SygusLexerBase
+
 
 # noinspection PyMethodMayBeStatic
 class SygusParserBase(object):
@@ -89,6 +91,15 @@ class SygusParserBase(object):
         self.input_string = None
         self.lexer = None
         self._ast_root = None
+
+    def _parse(self, reset: bool = True):
+        self.parser.parse(self.input_string, lexer=self.lexer.lexer)
+        if not reset:
+            return self._ast_root
+        self.input_string = None
+        result = self._ast_root
+        self._ast_root = None
+        return result
 
     @abstractmethod
     def parse(self, input_string):

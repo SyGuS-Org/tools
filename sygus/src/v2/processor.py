@@ -3,7 +3,7 @@ from ..resolution import SymbolTable
 from ..base.processor import SygusProcessorBase
 
 class SygusV2Processor(SygusProcessorBase):
-    __slots__ = ('symbol_table')
+    __slots__ = ['symbol_table']
 
     def visit_program(self, program: ast.Program):
         program.commands = [command for command in program.commands

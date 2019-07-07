@@ -2,10 +2,11 @@ from abc import abstractmethod
 from io import StringIO
 
 from .. import ast
+from ..resolution import CoreResolver, SymbolTable
 
 
 class IndentScope(object):
-    __slots__ = ('stream', 'old_indentation_level', 'new_indentation_level')
+    __slots__ = ['stream', 'old_indentation_level', 'new_indentation_level']
 
     def __init__(self, stream: 'IndentedStream', new_indentation_level):
         self.stream = stream
@@ -21,7 +22,7 @@ class IndentScope(object):
 
 
 class IndentedStream(object):
-    __slots__ = ('buffer', 'current_indentation_level', 'index_in_current_line', 'spaces_per_indent')
+    __slots__ = ['buffer', 'current_indentation_level', 'index_in_current_line', 'spaces_per_indent']
 
     def __init__(self, spaces_per_indent=4):
         self.current_indentation_level = 0
@@ -68,9 +69,7 @@ class IndentedStream(object):
 
 
 class SygusASTPrinterBase(ast.ASTVisitor):
-    def __init__(self, name: str):
-        super().__init__(name)
-        self.stream = IndentedStream()
+    __slots__ = ['convert_chains_to_binary', 'stream', 'symbol_table']
 
     def visit_sort_expression(self, sort_expression: ast.SortExpression):
         if sort_expression.sort_arguments is None or len(sort_expression.sort_arguments) == 0:
@@ -95,12 +94,52 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         else:
             self.stream.write(str(literal_term.literal.literal_value))
 
-    def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
-        self.stream.write(f'({str(function_application_term.function_identifier)}')
+    def _write_default_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
+        self.stream.write(f'({function_application_term.function_identifier}')
         for arg in function_application_term.arguments:
             self.stream.write(' ')
             arg.accept(self)
         self.stream.write(')')
+
+    def _break_self_chained_function_application(self, identifier, arguments):
+        final_term = ast.FunctionApplicationTerm(identifier, arguments[0:2], None, None)
+        final_term.sort_descriptor = arguments[0].sort_descriptor
+        for i in range(2, len(arguments)):
+            final_term = ast.FunctionApplicationTerm(identifier, [final_term, arguments[i]], None, None)
+            final_term.sort_descriptor = arguments[0].sort_descriptor
+        self._write_default_function_application_term(final_term)
+
+    def _break_bool_chained_function_application(self, identifier, arguments):
+        chained_calls = []
+        for i in range(len(arguments) - 1):
+            subcall = ast.FunctionApplicationTerm(identifier, arguments[i:i+2], None, None)
+            subcall.sort_descriptor = CoreResolver.get_boolean_sort()
+            chained_calls.append(subcall)
+        final_term = ast.FunctionApplicationTerm('and', chained_calls, None, None)
+        final_term.sort_descriptor = CoreResolver.get_boolean_sort()
+        self.visit_function_application_term(final_term)
+
+    def _break_chained_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
+        arguments = function_application_term.arguments
+        identifier = function_application_term.function_identifier
+        if function_application_term.sort_descriptor == arguments[0].sort_descriptor:
+            self._break_self_chained_function_application(identifier, arguments)
+        elif function_application_term.sort_descriptor == CoreResolver.get_boolean_sort():
+            self._break_bool_chained_function_application(identifier, arguments)
+        else:
+            raise NotImplementedError
+
+    def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
+        if not self.convert_chains_to_binary:
+            self._write_default_function_application_term(function_application_term)
+        else:
+            arg_sorts = [x.sort_descriptor for x in function_application_term.arguments]
+            identifier = function_application_term.function_identifier
+            func_desc = self.symbol_table.lookup_or_resolve_function(identifier, *arg_sorts)
+            if func_desc.is_chainable and len(function_application_term.arguments) > 2:
+                self._break_chained_function_application_term(function_application_term)
+            else:
+                self._write_default_function_application_term(function_application_term)
 
     def _write_params_and_sorts(self, parameters_and_sorts):
         first = True
@@ -254,7 +293,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
     @abstractmethod
     def visit_declare_datatypes_command(self, declare_datatypes_command: ast.DeclareDatatypesCommand):
         raise NotImplementedError
-
+    
     @abstractmethod
     def visit_declare_datatype_command(self, declare_datatypes_command: ast.DeclareDatatypeCommand):
         raise NotImplementedError
@@ -263,3 +302,9 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         for command in program.commands:
             command.accept(self)
             self.stream.write('\n')
+
+    def __init__(self, name: str, symbol_table: SymbolTable, convert_chains_to_binary: bool):
+        super().__init__(name)
+        self.convert_chains_to_binary = convert_chains_to_binary
+        self.stream = IndentedStream()
+        self.symbol_table = symbol_table

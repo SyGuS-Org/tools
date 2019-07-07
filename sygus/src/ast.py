@@ -7,7 +7,7 @@ from . import utilities
 from .utilities import Identifier, Location
 
 class ASTVisitor(object):
-    __slots__ = ('name',)
+    __slots__ = ['name']
 
     def __init__(self, name: str):
         self.name: str = name
@@ -134,7 +134,7 @@ class ASTVisitor(object):
 
 
 class AST(object):
-    __slots__ = ('start_location', 'end_location')
+    __slots__ = ['start_location', 'end_location']
 
     def __init__(self, start_location: Location, end_location: Location):
         self.start_location = start_location
@@ -146,7 +146,7 @@ class AST(object):
 
 
 class SortExpression(AST):
-    __slots__ = ('identifier', 'sort_arguments')
+    __slots__ = ['identifier', 'sort_arguments']
 
     def __init__(self, identifier: Union[str, Identifier],
                  sort_arguments: List['SortExpression'],
@@ -175,7 +175,7 @@ class SortExpression(AST):
 
 # Used only in V1 grammars!
 class EnumSortExpression(AST):
-    __slots__ = ('enum_constructors',)
+    __slots__ = ['enum_constructors']
 
     def __init__(self, enum_constructors: List[str],
                  start_location: Location, end_location: Location):
@@ -199,7 +199,7 @@ class LiteralKind(Enum):
 
 
 class Literal(AST):
-    __slots__ = ('literal_kind', 'literal_value')
+    __slots__ = ['literal_kind', 'literal_value']
 
     def __init__(self, literal_kind: LiteralKind, literal_value: str,
                  start_location: Location, end_location: Location):
@@ -212,7 +212,7 @@ class Literal(AST):
 
 
 class Term(AST, ABC):
-    __slots__ = ('sort_descriptor', 'symbol_table_scope')
+    __slots__ = ['sort_descriptor', 'symbol_table_scope']
 
     def __init__(self, start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
@@ -221,7 +221,7 @@ class Term(AST, ABC):
 
 
 class IdentifierTerm(Term):
-    __slots__ = ('identifier')
+    __slots__ = ['identifier']
 
     def __init__(self, identifier: Union[Identifier, str],
                  start_location: Location, end_location: Location):
@@ -233,7 +233,7 @@ class IdentifierTerm(Term):
 
 
 class LiteralTerm(Term):
-    __slots__ = ('literal')
+    __slots__ = ['literal']
 
     def __init__(self, literal: Literal, start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
@@ -244,7 +244,7 @@ class LiteralTerm(Term):
 
 
 class FunctionApplicationTerm(Term):
-    __slots__ = ('function_identifier', 'arguments')
+    __slots__ = ['function_identifier', 'arguments']
 
     def __init__(self, identifier: Union[Identifier, str], arguments: List[Term],
                  start_location: Location, end_location: Location):
@@ -262,7 +262,7 @@ class QuantifierKind(Enum):
 
 
 class QuantifiedTerm(Term):
-    __slots__ = ('quantifier_kind', 'quantified_variables', 'term_body')
+    __slots__ = ['quantifier_kind', 'quantified_variables', 'term_body']
 
     def __init__(self, quantifier_kind: QuantifierKind,
                  quantified_variables: List[Tuple[str, SortExpression]], term_body: Term,
@@ -277,7 +277,7 @@ class QuantifiedTerm(Term):
 
 
 class LetTerm(Term):
-    __slots__ = ('variable_bindings', 'let_body', 'type_annotations')
+    __slots__ = ['variable_bindings', 'let_body', 'type_annotations']
 
     def __init__(self, bindings: List[Tuple[str, Term]], let_body: Term,
                  start_location: Location, end_location: Location,
@@ -312,7 +312,7 @@ class CommandKind(Enum):
 
 
 class Command(AST, ABC):
-    __slots__ = ('command_kind',)
+    __slots__ = ['command_kind']
 
     def __init__(self, command_kind: CommandKind, start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
@@ -328,7 +328,7 @@ class CheckSynthCommand(Command):
 
 
 class ConstraintCommand(Command):
-    __slots__ = ('constraint',)
+    __slots__ = ['constraint']
 
     def __init__(self, constraint: Term, start_location: Location, end_location: Location):
         super().__init__(CommandKind.CONSTRAINT, start_location, end_location)
@@ -339,7 +339,7 @@ class ConstraintCommand(Command):
 
 
 class DeclareVarCommand(Command):
-    __slots__ = ('symbol', 'sort_expression')
+    __slots__ = ['symbol', 'sort_expression']
 
     def __init__(self, symbol: str, sort_expression: SortExpression,
                  start_location: Location, end_location: Location):
@@ -353,7 +353,7 @@ class DeclareVarCommand(Command):
 
 # Used only with V1 grammars!
 class DeclarePrimedVarCommand(Command):
-    __slots__ = ('symbol', 'sort_expression')
+    __slots__ = ['symbol', 'sort_expression']
 
     def __init__(self, symbol: str, sort_expression: SortExpression,
                  start_location: Location, end_location: Location):
@@ -366,7 +366,7 @@ class DeclarePrimedVarCommand(Command):
 
 
 class InvConstraintCommand(Command):
-    __slots__ = ('inv_fun_symbol', 'pre_symbol', 'trans_symbol', 'post_symbol')
+    __slots__ = ['inv_fun_symbol', 'pre_symbol', 'trans_symbol', 'post_symbol']
 
     def __init__(self, inv_fun_symbol: str, pre_symbol: str, trans_symbol: str, post_symbol: str,
                  start_location: Location, end_location: Location):
@@ -381,7 +381,7 @@ class InvConstraintCommand(Command):
 
 
 class SetFeatureCommand(Command):
-    __slots__ = ('feature_name', 'feature_value')
+    __slots__ = ['feature_name', 'feature_value']
 
     def __init__(self, feature_name: str, feature_value: bool, start_location: Location, end_location: Location):
         super().__init__(CommandKind.SET_FEATURE, start_location, end_location)
@@ -393,7 +393,7 @@ class SetFeatureCommand(Command):
 
 
 class SetOptionCommand(Command):
-    __slots__ = ('option_name', 'option_value')
+    __slots__ = ['option_name', 'option_value']
 
     def __init__(self, option_name: str, option_value: Literal, start_location: Location, end_location: Location):
         super().__init__(CommandKind.SET_OPTION, start_location, end_location)
@@ -406,7 +406,7 @@ class SetOptionCommand(Command):
 
 # For v1 grammars only!!
 class SetOptionsCommand(Command):
-    __slots__ = ('option_names_and_values',)
+    __slots__ = ['option_names_and_values']
 
     def __init__(self, option_names_and_values: Tuple[str, str], start_location: Location, end_location: Location):
         super().__init__(CommandKind.SET_OPTIONS, start_location, end_location)
@@ -417,7 +417,7 @@ class SetOptionsCommand(Command):
 
 
 class SetLogicCommand(Command):
-    __slots__ = ('logic_name',)
+    __slots__ = ['logic_name']
 
     def __init__(self, logic_name: str, start_location: Location, end_location: Location):
         super().__init__(CommandKind.SET_LOGIC, start_location, end_location)
@@ -434,7 +434,7 @@ class GrammarTermKind(Enum):
 
 
 class GrammarTerm(Term):
-    __slots__ = ('grammar_term_kind', 'sort_expression', 'binder_free_term')
+    __slots__ = ['grammar_term_kind', 'sort_expression', 'binder_free_term']
 
     def __init__(self, start_location: Location, end_location: Location):
         super().__init__(start_location, end_location)
@@ -469,7 +469,7 @@ class GrammarTerm(Term):
 
 
 class GroupedRuleList(AST):
-    __slots__ = ('head_symbol', 'head_symbol_sort_expression', 'expansion_rules', 'head_symbol_sort_descriptor')
+    __slots__ = ['head_symbol', 'head_symbol_sort_expression', 'expansion_rules', 'head_symbol_sort_descriptor']
 
     def __init__(self, head_symbol: str, head_symbol_sort_expression: SortExpression,
                  expansion_rules: List[GrammarTerm],
@@ -485,7 +485,7 @@ class GroupedRuleList(AST):
 
 
 class Grammar(AST):
-    __slots__ = ('nonterminals', 'grouped_rule_lists', 'symbol_table_scope')
+    __slots__ = ['nonterminals', 'grouped_rule_lists', 'symbol_table_scope']
 
     def __init__(self, nonterminals: List[Tuple[str, SortExpression]], grouped_rule_lists: List[GroupedRuleList],
                  start_location: Location, end_location: Location):
@@ -506,8 +506,8 @@ class Grammar(AST):
 
 
 class SynthFunCommand(Command):
-    __slots__ = ('function_symbol', 'parameters_and_sorts', 'range_sort_expression',
-                 'synthesis_grammar', 'symbol_table_scope')
+    __slots__ = ['function_symbol', 'parameters_and_sorts', 'range_sort_expression',
+                 'synthesis_grammar', 'symbol_table_scope']
 
     def __init__(self, function_symbol: str, parameters_and_sorts: List[Tuple[str, SortExpression]],
                  range_sort_expression: SortExpression, synthesis_grammar: Grammar,
@@ -524,8 +524,7 @@ class SynthFunCommand(Command):
 
 
 class SynthInvCommand(Command):
-    __slots__ = ('function_symbol', 'parameters_and_sorts', 'synthesis_grammar',
-                 'symbol_table_scope')
+    __slots__ = ['function_symbol', 'parameters_and_sorts', 'synthesis_grammar', 'symbol_table_scope']
 
     def __init__(self, function_symbol: str, parameters_and_sorts: List[Tuple[str, SortExpression]],
                  synthesis_grammar: Grammar, start_location: Location, end_location: Location):
@@ -540,7 +539,7 @@ class SynthInvCommand(Command):
 
 
 class DeclareSortCommand(Command):
-    __slots__ = ('sort_name', 'sort_arity')
+    __slots__ = ['sort_name', 'sort_arity']
 
     def __init__(self, sort_name: str, sort_arity: int, start_location: Location, end_location: Location):
         super().__init__(CommandKind.DECLARE_SORT, start_location, end_location)
@@ -552,7 +551,7 @@ class DeclareSortCommand(Command):
 
 
 class DefineFunCommand(Command):
-    __slots__ = ('function_name', 'function_parameters', 'function_range_sort', 'function_body')
+    __slots__ = ['function_name', 'function_parameters', 'function_range_sort', 'function_body']
 
     def __init__(self, function_name: str, function_parameters: List[Tuple[str, SortExpression]],
                  function_range_sort: SortExpression, function_body: Term,
@@ -569,7 +568,7 @@ class DefineFunCommand(Command):
 
 # This is for the V1 parser ONLY!
 class DeclareFunCommand(Command):
-    __slots__ = ('function_name', 'parameter_sorts', 'function_range_sort')
+    __slots__ = ['function_name', 'parameter_sorts', 'function_range_sort']
 
     def __init__(self, function_name: str, parameter_sorts: List[SortExpression], range_sort: SortExpression,
                  start_location: Location, end_location: Location):
@@ -583,7 +582,7 @@ class DeclareFunCommand(Command):
 
 
 class DefineSortCommand(Command):
-    __slots__ = ('sort_name', 'sort_parameters', 'sort_expression')
+    __slots__ = ['sort_name', 'sort_parameters', 'sort_expression']
 
     def __init__(self, sort_name: str,
                  sort_parameters: List[str],
@@ -599,7 +598,7 @@ class DefineSortCommand(Command):
 
 
 class DatatypeConstructor(AST):
-    __slots__ = ('constructor_name', 'constructor_parameters')
+    __slots__ = ['constructor_name', 'constructor_parameters']
 
     def __init__(self, constructor_name: str, constructor_parameters: List[Tuple[str, SortExpression]],
                  start_location: Location, end_location: Location):
@@ -612,7 +611,7 @@ class DatatypeConstructor(AST):
 
 
 class DatatypeConstructorList(AST):
-    __slots__ = ('introduced_sort_placeholders', 'constructors')
+    __slots__ = ['introduced_sort_placeholders', 'constructors']
 
     def __init__(self, introduced_sort_placeholders: List[str], constructors: List[DatatypeConstructor],
                  start_location: Location, end_location: Location):
@@ -625,7 +624,7 @@ class DatatypeConstructorList(AST):
 
 
 class DeclareDatatypesCommand(Command):
-    __slots__ = ('sort_names_and_arities', 'datatype_constructor_lists')
+    __slots__ = ['sort_names_and_arities', 'datatype_constructor_lists']
 
     def __init__(self, sort_names_and_arities: List[Tuple[str, int]],
                  datatype_constructor_lists: List[DatatypeConstructorList],
@@ -643,7 +642,7 @@ class DeclareDatatypesCommand(Command):
 
 
 class DeclareDatatypeCommand(Command):
-    __slots__ = ('sort_name', 'sort_arity', 'datatype_constructor_list')
+    __slots__ = ['sort_name', 'sort_arity', 'datatype_constructor_list']
 
     def __init__(self, sort_name: str, sort_arity: int, datatype_constructor_list: DatatypeConstructorList,
                  start_location: Location, end_location: Location):
@@ -657,7 +656,7 @@ class DeclareDatatypeCommand(Command):
 
 
 class Program(AST):
-    __slots__ = ('commands')
+    __slots__ = ['commands']
 
     def __init__(self, commands: List[Command]):
         super().__init__(commands[0].start_location, commands[-1].end_location)

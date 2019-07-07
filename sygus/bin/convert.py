@@ -29,7 +29,7 @@ def main(args):
             raise NotImplementedError
 
         processor.run(program, symbol_table)
-        SymbolTableBuilder.run(program)
+        symbol_table = SymbolTableBuilder.run(program)
 
     # Step 3: Print the converted program
     if args.target_sygus_standard == '1':
@@ -39,15 +39,19 @@ def main(args):
     else:
         raise NotImplementedError
 
-    print(printer.run(program))
+    print(printer.run(program, symbol_table, args.binarize))
 
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
     parser.add_argument(
+        '-b', '--binarize', action='store_true',
+        help='Convert all chainable operators to binary operator applications')
+    parser.add_argument(
         '-q', '--quiet', action='store_true',
         help='Suppress all messages and debugging output')
+
     parser.add_argument(
         '-s', '--source-sygus-standard', default='1', choices=['1','2'],
         help='The SyGuS language standard used in the input file')

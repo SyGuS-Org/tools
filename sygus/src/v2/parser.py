@@ -371,8 +371,4 @@ class SygusV2Parser(SygusParserBase):
     def parse(self, input_string):
         self.input_string = input_string
         self.lexer = SygusV2Lexer()
-        self.parser.parse(input_string, lexer=self.lexer.lexer)
-        self.input_string = None
-        result = self._ast_root
-        self._ast_root = None
-        return result
+        return self._parse()
