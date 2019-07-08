@@ -39,7 +39,7 @@ def main(args):
     else:
         raise NotImplementedError
 
-    print(printer.run(program, symbol_table, args.binarize))
+    print(printer.run(program, symbol_table, vars(args)))
 
 
 if __name__ == '__main__':
@@ -51,6 +51,9 @@ if __name__ == '__main__':
     parser.add_argument(
         '-q', '--quiet', action='store_true',
         help='Suppress all messages and debugging output')
+    parser.add_argument(
+        '-u', '--no-unary-minus', action='store_true',
+        help='Convert all (- x) terms to (- 0 x)')
 
     parser.add_argument(
         '-s', '--source-sygus-standard', default='1', choices=['1','2'],

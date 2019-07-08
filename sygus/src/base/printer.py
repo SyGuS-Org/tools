@@ -69,7 +69,7 @@ class IndentedStream(object):
 
 
 class SygusASTPrinterBase(ast.ASTVisitor):
-    __slots__ = ['convert_chains_to_binary', 'stream', 'symbol_table']
+    __slots__ = ['options', 'stream', 'symbol_table']
 
     def visit_sort_expression(self, sort_expression: ast.SortExpression):
         if sort_expression.sort_arguments is None or len(sort_expression.sort_arguments) == 0:
@@ -130,7 +130,7 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             raise NotImplementedError
 
     def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
-        if not self.convert_chains_to_binary:
+        if not self.options.get('binarize', False):
             self._write_default_function_application_term(function_application_term)
         else:
             arg_sorts = [x.sort_descriptor for x in function_application_term.arguments]
@@ -303,8 +303,8 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             command.accept(self)
             self.stream.write('\n')
 
-    def __init__(self, name: str, symbol_table: SymbolTable, convert_chains_to_binary: bool):
+    def __init__(self, name: str, symbol_table: SymbolTable, options = {}):
         super().__init__(name)
-        self.convert_chains_to_binary = convert_chains_to_binary
+        self.options = options
         self.stream = IndentedStream()
         self.symbol_table = symbol_table

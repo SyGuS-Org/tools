@@ -1,5 +1,8 @@
+from typing import Dict
+
 from .. import ast
 from ..base.printer import SygusASTPrinterBase
+from ..resolution import SymbolTable
 
 
 class SygusV2ASTPrinter(SygusASTPrinterBase):
@@ -57,7 +60,7 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         super().__init__('SygusV2ASTPrinter', symbol_table, convert_chains_to_binary)
 
     @staticmethod
-    def run(program: ast.Program, symbol_table: SymbolTable, convert_chains_to_binary: bool = False) -> str:
-        writer = SygusV2ASTPrinter(symbol_table, convert_chains_to_binary)
+    def run(program: ast.Program, symbol_table: SymbolTable, options = {}) -> str:
+        writer = SygusV2ASTPrinter(symbol_table, options)
         program.accept(writer)
         return writer.stream.get_value()

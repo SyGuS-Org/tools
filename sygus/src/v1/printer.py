@@ -1,6 +1,6 @@
 from .. import ast
 from ..base.printer import SygusASTPrinterBase
-from ..resolution import SymbolTable
+from ..resolution import IntegerResolver, SymbolTable
 
 
 class SygusV1ASTPrinter(SygusASTPrinterBase):
@@ -48,11 +48,23 @@ class SygusV1ASTPrinter(SygusASTPrinterBase):
             grouped_rule_list.accept(self)
         self.stream.write(')')
 
-    def __init__(self, symbol_table: SymbolTable, convert_chains_to_binary: bool = False):
-        super().__init__('SygusV1ASTPrinter', symbol_table, convert_chains_to_binary)
+    def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
+        if not self.options.get('no_unary_minus', False):
+            super().visit_function_application_term(function_application_term)
+            return
+
+        if str(function_application_term.function_identifier) == '-' and len(function_application_term.arguments) == 1:
+            final_term = ast.FunctionApplicationTerm('-', [ast.LiteralTerm(ast.Literal(ast.LiteralKind.NUMERAL, '0', None, None), None, None), function_application_term.arguments[0]], None, None)
+            final_term.sort_descriptor = IntegerResolver.get_integer_sort()
+            self.visit_function_application_term(final_term)
+        else:
+            super().visit_function_application_term(function_application_term)
+
+    def __init__(self, symbol_table: SymbolTable, options):
+        super().__init__('SygusV1ASTPrinter', symbol_table, options)
 
     @staticmethod
-    def run(program: ast.Program, symbol_table: SymbolTable, convert_chains_to_binary: bool = False) -> str:
-        writer = SygusV1ASTPrinter(symbol_table, convert_chains_to_binary)
+    def run(program: ast.Program, symbol_table: SymbolTable, options = {}) -> str:
+        writer = SygusV1ASTPrinter(symbol_table, options)
         program.accept(writer)
         return writer.stream.get_value()
