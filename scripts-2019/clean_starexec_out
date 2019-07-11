@@ -1,0 +1,7 @@
+#!/bin/bash
+
+# remove time stamps
+sed -r 's/^.*\t//' $1 > tmp.txt
+# remove EOF
+sed -i '$ d' tmp.txt
+cat tmp.txt

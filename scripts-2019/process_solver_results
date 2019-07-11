@@ -1,0 +1,42 @@
+#!/bin/bash
+
+# Requires: clean_starexec_out, process_result, SynthLib2Tester in path
+
+STAREXECOUTDIR=$1
+BENCHDIR=$2
+
+# $RUNDIR is path 
+
+# Run script from base directory of StarExec job output (per solver)
+# $BENCHDIR is path to sygus benchmarks (parallel to the job output space)
+# SynthLib2Tester should exist in current path.
+
+
+
+(cd $STAREXECOUTDIR
+
+#echo "[debug] Analyzing $BENCHDIR"
+
+for FILE in $(find -name '*.txt'); do 
+  #echo "[debug] $FILE"
+  
+  clean_starexec_out $FILE > tmp.txt
+  
+  # extract the benchmark name
+  BENCHNAME="$(dirname "$FILE")"
+  #echo "[debug] benchmark: $BENCHNAME"
+  
+  # get the cooresponding sygus input file 
+  SYGUSBENCHNAME="$BENCHDIR$BENCHNAME"
+  #echo "[debug] sygus benchmark: $SYGUSBENCHNAME"
+  
+  # Check correctness
+  #echo "[debug] Process tmp.txt + $SYGUSBENCHNAME..."
+  
+  echo -n "$STAREXECOUTDIR:$SYGUSBENCHNAME:"
+  process_result tmp.txt $SYGUSBENCHNAME
+  
+  #
+  #~/sygus-standard/tools/postprocessor/bin/debug/SynthLib2Tester $FILE
+done
+)
