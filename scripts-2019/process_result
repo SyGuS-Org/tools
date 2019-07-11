@@ -3,7 +3,7 @@
 # Requires: SynthLib2Tester and $SOLVER in path
 
 SEMANTIC_CHECK_TIMEOUT=10
-SOLVER=ajr-cvc4
+SEMANTIC_SOLVER=cvc4
 
 # SynthLib2Tester should exist in current path.
 
@@ -19,7 +19,7 @@ cat temp-check-syntax.txt | grep result
 if grep -q adheres=true temp-check-syntax.txt;
 then
   #echo "[debug] Run SMT solvers to check semantic correctness..."
-  ulimit -t $SEMANTIC_CHECK_TIMEOUT;$SOLVER --lang=smt2 __sygus_grmrchecker_output.smt >& temp-check-semantic.txt
+  ulimit -t $SEMANTIC_CHECK_TIMEOUT;$SEMANTIC_SOLVER --lang=smt2 __sygus_grmrchecker_output.smt >& temp-check-semantic.txt
   if grep -q unsat temp-check-semantic.txt;
   then
     echo "FAIL-SEMANTIC-UNSAT"
