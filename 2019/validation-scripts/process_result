@@ -5,8 +5,6 @@
 SEMANTIC_CHECK_TIMEOUT=10
 SEMANTIC_SOLVER=cvc4
 
-# SynthLib2Tester should exist in current path.
-
 SOLVEROUT=$1
 SYGUSBENCHNAME=$2
 
@@ -16,10 +14,12 @@ SynthLib2Tester $SOLVEROUT $SYGUSBENCHNAME > temp-check-syntax.txt
 
 cat temp-check-syntax.txt | grep result
 
+# If it adheres to grammar (is this right?)
 if grep -q adheres=true temp-check-syntax.txt;
 then
-  #echo "[debug] Run SMT solvers to check semantic correctness..."
+  #echo "[debug] Run SMT solver to check semantic correctness..."
   ulimit -t $SEMANTIC_CHECK_TIMEOUT;$SEMANTIC_SOLVER --lang=smt2 __sygus_grmrchecker_output.smt >& temp-check-semantic.txt
+  # grep for unsat/sat here
   if grep -q unsat temp-check-semantic.txt;
   then
     echo "FAIL-SEMANTIC-UNSAT"
