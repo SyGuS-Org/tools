@@ -1,12 +1,15 @@
 #!/bin/bash
 
-# Requires: SynthLib2Tester and $SOLVER in path
+# Requires: SynthLib2Tester and $SEMANTIC_SOLVER in path
 
 SEMANTIC_CHECK_TIMEOUT=10
 SEMANTIC_SOLVER=cvc4
 
 SOLVEROUT=$1
 SYGUSBENCHNAME=$2
+
+# $SOLVEROUT is solver output
+# $SYGUSBENCHNAME is the sygus benchmark the solver output is for
 
 # Ensure that files exist
 if [ ! -e "$SOLVEROUT" ];

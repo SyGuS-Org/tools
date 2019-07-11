@@ -5,11 +5,8 @@
 STAREXECOUTDIR=$1
 BENCHDIR=$2
 
-# $RUNDIR is path 
-
-# Run script from base directory of StarExec job output (per solver)
+# $STAREXECOUTDIR is path to base directory of StarExec job output
 # $BENCHDIR is path to sygus benchmarks (parallel to the job output space)
-# SynthLib2Tester should exist in current path.
 
 (cd $STAREXECOUTDIR
 

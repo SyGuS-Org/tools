@@ -1,12 +1,17 @@
 #!/bin/bash
 
 
-# Run script from base directory of StarExec job output
-# Requires: clean_starexec_out, process_solver_results, process_result, SynthLib2Tester in path
+# Run this script from base directory of StarExec job output, whose directory subdirectories are solver output spaces
+
+# Requires: clean_starexec_out, process_solver_results, process_result, SynthLib2Tester in path.
+
+BENCHDIR=$1
+
+# $BENCHDIR is path to sygus benchmarks (parallel to the job output space)
 
 echo "Solver,Benchmark,Result"
 
 for DIR in */ ; do
     #echo "[debug] $DIR"
-    process_solver_results $DIR $1
+    process_solver_results $DIR $BENCHDIR
 done
