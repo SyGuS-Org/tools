@@ -1,0 +1,13 @@
+#!/bin/bash
+
+# copies all necessary files to proper path
+BIN=~/bin
+
+echo "cp clean_starexec_out $BIN/clean_starexec_out"
+cp clean_starexec_out $BIN/clean_starexec_out
+echo "cp process_result $BIN/process_result"
+cp process_result $BIN/process_result
+echo "cp process_solver_results $BIN/process_solver_results"
+cp process_solver_results $BIN/process_solver_results
+echo "cp process_track_results $BIN/process_track_results"
+cp process_track_results $BIN/process_track_results
