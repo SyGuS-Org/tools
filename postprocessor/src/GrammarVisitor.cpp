@@ -206,6 +206,29 @@ namespace SynthLib2Parser {
       return;
     }
 
+  bool same_bv_match(const string bv1, const string bv2) {
+	  u32 k=2;
+	  for (u32 i=2; i < bv2.length(); i++)
+	    k += tolower(bv1[i]) == tolower(bv2[i]);
+	  return (k == bv1.length());
+  }
+
+  string bin_to_hex(const string bv) {
+    stringstream res;
+    for (int i = 0; i < bv.length(); i += 4)
+      res << hex << std::stoi(bv.substr(i, 4), nullptr, 2);
+    return res.str();
+  }
+
+  bool bv_match(const string bv1, const string bv2) {
+    if (tolower(bv1[1]) == tolower(bv2[1]))
+      return same_bv_match(bv1, bv2);
+
+    string hbv1 = tolower(bv1[1]) == 'x' ? bv1.substr(2) : bin_to_hex(bv1.substr(2));
+    string hbv2 = tolower(bv1[2]) == 'x' ? bv2.substr(2) : bin_to_hex(bv2.substr(2));
+    return same_bv_match(hbv1, hbv2);
+  }
+
     void GrammarVisitor::VisitLiteralTerm(const LiteralTerm* TheTerm)
     {
       if (GrmrTerm->GetKind() == GTERMKIND_LITERAL) {
@@ -213,12 +236,8 @@ namespace SynthLib2Parser {
 	string Gstr = LitG->GetLiteral()->GetLiteralString();
 	string Tstr = TheTerm->GetLiteral()->GetLiteralString();
 	bool matched = Gstr==Tstr;
-	if (!matched && Tstr[0]=='#' && (Tstr[1]=='x' || Tstr[1]=='X')) {
-	  u32 k=2;
-	  for (u32 i=2; i<Tstr.length(); i++) 
-	    k+= tolower(Gstr[i]) == tolower(Tstr[i]);
-	  if (k==Gstr.length())
-	    matched = true;
+	if (!matched && Tstr[0]=='#' && (Tstr[1]=='x' || Tstr[1]=='X' || Tstr[1]=='b' || Tstr[1]=='B')) {
+    matched = bv_match(Gstr, Tstr);
 	} 
 	SetMatched(matched);
       }
