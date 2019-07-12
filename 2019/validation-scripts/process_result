@@ -3,7 +3,12 @@
 # Requires: SynthLib2Tester and $SEMANTIC_SOLVER in path
 
 SEMANTIC_CHECK_TIMEOUT=10
-SEMANTIC_SOLVER=cvc4
+
+SEMANTIC_SOLVER=z3-4.8.4
+SEMANTIC_SOLVER_OPTS=""
+
+#SEMANTIC_SOLVER=cvc4
+#SEMANTIC_SOLVER_OPTS="--lang=smt2"
 
 SOLVEROUT=$1
 SYGUSBENCHNAME=$2
@@ -32,8 +37,8 @@ fi
 if grep -q define-fun $SOLVEROUT;
 then
   # for simple debugging
-  echo "SOLVED"
-  exit 1;
+  #echo "SOLVED"
+  #exit 1;
 
   # Run the SynthLib2Tester tool to check grammar
   #echo "[debug] Run SynthLib2Tester to check grammar..."
@@ -45,9 +50,9 @@ then
   if grep -q adheres=true temp-check-syntax.tmp;
   then
     #echo "[debug] Run SMT solver to check semantic correctness..."
-    ulimit -t $SEMANTIC_CHECK_TIMEOUT;$SEMANTIC_SOLVER --lang=smt2 __sygus_grmrchecker_output.smt >& temp-check-semantic.txt
+    ulimit -t $SEMANTIC_CHECK_TIMEOUT;$SEMANTIC_SOLVER $SEMANTIC_SOLVER_OPTS __sygus_grmrchecker_output.smt >& temp-check-semantic.tmp
     # grep for unsat/sat here
-    if grep -q unsat temp-check-semantic.txt;
+    if grep -q unsat temp-check-semantic.tmp;
     then
       echo "FAIL-SEMANTIC-UNSAT"
     elif grep -q sat temp-check-semantic.txt;
@@ -56,6 +61,7 @@ then
     else
       echo "FAIL-SEMANTIC"
     fi
+    rm temp-check-semantic.tmp
   else
     echo "FAIL-SYNTAX"
     #echo "FAIL SYNTAX:"
