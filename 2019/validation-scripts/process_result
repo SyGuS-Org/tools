@@ -14,12 +14,12 @@ SYGUSBENCHNAME=$2
 # Ensure that files exist
 if [ ! -e "$SOLVEROUT" ];
 then
-  echo "error (could not find solver output file)"
+  echo "ERROR (could not find solver output file)"
   exit 1
 fi
 if [ ! -e "$SYGUSBENCHNAME" ];
 then
-  echo "error (could not find reference sygus file)"
+  echo "ERROR (could not find reference sygus file)"
   exit 1
 fi
 
