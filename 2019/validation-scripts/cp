@@ -11,3 +11,5 @@ echo "cp process_solver_results $BIN/process_solver_results"
 cp process_solver_results $BIN/process_solver_results
 echo "cp process_track_results $BIN/process_track_results"
 cp process_track_results $BIN/process_track_results
+echo "cp process_tracks $BIN/process_tracks"
+cp process_tracks $BIN/process_tracks

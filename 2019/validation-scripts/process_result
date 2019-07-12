@@ -23,6 +23,12 @@ then
   exit 1
 fi
 
+
+# for simple debugging
+#echo "FILE-OK"
+#exit 1;
+
+
 # Run the SynthLib2Tester tool to check grammar
 #echo "[debug] Run SynthLib2Tester to check grammar..."
 SynthLib2Tester $SOLVEROUT $SYGUSBENCHNAME > temp-check-syntax.txt
