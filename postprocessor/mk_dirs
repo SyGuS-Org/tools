@@ -1,0 +1,8 @@
+#!/bin/bash
+mkdir src/debug
+mkdir obj
+mkdir obj/debug
+mkdir lib
+mkdir lib/debug
+mkdir bin
+mkdir bin/debug
