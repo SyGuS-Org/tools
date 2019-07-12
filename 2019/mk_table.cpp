@@ -28,7 +28,7 @@ int main( int argc, char* argv[] )
   
   for( unsigned i=0; i<lines.size(); i++ )
   {
-    std::cout << "Process line : " << l << std::endl;
+    //std::cout << "Process line : " << l << std::endl;
     l = lines[i];
     size_t pos = 0;
     size_t pos_prev = 0;
@@ -49,9 +49,9 @@ int main( int argc, char* argv[] )
     pos++;
     std::string rest = l.substr(pos,l.size()-pos);
     
-    std::cout << "  slv:" << slv << std::endl;
-    std::cout << "  bench:" << bench << std::endl;
-    std::cout << "  rest:" << rest << std::endl;
+    //std::cout << "  slv:" << slv << std::endl;
+    //std::cout << "  bench:" << bench << std::endl;
+    //std::cout << "  rest:" << rest << std::endl;
     if( i==0 )
     {
       perSolver = rest;
