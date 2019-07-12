@@ -12,6 +12,7 @@ BENCHDIR=$1
 echo "Solver,Benchmark,Result"
 
 for DIR in */ ; do
-    #echo "[debug] $DIR"
-    process_solver_results $DIR $BENCHDIR
+  
+  #echo "[debug] $DIR"
+  process_solver_results $DIR $BENCHDIR
 done

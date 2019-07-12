@@ -15,7 +15,7 @@ BENCHDIR=$2
 for FILE in $(find -name '*.txt'); do 
   #echo "[debug] $FILE"
   
-  clean_starexec_out $FILE > tmp-out.txt
+  clean_starexec_out $FILE > tmp-out.tmp
   
   # extract the benchmark name
   BENCHNAME="$(dirname "$FILE")"
@@ -29,8 +29,9 @@ for FILE in $(find -name '*.txt'); do
   #echo "[debug] Process tmp.txt + $SYGUSBENCHNAME..."
   
   # Print in csv form
+  #echo "[debug] Process $FILE"
   echo -n "$STAREXECOUTDIR,$SYGUSBENCHNAME,"
-  process_result tmp-out.txt $SYGUSBENCHNAME
+  process_result tmp-out.tmp $SYGUSBENCHNAME
 done
-rm tmp-out.txt
+rm tmp-out.tmp
 )

@@ -19,7 +19,7 @@ for DIR in */ ; do
     TRACKNAME=${DIR%?};
     cd $DIR;
     echo "Analyzing track $TRACKNAME ..."
-    echo "[debug] benchmark directory $BENCHDIR"
+    #echo "[debug] benchmark directory $BENCHDIR"
     process_track_results $BENCHDIR > ../results-$TRACKNAME.txt
     cd ..;
 done
