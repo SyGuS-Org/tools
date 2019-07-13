@@ -17,3 +17,5 @@ echo "cp process_track_results $BIN/process_track_results"
 cp process_track_results $BIN/process_track_results
 echo "cp process_tracks $BIN/process_tracks"
 cp process_tracks $BIN/process_tracks
+echo "cp mk_table_tracks $BIN/mk_table_tracks"
+cp mk_table_tracks $BIN/mk_table_tracks

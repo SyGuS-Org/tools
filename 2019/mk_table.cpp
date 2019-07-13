@@ -185,7 +185,7 @@ int main( int argc, char* argv[] )
     }
     summary << std::endl;
   }
-  std::fstream fss("summary.tmp", std::ios::out);
+  std::fstream fss("mk_table_summary.tmp", std::ios::out);
   fss << summary.str() << std::endl;
   fss.close();
 }

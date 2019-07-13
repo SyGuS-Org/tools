@@ -29,9 +29,9 @@ for DIR in */ ; do
     #process_track_results $BENCHDIR > ./results-txt/results-$TRACKNAME.txt
     cd ..;
     ./mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
-    if [ ! -f mk_table-summary.tmp ];
+    if [ ! -f mk_table_summary.tmp ];
     then
       echo "Warning: Missing output file mk_table-summary.tmp"
     fi
-    mv mk_table-summary.tmp > ../results-txt/$TRACKNAME-summary.csv
+    mv mk_table_summary.tmp > ../results-txt/$TRACKNAME_summary.csv
 done
