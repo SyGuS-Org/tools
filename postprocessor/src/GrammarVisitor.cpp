@@ -426,7 +426,6 @@ namespace SynthLib2Parser {
   }
 
   bool GrammarVisitor::AdheresToGrammar(const Term* TheTerm) {
-
     if (GrmrTerm->GetKind() != GTERMKIND_SYMBOL) {
       Matched = false;
       TheTerm->Accept(this);

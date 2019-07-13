@@ -41,9 +41,8 @@ bool DoesNameAndSortMatch(const FunDefCmd* Out, const SynthFunCmd* In) {
 
 u32 GrammarCorrect(const FunDefCmd* OutFun, const SynthFunCmd* SynthFun, SymbolTable* SymTbl) {
 
-  bool noGrmrRestrictions = SynthFun->GetGrammarRules().empty();  
+  bool noGrmrRestrictions = SynthFun->GetGrammarRules().empty();
   if (!noGrmrRestrictions) {
-
     // find the start (= grammar axiom)
     NTDef* TheStart = NULL; 
     for(auto const& Rule : SynthFun->GetGrammarRules()) {
@@ -65,7 +64,7 @@ u32 GrammarCorrect(const FunDefCmd* OutFun, const SynthFunCmd* SynthFun, SymbolT
   GrammarVisitor GVstr(cout, TheGrmrTerm, SynthFun, OutFun, noGrmrRestrictions, SymTbl);
   GVstr.AdheresToGrammar(TheTerm);              
 
-  return GVstr.GetExprSize();
+  return noGrmrRestrictions ? 1 : GVstr.GetExprSize(); // TODO: some non-zero value to indicate a PASS
 }
 
 
