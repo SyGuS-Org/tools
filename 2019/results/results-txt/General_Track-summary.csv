@@ -1,6 +1,6 @@
-Solver,Solved,Fastest,Smallest
-DryadSynth___General-Track/,143,56,93
-cvc4-syguscomp2019___v1_GENERAL-auto/,696,476,568
-cvc4-syguscomp2019___v1_GENERAL-f/,670,613,643
-cvc4-syguscomp2019___v1_GENERAL-s/,649,356,523
+Solver,Solved,Fastest,Smallest,Score
+DryadSynth___General-Track/,143,56,93,976
+cvc4-syguscomp2019___v1_GENERAL-auto/,696,476,568,5476
+cvc4-syguscomp2019___v1_GENERAL-f/,670,613,643,5832
+cvc4-syguscomp2019___v1_GENERAL-s/,649,356,523,4836
 

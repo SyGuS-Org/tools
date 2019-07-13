@@ -12,7 +12,8 @@ for DIR in */ ; do
     BENCHDIR="$ROOTBENCHDIR/$DIR"
     TRACKNAME=${DIR%?};
     echo "Making tables for track $TRACKNAME ..."
-    ./mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
+    ./mk_table ../results-txt/results-$TRACKNAME.csv > ../results-txt/$TRACKNAME.csv
+    echo "Copy summary..."
     if [ ! -f mk_table_summary.tmp ];
     then
       echo "Warning: Missing output file mk_table_summary.tmp"

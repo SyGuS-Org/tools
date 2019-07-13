@@ -175,7 +175,8 @@ int main( int argc, char* argv[] )
   }
   // now print summary
   std::stringstream summary;
-  summary << "Solver,Solved,Fastest,Smallest" << std::endl;
+  summary << "Solver,Solved,Fastest,Smallest,Score" << std::endl;
+  //summary << "Solver,Solved,Fastest,Smallest,Score,Score2" << std::endl;
   for( unsigned i=0; i<allSlv.size(); i++ )
   {
     summary << allSlv[i];
@@ -183,6 +184,12 @@ int main( int argc, char* argv[] )
     {
       summary << "," << summaryStatSum[s][i];
     }
+    // official score is 5*N + 3*F + 1*S
+    int score1 = 5*summaryStatSum[0][i] + 3*summaryStatSum[1][i] + 1*summaryStatSum[2][i];
+    summary << "," << score1;
+    // alternate score (for testing)
+    //int score2 = 10*summaryStatSum[0][i] + 1*summaryStatSum[1][i] + 5*summaryStatSum[2][i];
+    //summary << "," << score2;
     summary << std::endl;
   }
   std::fstream fss("mk_table_summary.tmp", std::ios::out);
