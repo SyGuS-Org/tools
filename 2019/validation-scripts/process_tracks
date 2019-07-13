@@ -27,5 +27,6 @@ for DIR in */ ; do
     echo "Analyzing track $TRACKNAME ..."
     #echo "[debug] benchmark directory $BENCHDIR"
     process_track_results $BENCHDIR > ../results-txt/results-$TRACKNAME.txt
+    #mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
     cd ..;
 done

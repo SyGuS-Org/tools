@@ -80,8 +80,9 @@ int main( int argc, char* argv[] )
   for( unsigned i=0; i<allSlv.size(); i++ )
   {
     std::cout << "," << allSlv[i] << "-" << perSolver;
+    std::cout << ",Fastest,Smallest";
   }
-  std::cout << ",Fastest,Smallest" << std::endl;
+  std::cout << std::endl;
   for( std::map< std::string, std::map< std::string, std::string > >::iterator it = table.begin(); it != table.end(); ++it )
   {
     std::cout << it->first;
@@ -101,8 +102,6 @@ int main( int argc, char* argv[] )
         std::cout << "  Benchmark : " << it->first << std::endl;
         exit(1);
       }
-      std::cout << "," << itbr->second;
-      
       // ------------- compute solved stats, best solved
       std::string sStatus;
       std::string sTime;
@@ -149,29 +148,17 @@ int main( int argc, char* argv[] )
       }
       // ------------- 
     }
-    // --------------- now print best solved
-    std::stringstream slvFast;
-    std::stringstream slvSmall;
     for( unsigned i=0; i<allSlv.size(); i++ )
     {
+      itbr = bres.find(allSlv[i]);
+      std::cout << "," << itbr->second;
       int valTime = timeStat[i];
-      if( valTime<0 )
-      {
-        // unsolved
-        continue;
-      }
-      // if within 1 second of fastest
-      if( valTime-minTime<=100 )
-      {
-        slvFast << "@" << allSlv[i];
-      }
+      int valTimeResult = valTime>=0 && valTime-minTime<=100 ? 1 : 0;
+      std::cout << "," << valTimeResult;
       int valExprs = exprStat[i];
-      if( valExprs<=minExprs )
-      {
-        slvSmall << "@" << allSlv[i];
-      }
+      int valExprsResult = valExprs>=0 && valExprs<=minExprs ? 1 : 0;
+      std::cout << "," << valExprsResult;
     }
-    std::cout << "," << slvFast.str() << "," << slvSmall.str() << std::endl;
-    // ------------- 
+    std::cout << std::endl;
   }
 }
