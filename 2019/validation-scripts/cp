@@ -7,6 +7,8 @@ echo "cp get_starexec_time $BIN/get_starexec_time"
 cp get_starexec_time $BIN/get_starexec_time
 echo "cp clean_starexec_out $BIN/clean_starexec_out"
 cp clean_starexec_out $BIN/clean_starexec_out
+echo "cp get_expr_size $BIN/get_expr_size"
+cp get_expr_size $BIN/get_expr_size
 echo "cp process_result $BIN/process_result"
 cp process_result $BIN/process_result
 echo "cp process_solver_results $BIN/process_solver_results"
