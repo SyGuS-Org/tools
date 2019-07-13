@@ -9,7 +9,7 @@ BENCHDIR=$1
 
 # $BENCHDIR is path to sygus benchmarks, which is has a parallel hierarchy to the job output space. This should be the benchmarks that the track was run on.
 
-echo "Solver,Benchmark,Result"
+echo "Solver,Benchmark,Result,Time"
 
 for DIR in */ ; do
   

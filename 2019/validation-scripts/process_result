@@ -58,23 +58,34 @@ then
     # grep for unsat/sat here
     if grep -q unsat temp-check-semantic.tmp;
     then
-      echo "FAIL-SEMANTIC-UNSAT"
+      echo -n "FAIL-SEMANTIC-UNSAT"
     elif grep -q sat temp-check-semantic.tmp;
     then
-      echo "SUCCESS"
+      echo -n "SUCCESS"
     else
-      echo "FAIL-SEMANTIC"
+      echo -n "FAIL-SEMANTIC"
     fi
     rm temp-check-semantic.tmp
   else
-    echo "FAIL-SYNTAX"
+    echo -n "FAIL-SYNTAX"
     #echo "FAIL SYNTAX:"
     #cat temp-check-syntax.tmp
   fi
   #rm temp-check-syntax.tmp
 else
-    echo "UNSOLVED"
+    echo -n "UNSOLVED"
 fi
+
+# extract time
+TIME=$(get_starexec_time $SOLVEROUT)
+echo -n ",$TIME"
+
+
+### TODO  Compute expression size from (cleaned) solver output file $SOLVEROUT-out.tmp
+
+
+
+echo
 
 rm -f $SOLVEROUT-out.tmp
 
