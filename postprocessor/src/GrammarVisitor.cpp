@@ -434,7 +434,7 @@ namespace SynthLib2Parser {
 
     SymbolGTerm* SymG = dynamic_cast <SymbolGTerm*> (GrmrTerm);
 
-    NTDef* TheRule = NULL;                                              
+    NTDef* TheRule = NULL;
     for(auto const& Rule : SynthFun->GetGrammarRules()) {
       if (Rule->GetName() == SymG->GetSymbol()) {
 	TheRule = Rule;

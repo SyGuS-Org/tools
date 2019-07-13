@@ -1358,19 +1358,6 @@ namespace SynthLib2Parser {
             throw SynthLib2ParserException("Identifier \"" + FunName + "\" is an " +
                                            "invariant and cannot be explicitly ref to.");
         }
-   
-        if (FunName == "div" || FunName == "mod") {
-           if (Args[1]->GetKind() != TERMKIND_LITERAL) {
-               throw SynthLib2ParserException("In LIA the second argument of " + FunName +
-                     " is required to be a constant.");
-           }
-        }
-        else if (FunName == "*") {
-           if (Args[0]->GetKind() != TERMKIND_LITERAL && Args[1]->GetKind() != TERMKIND_LITERAL) {
-               throw SynthLib2ParserException("In LIA one of the argument of " + FunName +
-                      " is required to be a constant.");
-           }
-        }
  
         return FunSort->GetRetSort();
     }
