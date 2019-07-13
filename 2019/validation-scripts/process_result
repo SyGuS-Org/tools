@@ -80,10 +80,8 @@ fi
 TIME=$(get_starexec_time $SOLVEROUT)
 echo -n ",$TIME"
 
-
-### TODO  Compute expression size from (cleaned) solver output file $SOLVEROUT-out.tmp
-
-
+SIZE=$(get_expr_size $SOLVEROUT-out.tmp)
+echo -n ",$SIZE"
 
 echo
 

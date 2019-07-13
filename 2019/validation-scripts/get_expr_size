@@ -1,0 +1,13 @@
+#!/usr/bin/env bash
+
+set -Euo pipefail
+
+if (( ${BASH_VERSION%%.*} < 4 )); then echo "ERROR: [bash] version 4.0+ required!" ; exit -1 ; fi
+
+USER_DIR="$(pwd)"
+ROOT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)"
+
+OUTPUT_FILE=$(realpath "$1")
+
+cd "$ROOT_DIR/../.."
+python3 -m sygus.bin.size "$OUTPUT_FILE"

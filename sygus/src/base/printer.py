@@ -81,10 +81,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
                 param_sort.accept(self)
             self.stream.write(')')
 
-    @abstractmethod
-    def visit_enum_sort_expression(self, enum_sort_expression: ast.EnumSortExpression):
-        raise NotImplementedError
-
     def visit_identifier_term(self, identifier_term: ast.IdentifierTerm):
         self.stream.write(str(identifier_term.identifier))
 
@@ -161,10 +157,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         quantified_term.term_body.accept(self)
         self.stream.write(')')
 
-    @abstractmethod
-    def visit_let_term(self, let_term: ast.LetTerm):
-        raise NotImplementedError
-
     def visit_check_synth_command(self, check_synth_command: ast.CheckSynthCommand):
         self.stream.write('\n(check-synth)')
 
@@ -179,10 +171,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         declare_var_command.sort_expression.accept(self)
         self.stream.write(')')
 
-    @abstractmethod
-    def visit_declare_primed_var_command(self, declare_primed_var_command: ast.DeclarePrimedVarCommand):
-        raise NotImplementedError
-
     def visit_inv_constraint_command(self, inv_constraint_command: ast.InvConstraintCommand):
         self.stream.write('\n(inv-constraint ')
         self.stream.write(f'{inv_constraint_command.inv_fun_symbol} ')
@@ -190,18 +178,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
         self.stream.write(f'{inv_constraint_command.trans_symbol} ')
         self.stream.write(f'{inv_constraint_command.post_symbol}')
         self.stream.write(')')
-
-    @abstractmethod
-    def visit_set_feature_command(self, set_feature_command: ast.SetFeatureCommand):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_set_option_command(self, set_option_command: ast.SetOptionCommand):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_set_options_command(self, set_options_command: ast.SetOptionsCommand):
-        raise NotImplementedError
 
     def visit_set_logic_command(self, set_logic_command: ast.SetLogicCommand):
         self.stream.write(f'(set-logic {set_logic_command.logic_name})\n')
@@ -256,14 +232,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             expansion.accept(self)
         self.stream.write('))')
 
-    @abstractmethod
-    def visit_grammar(self, grammar: ast.Grammar):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_declare_sort_command(self, declare_sort_command: ast.DeclareSortCommand):
-        raise NotImplementedError
-
     def visit_define_fun_command(self, define_fun_command: ast.DefineFunCommand):
         self.stream.write(f'(define-fun {str(define_fun_command.function_name)} (')
         self._write_params_and_sorts(define_fun_command.function_parameters)
@@ -273,30 +241,6 @@ class SygusASTPrinterBase(ast.ASTVisitor):
             self.stream.write('\n')
             define_fun_command.function_body.accept(self)
         self.stream.write(')')
-
-    @abstractmethod
-    def visit_declare_fun_command(self, declare_fun_command: ast.DeclareFunCommand):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_define_sort_command(self, define_sort_command: ast.DefineSortCommand):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_datatype_constructor(self, datatype_constructor: ast.DatatypeConstructor):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_datatype_constructor_list(self, datatype_constructor_list: ast.DatatypeConstructorList):
-        raise NotImplementedError
-
-    @abstractmethod
-    def visit_declare_datatypes_command(self, declare_datatypes_command: ast.DeclareDatatypesCommand):
-        raise NotImplementedError
-    
-    @abstractmethod
-    def visit_declare_datatype_command(self, declare_datatypes_command: ast.DeclareDatatypeCommand):
-        raise NotImplementedError
 
     def visit_program(self, program: ast.Program):
         for command in program.commands:
