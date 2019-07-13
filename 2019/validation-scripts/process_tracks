@@ -10,6 +10,12 @@ ROOTBENCHDIR=$1
 
 echo "Root benchmark directory set to $ROOTBENCHDIR"
 
+if [ ! -d "$ROOTBENCHDIR" ];
+then
+  echo "Error: Bad root benchmark directory specified $ROOTBENCHDIR"
+  exit 1
+fi
+
 # $ROOTBENCHDIR is path to sygus benchmarks over all tracks.
 # For 2019, this should be the directory https://github.com/SyGuS-Org/benchmarks/tree/master/comp/2019.
 

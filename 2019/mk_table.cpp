@@ -87,8 +87,8 @@ int main( int argc, char* argv[] )
     std::cout << it->first;
     std::map< std::string, std::string >& bres = it->second;
     std::map< std::string, std::string >::iterator itbr;
-    std::stringstream slvFast;
-    std::stringstream slvSmall;
+    std::vector< int > timeStat;
+    std::vector< int > exprStat;
     int minTime = -1;
     int minExprs = -1;
     for( unsigned i=0; i<allSlv.size(); i++ )
@@ -103,7 +103,7 @@ int main( int argc, char* argv[] )
       }
       std::cout << "," << itbr->second;
       
-      // ------------- compute best solved
+      // ------------- compute solved stats, best solved
       std::string sStatus;
       std::string sTime;
       std::string sExprs;
@@ -127,29 +127,51 @@ int main( int argc, char* argv[] )
       sExprs = itbr->second.substr(pos,itbr->second.size()-pos);
       if( sStatus=="SUCCESS" )
       {
-        int valTime = atoi( sTime.c_str() );
+        // consider 2 decimal points
+        int valTime = static_cast<int>(atof( sTime.c_str() )*100.0);
+        //std::cout << "ATOF " << sTime.c_str() << " -> " << valTime << std::endl;
         if( minTime<0 || valTime<=minTime )
         {
-          if( valTime!=minTime )
-          {
-            slvFast.str("");
-          }
           minTime = valTime;
-          slvFast << "@" << allSlv[i];
         }
+        timeStat.push_back(valTime);
         int valExprs = atoi( sExprs.c_str() );
         if( minExprs<0 || valExprs<=minExprs )
         {
-          if( valExprs!=minExprs )
-          {
-            slvSmall.str("");
-          }
           minExprs = valExprs;
-          slvSmall << "@" << allSlv[i];
         }
+        exprStat.push_back(valExprs);
+      }
+      else
+      {
+        timeStat.push_back(-1);
+        exprStat.push_back(-1);
       }
       // ------------- 
     }
+    // --------------- now print best solved
+    std::stringstream slvFast;
+    std::stringstream slvSmall;
+    for( unsigned i=0; i<allSlv.size(); i++ )
+    {
+      int valTime = timeStat[i];
+      if( valTime<0 )
+      {
+        // unsolved
+        continue;
+      }
+      // if within 1 second of fastest
+      if( valTime-minTime<=100 )
+      {
+        slvFast << "@" << allSlv[i];
+      }
+      int valExprs = exprStat[i];
+      if( valExprs<=minExprs )
+      {
+        slvSmall << "@" << allSlv[i];
+      }
+    }
     std::cout << "," << slvFast.str() << "," << slvSmall.str() << std::endl;
+    // ------------- 
   }
 }

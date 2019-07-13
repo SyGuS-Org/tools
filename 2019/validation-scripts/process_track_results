@@ -7,6 +7,12 @@
 
 BENCHDIR=$1
 
+if [ ! -d "$BENCHDIR" ];
+then
+  echo "Error: Bad root benchmark directory specified $BENCHDIR"
+  exit 1
+fi
+
 # $BENCHDIR is path to sygus benchmarks, which is has a parallel hierarchy to the job output space. This should be the benchmarks that the track was run on.
 
 echo "Solver,Benchmark,Result,Time,Exprs"
