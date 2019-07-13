@@ -80,7 +80,7 @@ int main( int argc, char* argv[] )
   for( unsigned i=0; i<allSlv.size(); i++ )
   {
     std::cout << "," << allSlv[i] << "-" << perSolver;
-    std::cout << ",Fastest,Smallest";
+    std::cout << ",Solved,Fastest,Smallest";
   }
   std::cout << std::endl;
   for( std::map< std::string, std::map< std::string, std::string > >::iterator it = table.begin(); it != table.end(); ++it )
@@ -88,6 +88,7 @@ int main( int argc, char* argv[] )
     std::cout << it->first;
     std::map< std::string, std::string >& bres = it->second;
     std::map< std::string, std::string >::iterator itbr;
+    std::vector< int > slvStat;
     std::vector< int > timeStat;
     std::vector< int > exprStat;
     int minTime = -1;
@@ -126,6 +127,7 @@ int main( int argc, char* argv[] )
       sExprs = itbr->second.substr(pos,itbr->second.size()-pos);
       if( sStatus=="SUCCESS" )
       {
+        slvStat.push_back(1);
         // consider 2 decimal points
         int valTime = static_cast<int>(atof( sTime.c_str() )*100.0);
         //std::cout << "ATOF " << sTime.c_str() << " -> " << valTime << std::endl;
@@ -143,6 +145,7 @@ int main( int argc, char* argv[] )
       }
       else
       {
+        slvStat.push_back(0);
         timeStat.push_back(-1);
         exprStat.push_back(-1);
       }
@@ -152,6 +155,7 @@ int main( int argc, char* argv[] )
     {
       itbr = bres.find(allSlv[i]);
       std::cout << "," << itbr->second;
+      std::cout << "," << slvStat[i];
       int valTime = timeStat[i];
       int valTimeResult = valTime>=0 && valTime-minTime<=100 ? 1 : 0;
       std::cout << "," << valTimeResult;
