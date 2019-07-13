@@ -3,6 +3,8 @@
 # copies all necessary files to proper path
 BIN=~/bin
 
+echo "cp get_starexec_time $BIN/get_starexec_time"
+cp get_starexec_time $BIN/get_starexec_time
 echo "cp clean_starexec_out $BIN/clean_starexec_out"
 cp clean_starexec_out $BIN/clean_starexec_out
 echo "cp process_result $BIN/process_result"

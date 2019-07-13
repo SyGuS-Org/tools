@@ -1,0 +1,2 @@
+#!/bin/bash
+tail -1 $1 | sed -r 's/\/.*//'
