@@ -30,7 +30,7 @@ for FILE in $(find -name '*.txt'); do
   
   # Print in csv form
   #echo "[debug] Process $FILE"
-  echo -n "$STAREXECOUTDIR,$SYGUSBENCHNAME,"
+  echo -n "$STAREXECOUTDIR,$BENCHNAME,"
   process_result $FILE-out.tmp $SYGUSBENCHNAME
   #echo "process_result $FILE-out.tmp $SYGUSBENCHNAME"
 done
