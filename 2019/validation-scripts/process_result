@@ -21,12 +21,12 @@ clean_starexec_out $SOLVEROUT > $SOLVEROUT-out.tmp
 # $SYGUSBENCHNAME is the sygus benchmark the solver output is for
 
 # Ensure that files exist
-if [ ! -e "$SOLVEROUT" ];
+if [ ! -f "$SOLVEROUT" ];
 then
   echo "ERROR (could not find solver output file)"
   exit 1
 fi
-if [ ! -e "$SYGUSBENCHNAME" ];
+if [ ! -f "$SYGUSBENCHNAME" ];
 then
   echo "ERROR (could not find reference sygus file)"
   exit 1
