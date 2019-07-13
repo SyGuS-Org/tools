@@ -13,6 +13,10 @@ SEMANTIC_SOLVER_OPTS=""
 SOLVEROUT=$1
 SYGUSBENCHNAME=$2
 
+
+
+clean_starexec_out $SOLVEROUT > $SOLVEROUT-out.tmp
+
 # $SOLVEROUT is solver output
 # $SYGUSBENCHNAME is the sygus benchmark the solver output is for
 
@@ -42,7 +46,7 @@ then
 
   # Run the SynthLib2Tester tool to check grammar
   #echo "[debug] Run SynthLib2Tester to check grammar..."
-  SynthLib2Tester $SOLVEROUT $SYGUSBENCHNAME > temp-check-syntax.tmp
+  SynthLib2Tester $SOLVEROUT-out.tmp $SYGUSBENCHNAME > temp-check-syntax.tmp
 
   #cat temp-check-syntax.txt | grep result
 
@@ -67,9 +71,11 @@ then
     #echo "FAIL SYNTAX:"
     #cat temp-check-syntax.tmp
   fi
-  rm temp-check-syntax.tmp
+  #rm temp-check-syntax.tmp
 else
     echo "UNSOLVED"
 fi
+
+rm -f $SOLVEROUT-out.tmp
 
 #echo "[debug] Finished"
