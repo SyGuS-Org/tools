@@ -183,7 +183,7 @@ int main(int argc, char *argv[])
       std::cout << "," << slvStat[i];
       summaryStatSum[0][i] += slvStat[i];
       int valTime = timeStat[i];
-      int valTimeResult = valTime >= 0 && valTime - minTime <= 100 ? 1 : 0;
+      int valTimeResult = valTime >= 0 && valTime <= minTime ? 1 : 0;
       std::cout << "," << valTimeResult;
       summaryStatSum[1][i] += valTimeResult;
       int valExprs = exprStat[i];
