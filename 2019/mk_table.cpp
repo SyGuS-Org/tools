@@ -81,12 +81,16 @@ int main( int argc, char* argv[] )
   {
     std::cout << "," << allSlv[i] << "-" << perSolver;
   }
-    std::cout << std::endl;
+  std::cout << ",Fastest,Smallest" << std::endl;
   for( std::map< std::string, std::map< std::string, std::string > >::iterator it = table.begin(); it != table.end(); ++it )
   {
     std::cout << it->first;
     std::map< std::string, std::string >& bres = it->second;
     std::map< std::string, std::string >::iterator itbr;
+    std::stringstream slvFast;
+    std::stringstream slvSmall;
+    int minTime = -1;
+    int minExprs = -1;
     for( unsigned i=0; i<allSlv.size(); i++ )
     {
       itbr = bres.find(allSlv[i]);
@@ -98,7 +102,54 @@ int main( int argc, char* argv[] )
         exit(1);
       }
       std::cout << "," << itbr->second;
+      
+      // ------------- compute best solved
+      std::string sStatus;
+      std::string sTime;
+      std::string sExprs;
+      size_t pos = 0;
+      size_t pos_prev = 0;
+      pos = itbr->second.find(",", pos);
+      if( pos==std::string::npos )
+      {
+        continue;
+      }
+      sStatus = itbr->second.substr( pos_prev, pos-pos_prev );
+      pos++;
+      pos_prev = pos;
+      pos = itbr->second.find(",", pos);
+      if( pos==std::string::npos )
+      {
+        continue;
+      }
+      sTime = itbr->second.substr( pos_prev, pos-pos_prev );
+      pos++;
+      sExprs = itbr->second.substr(pos,itbr->second.size()-pos);
+      if( sStatus=="SUCCESS" )
+      {
+        int valTime = atoi( sTime.c_str() );
+        if( minTime<0 || valTime<=minTime )
+        {
+          if( valTime!=minTime )
+          {
+            slvFast.str("");
+          }
+          minTime = valTime;
+          slvFast << "@" << allSlv[i];
+        }
+        int valExprs = atoi( sExprs.c_str() );
+        if( minExprs<0 || valExprs<=minExprs )
+        {
+          if( valExprs!=minExprs )
+          {
+            slvSmall.str("");
+          }
+          minExprs = valExprs;
+          slvSmall << "@" << allSlv[i];
+        }
+      }
+      // ------------- 
     }
-    std::cout << std::endl;
+    std::cout << "," << slvFast.str() << "," << slvSmall.str() << std::endl;
   }
 }

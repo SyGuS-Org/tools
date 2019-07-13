@@ -1,0 +1,3 @@
+#!/bin/bash
+echo "Make mk_table..."
+g++ mk_table.cpp -o mk_table
