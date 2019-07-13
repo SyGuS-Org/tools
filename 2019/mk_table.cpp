@@ -10,6 +10,27 @@
 #include <iomanip>
 #include <unordered_set>
 
+int bucket_time (float time) {
+  if (time >= 3600) return 9;
+  else if (time >= 1000) return 8;
+  else if (time >= 300) return 7;
+  else if (time >= 100) return 6;
+  else if (time >= 30) return 5;
+  else if (time >= 10) return 4;
+  else if (time >= 3) return 3;
+  else if (time >= 1) return 2;
+  return 1;
+}
+
+int bucket_size (int size) {
+  if (size >= 1000) return 6;
+  else if (size >= 300) return 5;
+  else if (size >= 100) return 4;
+  else if (size >= 30) return 3;
+  else if (size >= 10) return 2;
+  return 1;
+}
+
 int main(int argc, char *argv[])
 {
   std::map<std::string, std::map<std::string, std::string>> table;
@@ -95,7 +116,7 @@ int main(int argc, char *argv[])
     std::vector<int> timeStat;
     std::vector<int> exprStat;
     int minTime = -1;
-    int minExprs = -1;
+    int minSize = -1;
     for (unsigned i = 0; i < allSlv.size(); i++)
     {
       itbr = bres.find(allSlv[i]);
@@ -132,19 +153,19 @@ int main(int argc, char *argv[])
       {
         slvStat.push_back(1);
         // consider 2 decimal points
-        int valTime = static_cast<int>(atof(sTime.c_str()) * 100.0);
+        int valTime = bucket_time (atof(sTime.c_str()));
         //std::cout << "ATOF " << sTime.c_str() << " -> " << valTime << std::endl;
         if (minTime < 0 || valTime <= minTime)
         {
           minTime = valTime;
         }
         timeStat.push_back(valTime);
-        int valExprs = atoi(sExprs.c_str());
-        if (minExprs < 0 || valExprs <= minExprs)
+        int valSize = atoi(sExprs.c_str());
+        if (minSize < 0 || valSize <= minSize)
         {
-          minExprs = valExprs;
+          minSize = valSize;
         }
-        exprStat.push_back(valExprs);
+        exprStat.push_back(valSize);
       }
       else
       {
@@ -166,7 +187,7 @@ int main(int argc, char *argv[])
       std::cout << "," << valTimeResult;
       summaryStatSum[1][i] += valTimeResult;
       int valExprs = exprStat[i];
-      int valExprsResult = valExprs >= 0 && valExprs <= minExprs ? 1 : 0;
+      int valExprsResult = valExprs >= 0 && valExprs <= minSize ? 1 : 0;
       std::cout << "," << valExprsResult;
       summaryStatSum[2][i] += valExprsResult;
     }
