@@ -207,8 +207,8 @@ namespace SynthLib2Parser {
     }
 
   bool same_bv_match(const string bv1, const string bv2) {
-	  u32 k=2;
-	  for (u32 i=2; i < bv2.length(); i++)
+	  u32 k=0;
+	  for (u32 i=0; i < bv2.length(); i++)
 	    k += tolower(bv1[i]) == tolower(bv2[i]);
 	  return (k == bv1.length());
   }
@@ -221,11 +221,8 @@ namespace SynthLib2Parser {
   }
 
   bool bv_match(const string bv1, const string bv2) {
-    if (tolower(bv1[1]) == tolower(bv2[1]))
-      return same_bv_match(bv1, bv2);
-
     string hbv1 = tolower(bv1[1]) == 'x' ? bv1.substr(2) : bin_to_hex(bv1.substr(2));
-    string hbv2 = tolower(bv1[2]) == 'x' ? bv2.substr(2) : bin_to_hex(bv2.substr(2));
+    string hbv2 = tolower(bv2[1]) == 'x' ? bv2.substr(2) : bin_to_hex(bv2.substr(2));
     return same_bv_match(hbv1, hbv2);
   }
 

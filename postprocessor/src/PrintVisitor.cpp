@@ -185,7 +185,7 @@ namespace SynthLib2Parser {
         }
         else if (Compile) { 
             string Error = "Currently the only implicit allowed grammar is LIA;"; 
-            Error += " sorts are resitrincted to Bool and Int.";
+            Error += " sorts are restricted to Bool and Int.";
             //Out << LogicGrammars[LogicName] << endl;
             
             Out << "((Start Bool (StartBool))" << endl;

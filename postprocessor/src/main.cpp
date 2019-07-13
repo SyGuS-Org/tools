@@ -73,7 +73,7 @@ int main(int argc, char ** argv) {
 	  bool validate = (arg2=="CMPTRK_GENERAL" || 
                            arg2=="CMPTRK_INV" || 
                            arg2=="CMPTRK_LIA" ||
-                           arg2=="CMPTRK_PBE") ? true : false;            
+                           arg2=="CMPTRK_PBE") ? true : false;
           // WHEN USED AS A BENCHMARK PROCESSOR
 	  if (validate) {
              char* benchmark = argv[1];
