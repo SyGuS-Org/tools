@@ -26,9 +26,9 @@ for DIR in */ ; do
     cd $DIR;
     echo "Analyzing track $TRACKNAME ..."
     #echo "[debug] benchmark directory $BENCHDIR"
-    #process_track_results $BENCHDIR > ./results-txt/results-$TRACKNAME.txt
+    #process_track_results $BENCHDIR > ./results-txt/results-$TRACKNAME.csv
     cd ..;
-    ./mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
+    ./mk_table ../results-txt/results-$TRACKNAME.csv > ../results-txt/$TRACKNAME.csv
     if [ ! -f mk_table_summary.tmp ];
     then
       echo "Warning: Missing output file mk_table-summary.tmp"
