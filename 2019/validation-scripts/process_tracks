@@ -2,7 +2,7 @@
 
 
 # Run this script from base directory of StarExec job output containing subdirectories for each of the sygus comp 2019 job outputs.
-# For 2019, this should be run in https://github.com/SyGuS-Org/tools/tree/master/2019/results with all tgz expanded.
+# For 2019, this should be run in https://github.com/SyGuS-Org/tools/tree/master/2019/results/results_tgz/ with all tgz expanded.
 
 # Requires: clean_starexec_out, process_solver_results, process_result, process_track_results, SynthLib2Tester in path.
 
@@ -26,7 +26,12 @@ for DIR in */ ; do
     cd $DIR;
     echo "Analyzing track $TRACKNAME ..."
     #echo "[debug] benchmark directory $BENCHDIR"
-    process_track_results $BENCHDIR > ../results-txt/results-$TRACKNAME.txt
-    #mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
+    #process_track_results $BENCHDIR > ./results-txt/results-$TRACKNAME.txt
     cd ..;
+    ./mk_table ../results-txt/results-$TRACKNAME.txt > ../results-txt/$TRACKNAME.csv
+    if [ ! -f mk_table-summary.tmp ];
+    then
+      echo "Warning: Missing output file mk_table-summary.tmp"
+    fi
+    mv mk_table-summary.tmp > ../results-txt/$TRACKNAME-summary.csv
 done

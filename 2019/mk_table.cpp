@@ -77,10 +77,14 @@ int main( int argc, char* argv[] )
     }
   }
   std::cout << "Benchmark";
+  std::vector< int > summaryStatSum[3];
   for( unsigned i=0; i<allSlv.size(); i++ )
   {
     std::cout << "," << allSlv[i] << "-" << perSolver;
     std::cout << ",Solved,Fastest,Smallest";
+    summaryStatSum[0].push_back(0);
+    summaryStatSum[1].push_back(0);
+    summaryStatSum[2].push_back(0);
   }
   std::cout << std::endl;
   for( std::map< std::string, std::map< std::string, std::string > >::iterator it = table.begin(); it != table.end(); ++it )
@@ -153,16 +157,35 @@ int main( int argc, char* argv[] )
     }
     for( unsigned i=0; i<allSlv.size(); i++ )
     {
+      // should be found due to check above
       itbr = bres.find(allSlv[i]);
       std::cout << "," << itbr->second;
       std::cout << "," << slvStat[i];
+      summaryStatSum[0][i] += slvStat[i];
       int valTime = timeStat[i];
       int valTimeResult = valTime>=0 && valTime-minTime<=100 ? 1 : 0;
       std::cout << "," << valTimeResult;
+      summaryStatSum[1][i] += valTimeResult;
       int valExprs = exprStat[i];
       int valExprsResult = valExprs>=0 && valExprs<=minExprs ? 1 : 0;
       std::cout << "," << valExprsResult;
+      summaryStatSum[2][i] += valExprsResult;
     }
     std::cout << std::endl;
   }
+  // now print summary
+  std::stringstream summary;
+  summary << "Solver,Solved,Fastest,Smallest" << std::endl;
+  for( unsigned i=0; i<allSlv.size(); i++ )
+  {
+    summary << allSlv[i];
+    for( unsigned s=0; s<3; s++ )
+    {
+      summary << "," << summaryStatSum[s][i];
+    }
+    summary << std::endl;
+  }
+  std::fstream fss("summary.tmp", std::ios::out);
+  fss << summary.str() << std::endl;
+  fss.close();
 }
