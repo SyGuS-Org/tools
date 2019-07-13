@@ -232,7 +232,7 @@ cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_76_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_77_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_77_100.sl,SUCCESS
-cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_77_1000.sl,FAIL-SEMANTIC
+cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_77_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_78_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_78_100.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_78_1000.sl,SUCCESS
@@ -364,7 +364,7 @@ cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_120_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_121_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_121_100.sl,SUCCESS
-cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_121_1000.sl,FAIL-SEMANTIC
+cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_121_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_122_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_122_100.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_122_1000.sl,SUCCESS
@@ -424,7 +424,7 @@ cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_140_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_141_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_141_100.sl,SUCCESS
-cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_141_1000.sl,FAIL-SEMANTIC
+cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_141_1000.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_142_10.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_142_100.sl,SUCCESS
 cvc4-syguscomp2019___v1_PBE_BitVec-f/,/space/ajreynol/sygus-standard/benchmarks/comp/2019//PBE_BV_Track/./from_2018/PRE_142_1000.sl,SUCCESS
