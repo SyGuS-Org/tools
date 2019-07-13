@@ -45,7 +45,6 @@ namespace SynthLib2Parser {
 
         delete BinOpVec[0];
         delete BinOpVec[1];
-                              
         delete UnOpVec[0];
         delete ITEOpVec[0];
         delete ITEOpVec[1];
@@ -74,6 +73,7 @@ namespace SynthLib2Parser {
         vector<const SortExpr*> IntOpVec(1);
         IntOpVec[0] = new IntSortExpr();
 
+        SymTab->BindTheoryFun("distinct", BinOpVec, BS);
         SymTab->BindTheoryFun("bvand", BinOpVec, BVS);
         SymTab->BindTheoryFun("bvor", BinOpVec, BVS);
         SymTab->BindTheoryFun("bvxor", BinOpVec, BVS);
