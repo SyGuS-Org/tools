@@ -20,6 +20,6 @@ for DIR in */ ; do
     cd $DIR;
     echo "Analyzing track $TRACKNAME ..."
     #echo "[debug] benchmark directory $BENCHDIR"
-    process_track_results $BENCHDIR > ../results-$TRACKNAME.txt
+    process_track_results $BENCHDIR > ../results-txt/results-$TRACKNAME.txt
     cd ..;
 done
