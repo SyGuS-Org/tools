@@ -37,6 +37,8 @@ fi
 #exit 1;
 
 
+SIZE="n/a"
+
 # did the solver produce a solution?
 if grep -q define-fun $SOLVEROUT;
 then
@@ -62,6 +64,7 @@ then
     elif grep -q sat temp-check-semantic.tmp;
     then
       echo -n "SUCCESS"
+      SIZE=$(get_expr_size $SOLVEROUT-out.tmp)
     else
       echo -n "FAIL-SEMANTIC"
     fi
@@ -80,7 +83,6 @@ fi
 TIME=$(get_starexec_time $SOLVEROUT)
 echo -n ",$TIME"
 
-SIZE=$(get_expr_size $SOLVEROUT-out.tmp)
 echo -n ",$SIZE"
 
 echo
