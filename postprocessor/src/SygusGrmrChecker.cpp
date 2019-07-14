@@ -56,15 +56,13 @@ u32 GrammarCorrect(const FunDefCmd* OutFun, const SynthFunCmd* SynthFun, SymbolT
       throw SynthLib2ParserException((string)"Grammar for function " + FunName + " has no Start axiom.");
       return false;
     }
-  } 
-
-  Term* TheTerm = OutFun->GetTerm(); // func body
-  GTerm* TheGrmrTerm = new SymbolGTerm(SourceLocation::None, "Start");
-
-  GrammarVisitor GVstr(cout, TheGrmrTerm, SynthFun, OutFun, noGrmrRestrictions, SymTbl);
-  GVstr.AdheresToGrammar(TheTerm);              
-
-  return noGrmrRestrictions ? 1 : GVstr.GetExprSize(); // TODO: some non-zero value to indicate a PASS
+  } else {
+    return 1;
+  }
+  // Term* TheTerm = OutFun->GetTerm(); // func body
+  // GTerm* TheGrmrTerm = new SymbolGTerm(SourceLocation::None, "Start");
+  // GrammarVisitor GVstr(cout, TheGrmrTerm, SynthFun, OutFun, noGrmrRestrictions, SymTbl);
+  // GVstr.AdheresToGrammar(TheTerm);
 }
 
 
