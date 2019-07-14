@@ -5408,7 +5408,7 @@ OASIS___default/,./XC/3_conf5.sl,UNSOLVED,3600.17,n/a
 OASIS___default/,./XC/63.c.sl,SUCCESS,1.28,19
 OASIS___default/,./XC/46.c.sl,SUCCESS,2410.48,27
 OASIS___default/,./XC/23_conf5.sl,UNSOLVED,3600.23,n/a
-OASIS___default/,./XC/111_conf1.sl,FAIL-SYNTAX,361.09,n/a
+OASIS___default/,./XC/111_conf1.sl,SUCCESS,361.09,44
 OASIS___default/,./XC/83_conf1.sl,SUCCESS,1.32,23
 OASIS___default/,./XC/99_conf1.sl,SUCCESS,208.52,19
 OASIS___default/,./XC/97_conf1.sl,SUCCESS,11.90,3
@@ -5453,7 +5453,7 @@ OASIS___default/,./XC/73.c.sl,SUCCESS,1.25,26
 OASIS___default/,./XC/48_conf5.sl,SUCCESS,9.35,3
 OASIS___default/,./XC/124_conf1.sl,SUCCESS,144.12,33
 OASIS___default/,./XC/103.c.sl,SUCCESS,1.31,15
-OASIS___default/,./XC/1_conf1.sl,FAIL-SYNTAX,11.10,n/a
+OASIS___default/,./XC/1_conf1.sl,SUCCESS,11.10,28
 OASIS___default/,./XC/18.c.sl,SUCCESS,7.10,7
 OASIS___default/,./XC/44_conf1.sl,SUCCESS,6.25,3
 OASIS___default/,./XC/13_conf1.sl,SUCCESS,5.79,24
@@ -5480,7 +5480,7 @@ OASIS___default/,./XC/46_conf1.sl,SUCCESS,2462.18,27
 OASIS___default/,./XC/110.c.sl,SUCCESS,8.35,60
 OASIS___default/,./XC/66.c.sl,SUCCESS,1.31,19
 OASIS___default/,./XC/66_conf1.sl,SUCCESS,1.37,23
-OASIS___default/,./XC/95_conf5.sl,FAIL-SYNTAX,366.55,n/a
+OASIS___default/,./XC/95_conf5.sl,SUCCESS,366.55,38
 OASIS___default/,./XC/71.c.sl,SUCCESS,4.79,3
 OASIS___default/,./XC/130_conf5.sl,SUCCESS,392.98,3
 OASIS___default/,./XC/51.c.sl,SUCCESS,1.47,15
@@ -5534,7 +5534,7 @@ OASIS___default/,./XC/4.c.sl,UNSOLVED,3600.20,n/a
 OASIS___default/,./XC/3.c.sl,UNSOLVED,3600.16,n/a
 OASIS___default/,./XC/67_conf5.sl,SUCCESS,1362.71,7
 OASIS___default/,./XC/18_conf1.sl,SUCCESS,137.71,7
-OASIS___default/,./XC/119_conf1.sl,FAIL-SYNTAX,54.66,n/a
+OASIS___default/,./XC/119_conf1.sl,SUCCESS,54.66,44
 OASIS___default/,./XC/91_conf5.sl,SUCCESS,15.79,7
 OASIS___default/,./XC/132_conf5.sl,SUCCESS,16.25,3
 OASIS___default/,./XC/79_conf1.sl,SUCCESS,4.21,3
@@ -5571,9 +5571,9 @@ OASIS___default/,./XC/85_conf5.sl,UNSOLVED,3600.14,n/a
 OASIS___default/,./XC/96_conf1.sl,SUCCESS,228.14,53
 OASIS___default/,./XC/108_conf1.sl,SUCCESS,80.64,7
 OASIS___default/,./XC/63_conf5.sl,SUCCESS,1827.89,7
-OASIS___default/,./XC/118.c.sl,FAIL-SYNTAX,8.68,n/a
+OASIS___default/,./XC/118.c.sl,SUCCESS,8.68,49
 OASIS___default/,./XC/70_conf5.sl,UNSOLVED,3600.16,n/a
-OASIS___default/,./XC/2.c.sl,FAIL-SYNTAX,6.14,n/a
+OASIS___default/,./XC/2.c.sl,SUCCESS,6.14,25
 OASIS___default/,./XC/45_conf1.sl,SUCCESS,4.90,3
 OASIS___default/,./XC/72_conf1.sl,FAIL-SEMANTIC-UNSAT,3.39,1
 OASIS___default/,./XC/125.c.sl,SUCCESS,56.11,47
@@ -5588,12 +5588,12 @@ OASIS___default/,./XC/43_conf1.sl,SUCCESS,6.47,3
 OASIS___default/,./XC/56_conf5.sl,SUCCESS,48.28,7
 OASIS___default/,./XC/16.c.sl,SUCCESS,5.22,7
 OASIS___default/,./XC/133_conf5.sl,SUCCESS,475.97,7
-OASIS___default/,./XC/2_conf1.sl,FAIL-SYNTAX,17.24,n/a
+OASIS___default/,./XC/2_conf1.sl,SUCCESS,17.24,28
 OASIS___default/,./XC/71_conf1.sl,SUCCESS,5.48,3
 OASIS___default/,./XC/65.c.sl,SUCCESS,1.37,19
 OASIS___default/,./XC/118_conf1.sl,SUCCESS,131.18,63
 OASIS___default/,./XC/120_conf5.sl,UNSOLVED,3600.20,n/a
-OASIS___default/,./XC/1.c.sl,FAIL-SYNTAX,6.12,n/a
+OASIS___default/,./XC/1.c.sl,SUCCESS,6.12,25
 OASIS___default/,./XC/36_conf1.sl,SUCCESS,1.40,19
 OASIS___default/,./XC/12_conf1.sl,SUCCESS,8.11,24
 OASIS___default/,./XC/93_conf5.sl,UNSOLVED,3600.23,n/a
@@ -5659,7 +5659,7 @@ OASIS___default/,./XC/27_conf1.sl,FAIL-SEMANTIC-UNSAT,3.36,1
 OASIS___default/,./XC/23.c.sl,FAIL-SEMANTIC-UNSAT,279.12,1
 OASIS___default/,./XC/57_conf5.sl,SUCCESS,68.68,7
 OASIS___default/,./XC/36_conf5.sl,SUCCESS,69.20,3
-OASIS___default/,./XC/110_conf1.sl,FAIL-SYNTAX,55.34,n/a
+OASIS___default/,./XC/110_conf1.sl,SUCCESS,55.34,44
 OASIS___default/,./XC/27_conf5.sl,FAIL-SEMANTIC-UNSAT,3.41,1
 OASIS___default/,./XC/119.c.sl,SUCCESS,6.51,60
 OASIS___default/,./XC/26_conf5.sl,FAIL-SEMANTIC-UNSAT,3.90,1
@@ -5680,7 +5680,7 @@ OASIS___default/,./From2018/jmbl_formula25.sl,SUCCESS,1.20,21
 OASIS___default/,./From2018/jmbl_fig3.sl,SUCCESS,1.26,9
 OASIS___default/,./From2018/jmbl_hola.07.sl,SUCCESS,112.22,56
 OASIS___default/,./From2018/jmbl_hola.41.sl,SUCCESS,5.08,23
-OASIS___default/,./From2018/fib_18.sl,FAIL-SYNTAX,10.38,n/a
+OASIS___default/,./From2018/fib_18.sl,SUCCESS,10.38,51
 OASIS___default/,./From2018/bk-nat.sl,SUCCESS,1.50,27
 OASIS___default/,./From2018/jmbl_dec_simpl-new.sl,FAIL-SEMANTIC-UNSAT,3.43,1
 OASIS___default/,./From2018/jmbl_tacas_vars.sl,SUCCESS,4.80,47
