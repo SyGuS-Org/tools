@@ -11,6 +11,9 @@ class SygusSizerBase(ast.ASTVisitor):
 
     def visit_function_application_term(self, function_application_term: ast.FunctionApplicationTerm):
         self.result += 1
+        if str(function_application_term.function_identifier) == '-' and len(function_application_term.arguments) == 1 and isinstance(function_application_term.arguments[0], ast.LiteralTerm):
+            # (- 1) and -1 are of the same size = 1
+            return
         for argument in function_application_term.arguments:
             argument.accept(self)
 
