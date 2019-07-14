@@ -2937,14 +2937,14 @@ DryadSynth___INV-Track/,./XC/93.c.sl,UNSOLVED,3601.71,n/a
 DryadSynth___INV-Track/,./XC/84_conf5.sl,SUCCESS,1945.73,108
 DryadSynth___INV-Track/,./XC/39.c.sl,SUCCESS,0.74,18
 DryadSynth___INV-Track/,./XC/11_conf5.sl,UNSOLVED,3601.30,n/a
-DryadSynth___INV-Track/,./XC/132_conf1.sl,FAIL-SEMANTIC,3.57,72
+DryadSynth___INV-Track/,./XC/132_conf1.sl,SUCCESS-MANUAL,3.57,72
 DryadSynth___INV-Track/,./XC/2_conf5.sl,UNSOLVED,3601.93,n/a
 DryadSynth___INV-Track/,./XC/49.c.sl,SUCCESS,0.85,38
 DryadSynth___INV-Track/,./XC/13.c.sl,SUCCESS,0.81,41
 DryadSynth___INV-Track/,./XC/106_conf1.sl,UNSOLVED,3601.55,n/a
 DryadSynth___INV-Track/,./XC/98.c.sl,SUCCESS,40.21,86
 DryadSynth___INV-Track/,./XC/121.c.sl,SUCCESS,2.75,73
-DryadSynth___INV-Track/,./XC/15.c.sl,FAIL-SEMANTIC,1.00,46
+DryadSynth___INV-Track/,./XC/15.c.sl,SUCCESS-MANUAL,1.00,46
 DryadSynth___INV-Track/,./XC/114_conf1.sl,FAIL-SEMANTIC-UNSAT,1.06,46
 DryadSynth___INV-Track/,./XC/15_conf1.sl,FAIL-SEMANTIC-UNSAT,3.17,59
 DryadSynth___INV-Track/,./XC/50.c.sl,SUCCESS,0.77,27

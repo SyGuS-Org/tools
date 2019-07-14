@@ -149,7 +149,7 @@ int main(int argc, char *argv[])
       sTime = itbr->second.substr(pos_prev, pos - pos_prev);
       pos++;
       sExprs = itbr->second.substr(pos, itbr->second.size() - pos);
-      if (sStatus == "SUCCESS")
+      if (sStatus == "SUCCESS" || sStatus== "SUCCESS-MANUAL")
       {
         slvStat.push_back(1);
         // consider 2 decimal points

@@ -103,7 +103,7 @@ DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_mpg_guard2.sl,SUCCESS,0.52,45
 DryadSynth___CLIA-Track/,./from_2018/small_linear_func.sl,SUCCESS,0.61,78
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_max12.sl,SUCCESS,0.62,433
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_array_search_10.sl,SUCCESS,1.87,3714
-DryadSynth___CLIA-Track/,./from_2018/max18.sl,FAIL-SEMANTIC,0.74,973
+DryadSynth___CLIA-Track/,./from_2018/max18.sl,SUCCESS-MANUAL,0.74,973
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_ninefuncs.sl,SUCCESS,0.58,25
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_tenfunc1.sl,SUCCESS,0.64,30
 DryadSynth___CLIA-Track/,./from_2018/arraysearch20.sl,SUCCESS,1.45,26824
@@ -140,9 +140,9 @@ DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_max10.sl,SUCCESS,0.60,301
 DryadSynth___CLIA-Track/,./from_2018/arraysearch16.sl,SUCCESS,1.06,14100
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_mpg_ite1.sl,SUCCESS,0.55,112
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_array_search_13.sl,SUCCESS,0.93,7791
-DryadSynth___CLIA-Track/,./from_2018/max19.sl,FAIL-SEMANTIC,0.74,1084
+DryadSynth___CLIA-Track/,./from_2018/max19.sl,SUCCESS-MANUAL,0.74,1084
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_array_sum_2_5.sl,SUCCESS,0.52,30
-DryadSynth___CLIA-Track/,./from_2018/max20.sl,FAIL-SEMANTIC,0.78,1201
+DryadSynth___CLIA-Track/,./from_2018/max20.sl,SUCCESS-MANUAL,0.78,1201
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_array_sum_6_5.sl,SUCCESS,0.61,792
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_polynomial1.sl,SUCCESS,0.50,4
 DryadSynth___CLIA-Track/,./from_2018/jmbl_fg_array_sum_6_15.sl,SUCCESS,0.59,792
