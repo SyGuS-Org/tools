@@ -64,11 +64,11 @@ then
     elif grep -q sat temp-check-semantic.tmp;
     then
       echo -n "SUCCESS"
-      SIZE=$(get_expr_size $SOLVEROUT-out.tmp)
     else
       echo -n "FAIL-SEMANTIC"
     fi
     rm temp-check-semantic.tmp
+    SIZE=$(get_expr_size $SOLVEROUT-out.tmp)
   else
     echo -n "FAIL-SYNTAX"
     #echo "FAIL SYNTAX:"
