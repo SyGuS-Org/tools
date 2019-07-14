@@ -103,38 +103,7 @@ struct element {
     element* subs;
 };
 
-
-char* fixable_ops[] = {
-    "or ", "and ", "xor ", "+", "*", NULL
-};
-
 element head = {EK_LIST, 0, 0, NULL, NULL};
-
-
-bool str_cmp(char* a, char* b)
-{
-    while (*a && *b && *a==*b)
-    {
-        a++;
-        b++;
-    }
-    
-    return *b == 0;
-}
-
-bool fixable_op(char* a)
-{
-    char** op_p = fixable_ops;
-    
-    while (*op_p)
-    {
-        if (str_cmp(a, *op_p))
-            return true;
-        op_p++;
-    }
-    
-    return false;
-}
 
 bool is_blank(int ch)
 {
@@ -209,65 +178,6 @@ void parse_next(char* file_buff, int& i, element* prev)
            i++;
            parse_next(file_buff, i, prev->next);
     }
-}
-
-void fix_tree(element* head, char* file_buff)
-{
-    element* curr = head;
-   
-    while (curr)
-    {
-        if (curr->kind == EK_LIST && curr->subs)
-        {
-            fix_tree(curr->subs, file_buff);
-
-            if (curr->subs->kind == EK_NAME && fixable_op(file_buff+curr->subs->from))
-            {
-                if (curr->subs->next == NULL)
-                    continue;
-
-                // if there is only one operand, we replace the whole "or" tree with it
-                if (curr->subs->next->next == NULL)
-                {
-                    element* op = curr->subs->next;
-                    
-                    curr->kind = op->kind;
-                    curr->from = op->from;
-                    curr->to   = op->to;
-                    
-                    delete curr->subs;
-                    
-                    curr->subs = op->subs;
-                    continue;
-                }
-                
-                // while there are MORE than two operands
-                while (curr->subs->next->next->next != NULL)
-                {
-                    element* new_node = new element;
-                    
-                    new_node->kind = EK_LIST;
-                    new_node->from = 0;
-                    new_node->to   = 0;
-                    new_node->next = curr->subs->next->next->next;
-                    new_node->subs = new element;
-                    
-                    new_node->subs->kind = EK_NAME;
-                    new_node->subs->from = curr->subs->from;
-                    new_node->subs->to   = curr->subs->to;
-                    new_node->subs->next = curr->subs->next;
-                    new_node->subs->subs = NULL;
-
-                    new_node->subs->next->next->next = NULL;
-                    
-                    curr->subs->next = new_node;
-                }
-            }
-        }
-        
-        curr = curr->next;
-    }
-    
 }
 
 void print_tree(element* head, char* file_buff, FILE* fout, int level = 0)
@@ -345,8 +255,6 @@ int AnyArityToTwoArity(char* benchmark, char* benchmark_p) {
     
     int i=0;
     parse_next(file_buff, i, &head);
-
-    fix_tree(head.next, file_buff);
      
     print_tree(head.next, file_buff, fout);
     fprintf(fout, "\n");

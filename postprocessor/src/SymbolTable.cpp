@@ -1,5 +1,39 @@
 #include <SymbolTable.hpp>
 
+namespace {
+
+char* fixable_ops[] = {
+    "or", "and", "xor", "+", "*", NULL
+};
+
+bool str_cmp(const char* a, const char* b)
+{
+    while (*a && *b && *a==*b)
+    {
+        a++;
+        b++;
+    }
+
+    return *b == 0;
+}
+
+bool fixable_op(const char* a)
+{
+    char** op_p = fixable_ops;
+
+    while (*op_p)
+    {
+        if (str_cmp(a, *op_p)) {
+            return true;
+        }
+        op_p++;
+    }
+
+    return false;
+}
+
+}
+
 namespace SynthLib2Parser {
 
     SymbolTableEntry::SymbolTableEntry(SymtabEntryKind STEKind, const SortExpr* STESort)
@@ -246,10 +280,17 @@ namespace SynthLib2Parser {
     inline string SymbolTable::MangleName(const string& Name, 
                                           const vector<const SortExpr*>& ArgSorts) const
     {
+        bool fixable = fixable_op(Name.c_str());
         string Retval = Name;
-        for(auto const& ArgSort : ArgSorts) {
-            auto ActualSort = ResolveSort(ArgSort);
-            Retval += "_@_" + ActualSort->ToMangleString();
+        for (size_t i = 0, size = ArgSorts.size(); i < size; i++) {
+          auto ActualSort = ResolveSort(ArgSorts[i]);
+          Retval += "_@_" + ActualSort->ToMangleString();
+
+          // TODO: This is a hack to make type checking work for
+          // chainable operators
+          if (fixable && i == 1) {
+            break;
+          }
         }
         return Retval;
     }

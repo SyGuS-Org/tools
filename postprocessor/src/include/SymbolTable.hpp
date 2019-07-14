@@ -7,7 +7,6 @@
 
 namespace SynthLib2Parser {
 
-
     // definitions for the symbol table and auxiliary structures
     // A symbol table entry
     enum SymtabEntryKind {
