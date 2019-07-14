@@ -56,13 +56,16 @@ u32 GrammarCorrect(const FunDefCmd* OutFun, const SynthFunCmd* SynthFun, SymbolT
       throw SynthLib2ParserException((string)"Grammar for function " + FunName + " has no Start axiom.");
       return false;
     }
-  } else {
-    return 1;
+
+    Term* TheTerm = OutFun->GetTerm(); // func body
+    GTerm* TheGrmrTerm = new SymbolGTerm(SourceLocation::None, "Start");
+    GrammarVisitor GVstr(cout, TheGrmrTerm, SynthFun, OutFun, noGrmrRestrictions, SymTbl);
+    GVstr.AdheresToGrammar(TheTerm);
+
+    return GVstr.GetExprSize();
   }
-  // Term* TheTerm = OutFun->GetTerm(); // func body
-  // GTerm* TheGrmrTerm = new SymbolGTerm(SourceLocation::None, "Start");
-  // GrammarVisitor GVstr(cout, TheGrmrTerm, SynthFun, OutFun, noGrmrRestrictions, SymTbl);
-  // GVstr.AdheresToGrammar(TheTerm);
+
+  return 1;
 }
 
 
@@ -83,190 +86,190 @@ int AddSetLogic(char* solvers_out, string set_logic_string, char* solvers_revise
 }
 
 
-///////////////////////////////////////
+// ///////////////////////////////////////
 
-enum ElementKind
-{
-    EK_NAME,
-    EK_LIST,
-};
+// enum ElementKind
+// {
+//     EK_NAME,
+//     EK_LIST,
+// };
 
-struct element {
-    ElementKind kind;
-    int from;
-    int to;
+// struct element {
+//     ElementKind kind;
+//     int from;
+//     int to;
 
-    element* next;
+//     element* next;
     
-    element* subs;
-};
+//     element* subs;
+// };
 
-element head = {EK_LIST, 0, 0, NULL, NULL};
+// element head = {EK_LIST, 0, 0, NULL, NULL};
 
-bool is_blank(int ch)
-{
-    return ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r';
-}
+// bool is_blank(int ch)
+// {
+//     return ch == ' ' || ch == '\n' || ch == '\t' || ch == '\r';
+// }
 
 
-void advance_to_next_token(char* file_buff, int& i)
-{
-    bool in_remark = false;
+// void advance_to_next_token(char* file_buff, int& i)
+// {
+//     bool in_remark = false;
 
-    while (file_buff[i] && (in_remark || file_buff[i] == ';' || is_blank(file_buff[i])))
-    {
-        if (file_buff[i] == '\n' || file_buff[i] == '\r')
-            in_remark = false;
-        else if (file_buff[i] == ';')
-            in_remark = true;
+//     while (file_buff[i] && (in_remark || file_buff[i] == ';' || is_blank(file_buff[i])))
+//     {
+//         if (file_buff[i] == '\n' || file_buff[i] == '\r')
+//             in_remark = false;
+//         else if (file_buff[i] == ';')
+//             in_remark = true;
        
-        i++;
-    }
-}
+//         i++;
+//     }
+// }
 
-bool get_name(char* buff, int& i, int& from, int& to)
-{
-    advance_to_next_token(buff, i);    
+// bool get_name(char* buff, int& i, int& from, int& to)
+// {
+//     advance_to_next_token(buff, i);    
     
-    if (buff[i] == '(' || buff[i] == ')' || buff[i] == 0)
-        return false;
+//     if (buff[i] == '(' || buff[i] == ')' || buff[i] == 0)
+//         return false;
 
-    from = i;
-    while (!is_blank(buff[i]) && buff[i] != ')' && buff[i] != '(' && buff[i] != ';')
-        i++;
+//     from = i;
+//     while (!is_blank(buff[i]) && buff[i] != ')' && buff[i] != '(' && buff[i] != ';')
+//         i++;
 
-    to = i;
+//     to = i;
     
-    return true;
-}
+//     return true;
+// }
 
-void parse_next(char* file_buff, int& i, element* prev)
-{
-    int from, to;
-    if (get_name(file_buff, i, from, to))
-    {
-        prev->next = new element;
-        prev->next->kind = EK_NAME;
-        prev->next->from = from;
-        prev->next->to = to;
+// void parse_next(char* file_buff, int& i, element* prev)
+// {
+//     int from, to;
+//     if (get_name(file_buff, i, from, to))
+//     {
+//         prev->next = new element;
+//         prev->next->kind = EK_NAME;
+//         prev->next->from = from;
+//         prev->next->to = to;
 
-        prev->next->next = NULL;        
-        prev->next->subs = NULL;
+//         prev->next->next = NULL;        
+//         prev->next->subs = NULL;
 
-        parse_next(file_buff, i, prev->next);
-    }
-    else if (file_buff[i] == '(')
-    {
-           prev->next = new element;
-           prev->next->kind = EK_LIST;
-           prev->next->from = 0;
-           prev->next->to = 0;
+//         parse_next(file_buff, i, prev->next);
+//     }
+//     else if (file_buff[i] == '(')
+//     {
+//            prev->next = new element;
+//            prev->next->kind = EK_LIST;
+//            prev->next->from = 0;
+//            prev->next->to = 0;
     
-           prev->next->next = NULL;
-           prev->next->subs = NULL;
+//            prev->next->next = NULL;
+//            prev->next->subs = NULL;
 
-           i++;
-           parse_next(file_buff, i, prev->next);
-           prev->next->subs = prev->next->next;
-           prev->next->next = NULL;
+//            i++;
+//            parse_next(file_buff, i, prev->next);
+//            prev->next->subs = prev->next->next;
+//            prev->next->next = NULL;
         
-           if (file_buff[i] != ')')
-              printf("Expected ')'\n");
+//            if (file_buff[i] != ')')
+//               printf("Expected ')'\n");
 
-           i++;
-           parse_next(file_buff, i, prev->next);
-    }
-}
+//            i++;
+//            parse_next(file_buff, i, prev->next);
+//     }
+// }
 
-void print_tree(element* head, char* file_buff, FILE* fout, int level = 0)
-{
-    element* curr = head;
-    char tmp;
+// void print_tree(element* head, char* file_buff, FILE* fout, int level = 0)
+// {
+//     element* curr = head;
+//     char tmp;
     
-    while (curr)
-    {
-        if (curr->kind == EK_NAME)
-        {
-            tmp = file_buff[curr->to];
-            file_buff[curr->to] = 0;
-            fprintf(fout, "%s ", file_buff+curr->from);
-            file_buff[curr->to] = tmp;
-        }
-        else
-        {   
-	    if (level == 0)	
-              fprintf(fout, "\n(");
-            else
-	      fprintf(fout, "(");
-            print_tree(curr->subs, file_buff, fout, level+1);
+//     while (curr)
+//     {
+//         if (curr->kind == EK_NAME)
+//         {
+//             tmp = file_buff[curr->to];
+//             file_buff[curr->to] = 0;
+//             fprintf(fout, "%s ", file_buff+curr->from);
+//             file_buff[curr->to] = tmp;
+//         }
+//         else
+//         {   
+// 	    if (level == 0)	
+//               fprintf(fout, "\n(");
+//             else
+// 	      fprintf(fout, "(");
+//             print_tree(curr->subs, file_buff, fout, level+1);
 
-            fprintf(fout, ")");
-        }
+//             fprintf(fout, ")");
+//         }
         
-        curr = curr->next;
-    }
+//         curr = curr->next;
+//     }
 
-}
+// }
 
 
 
-void clear_tree(element* tree)
-{
-    if (tree->next)
-    {
-        clear_tree(tree->next);
-        delete(tree->next);
-	tree->next = NULL;
-    }
+// void clear_tree(element* tree)
+// {
+//     if (tree->next)
+//     {
+//         clear_tree(tree->next);
+//         delete(tree->next);
+// 	tree->next = NULL;
+//     }
 
-    if (tree->subs)
-    {
-        clear_tree(tree->subs);
-        delete(tree->subs);
- 	tree->subs = NULL;
-    }
-}
+//     if (tree->subs)
+//     {
+//         clear_tree(tree->subs);
+//         delete(tree->subs);
+//  	tree->subs = NULL;
+//     }
+// }
 
-int AnyArityToTwoArity(char* benchmark, char* benchmark_p) {
+// int AnyArityToTwoArity(char* benchmark, char* benchmark_p) {
 
-    FILE* fin;
-    FILE* fout;
+//     FILE* fin;
+//     FILE* fout;
     
-    fin = fopen(benchmark, "rt");
+//     fin = fopen(benchmark, "rt");
     
-    if (fin == NULL)
-    {
-        printf("could not open file\n");
-        return 1;
-    }
+//     if (fin == NULL)
+//     {
+//         printf("could not open file\n");
+//         return 1;
+//     }
    
-    fout = fopen(benchmark_p, "wt");
+//     fout = fopen(benchmark_p, "wt");
    
-    fseek(fin, 0, SEEK_END);
-    long file_size = ftell(fin);
-    char* file_buff = new char[file_size+1];
-    fseek(fin, 0, SEEK_SET);
+//     fseek(fin, 0, SEEK_END);
+//     long file_size = ftell(fin);
+//     char* file_buff = new char[file_size+1];
+//     fseek(fin, 0, SEEK_SET);
     
-    fread(file_buff, file_size, 1, fin);
-    file_buff[file_size] = 0;
-    fclose(fin);
+//     fread(file_buff, file_size, 1, fin);
+//     file_buff[file_size] = 0;
+//     fclose(fin);
     
-    int i=0;
-    parse_next(file_buff, i, &head);
+//     int i=0;
+//     parse_next(file_buff, i, &head);
      
-    print_tree(head.next, file_buff, fout);
-    fprintf(fout, "\n");
-    fclose(fout);
+//     print_tree(head.next, file_buff, fout);
+//     fprintf(fout, "\n");
+//     fclose(fout);
     
-    clear_tree(&head);
+//     clear_tree(&head);
 
-    delete [] file_buff;
+//     delete [] file_buff;
     
-    return 0;
-}
+//     return 0;
+// }
 
 
-//////////////////////////////////////
+// //////////////////////////////////////
 
 int SygusTrackValidator(char* benchmark, char* track)
 {
@@ -284,12 +287,12 @@ int SygusTrackValidator(char* benchmark, char* track)
         // Read the SyGuS Problem - the input to a SyGuS Solver
 
         // First change any arity to two arity
-        string benchmark_p = string(benchmark) + "___p";
-        AnyArityToTwoArity(benchmark,(char *)benchmark_p.c_str());
+        // string benchmark_p = string(benchmark) + "___p";
+        // AnyArityToTwoArity(benchmark,(char *)benchmark_p.c_str());
         
         // Then read instead the processed benchmark
         SynthLib2Parser::SynthLib2Parser* ParserIn = new SynthLib2Parser::SynthLib2Parser();
-        (*ParserIn)(benchmark_p);
+        (*ParserIn)(benchmark);
         SymbolTable* InFileTable = ParserIn->GetSymbolTable();
         Program* InFileProg = ParserIn->GetProgram();
 
@@ -476,11 +479,11 @@ int SygusGrmrChecker(char* benchmark, char* solvers_out, char* smt_file)
         InFileTable->DeleteSynthFuncs();
 
         // first remove arbirtrary arity
-        string solvers_out_p = "__sygus_solversout";
-        AnyArityToTwoArity(solvers_out,(char *)solvers_out_p.c_str());
+        //string solvers_out_p = "__sygus_solversout";
+        //AnyArityToTwoArity(solvers_out,(char *)solvers_out_p.c_str());
         ParserOut = new SynthLib2Parser::SynthLib2Parser(InFileTable->Clone());
         // now parse it
-        (*ParserOut)(solvers_out_p);
+        (*ParserOut)(solvers_out);
         SymbolTable* OutFileTable = ParserOut->GetSymbolTable();
         Program* OutFileProg = ParserOut->GetProgram();
 

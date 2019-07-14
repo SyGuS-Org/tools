@@ -183,26 +183,26 @@ namespace SynthLib2Parser {
             IndentLevel--;
             Out << ")" << endl;
         }
-        else if (Compile) { 
-            string Error = "Currently the only implicit allowed grammar is LIA;"; 
-            Error += " sorts are restricted to Bool and Int.";
-            //Out << LogicGrammars[LogicName] << endl;
+        // else if (Compile) { 
+        //     string Error = "Currently the only implicit allowed grammar is LIA;"; 
+        //     Error += " sorts are restricted to Bool and Int.";
+        //     //Out << LogicGrammars[LogicName] << endl;
             
-            Out << "((Start Bool (StartBool))" << endl;
-            string BoolArgs = "";
-            string IntArgs = "";
-            for(auto const& ASPair : Cmd->GetArgs()) {
-                if (ASPair->GetSort()->GetKind() == SORTKIND_BOOL)
-                    BoolArgs += ASPair->GetName() + " ";
-                else if (ASPair->GetSort()->GetKind() == SORTKIND_INT)
-                    IntArgs += ASPair->GetName() + " ";
-                else 
-                    throw SynthLib2ParserException(Error);
-            }
-            Out << "(StartInt Int (" << IntArgs << LogicGrammars["StartInt"] << "))" << endl << endl;
-            Out << "(ConstantInt Int (" << LogicGrammars["ConstantInt"] << "))" << endl;
-            Out << "(StartBool Bool (" << BoolArgs << LogicGrammars["StartBool"] << ")))" << endl;
-        }
+        //     Out << "((Start Bool (StartBool))" << endl;
+        //     string BoolArgs = "";
+        //     string IntArgs = "";
+        //     for(auto const& ASPair : Cmd->GetArgs()) {
+        //         if (ASPair->GetSort()->GetKind() == SORTKIND_BOOL)
+        //             BoolArgs += ASPair->GetName() + " ";
+        //         else if (ASPair->GetSort()->GetKind() == SORTKIND_INT)
+        //             IntArgs += ASPair->GetName() + " ";
+        //         else 
+        //             throw SynthLib2ParserException(Error);
+        //     }
+        //     Out << "(StartInt Int (" << IntArgs << LogicGrammars["StartInt"] << "))" << endl << endl;
+        //     Out << "(ConstantInt Int (" << LogicGrammars["ConstantInt"] << "))" << endl;
+        //     Out << "(StartBool Bool (" << BoolArgs << LogicGrammars["StartBool"] << ")))" << endl;
+        // }
 
         IndentLevel--;
         Out << ")" << endl << endl;
