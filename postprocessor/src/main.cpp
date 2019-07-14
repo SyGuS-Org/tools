@@ -47,7 +47,7 @@ int clean(const char* sourceFileName, const char*  targetFileName)
       if (strstr(lineStart,"EOF"))
         break;
 
-      for (p = lineStart; *p && isspace(*p); p++);
+      for (p = lineStart; *p; p++);
 
       if (*p == 0 || *p == '(') {
         foundOpenparen = true;
