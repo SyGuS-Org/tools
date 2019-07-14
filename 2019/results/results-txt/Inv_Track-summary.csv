@@ -1,9 +1,9 @@
 Solver,Solved,Fastest,Smallest,Score
-DryadSynth___INV-Track/,275,12,39,1450
-LoopInvGen_19.06___default/,512,305,364,3839
-LoopInvGen_19.06___gplearn/,511,278,349,3738
-OASIS___default/,528,14,313,2995
-cvc4-syguscomp2019___v1_INV-f/,522,329,243,3840
-cvc4-syguscomp2019___v1_INV-s/,539,291,264,3832
-cvc4-syguscomp2019___v1_INV-su/,592,438,268,4542
+DryadSynth___INV-Track/,275,161,39,1897
+LoopInvGen_19.06___default/,512,442,364,4250
+LoopInvGen_19.06___gplearn/,511,411,349,4137
+OASIS___default/,528,16,313,3001
+cvc4-syguscomp2019___v1_INV-f/,522,323,243,3822
+cvc4-syguscomp2019___v1_INV-s/,539,287,264,3820
+cvc4-syguscomp2019___v1_INV-su/,592,427,268,4509
 
