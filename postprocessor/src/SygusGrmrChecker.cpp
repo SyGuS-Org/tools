@@ -507,10 +507,8 @@ int SygusParser(char* input, char* output, bool compile)
 {
     try {
         
-        string input_p = string(input) + "__tmp";
-        AnyArityToTwoArity(input,(char *)input_p.c_str());
         SynthLib2Parser::SynthLib2Parser* Parser = new SynthLib2Parser::SynthLib2Parser();
-        (*Parser)(input_p);
+        (*Parser)(input);
         SymbolTable* SymTbl = Parser->GetSymbolTable();
         Program* Prog = Parser->GetProgram();
 
