@@ -1,8 +1,0 @@
-#!/bin/bash
-
-# remove time stamps
-sed -r 's/^.*\t//' $1 > tmp.tmp
-# remove EOF
-sed -i '$ d' tmp.tmp
-cat tmp.tmp
-rm tmp.tmp

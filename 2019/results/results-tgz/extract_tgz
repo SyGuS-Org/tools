@@ -1,6 +1,0 @@
-#!/bin/bash
-tar -xzf GENERAL_Track.tgz
-tar -xzf INV_Track.tgz
-tar -xzf CLIA_Track.tgz
-tar -xzf PBE_BV_Track.tgz
-tar -xzf PBE_Strings_Track.tgz

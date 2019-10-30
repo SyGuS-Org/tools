@@ -32,15 +32,16 @@ python3 -m sygus.bin.convert -s 1 -t 2 /path/to/file.sl
 ```bash
 ./scripts/batch-check.sh -s 1 /path/to/dir_1 /path/to/dir_2
 ```
-See `./scripts/batch-check.sh -h` for more options
+See `./scripts/batch-check.sh -h` for more options.
 
 2. Use the `batch-convert.sh` script to convert an entire directory (recursively):
 ```bash
 ./scripts/batch-convert.sh -s 1 -t 2 -o /path/to/out_dir /path/to/in_dir
 ```
-The script generates an identical directory structure under the output directory,
-and generates a file named `sygus.sl` for every successfully converted `sygus.sl` file,
-and a file named `sygus.sl.err` with the error messages for every file `sygus.sl` that it failed to convert. <br>
+The script generates an identical directory structure under the `out_dir` output directory.
+It generates a file named `sygus.sl` for every successfully converted `sygus.sl` file,
+and a file named `sygus.sl.err` with the error messages for every `sygus.sl` file that it failed to convert.
+<br>
 See `./scripts/batch-convert.sh -h` for more options.
 
 [SyGuS]:                    https://sygus.org/
