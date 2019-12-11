@@ -1,7 +1,7 @@
 import inspect
 
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import auto, Enum, unique
 from typing import Dict, List, Set, Tuple, Union
 
 from . import ast, exceptions, utilities
@@ -9,10 +9,11 @@ from . import ast, exceptions, utilities
 from .utilities import Hashable, Identifier
 
 
+@unique
 class SymbolTableEntryKind(Enum):
-    SORT_DESCRIPTOR = 1
-    FUNCTION_DESCRIPTOR = 2
-    SYMBOL_DESCRIPTOR = 3
+    FUNCTION_DESCRIPTOR = auto()
+    SORT_DESCRIPTOR = auto()
+    SYMBOL_DESCRIPTOR = auto()
 
 
 class SymbolTableEntry(ABC):
@@ -23,15 +24,15 @@ class SymbolTableEntry(ABC):
         self.identifier: Identifier = utilities.canonicalize_identifier(identifier)
 
 
+@unique
 class SortKind(Enum):
-    UNINTERPRETED = 1
-    PRIMITIVE = 2
-    DATATYPE = 3
-    FUNCTION = 4
-    ALIAS = 5
-    PLACEHOLDER = 6
-    # Used in V1 grammars and ASTs ONLY!
-    ENUMERATED = 7
+    ALIAS = auto()
+    DATATYPE = auto()
+    ENUMERATED = auto()         # Used in V1 grammars and ASTs ONLY!
+    FUNCTION = auto()
+    PLACEHOLDER = auto()
+    PRIMITIVE = auto()
+    UNINTERPRETED = auto()
 
 
 class SortDescriptor(SymbolTableEntry, Hashable):
@@ -152,15 +153,16 @@ class SortDescriptor(SymbolTableEntry, Hashable):
                                             all(x.sort_kind != SortKind.PLACEHOLDER for x in self.sort_arguments))
 
 
+@unique
 class FunctionKind(Enum):
-    UNINTERPRETED = 1
-    SYNTH_FUN = 2
-    SYNTH_INV = 3
-    USER_DEFINED = 4
-    DATATYPE_CONSTRUCTOR = 5
-    DATATYPE_TESTER = 6
-    DATATYPE_SELECTOR = 7
-    THEORY = 8
+    DATATYPE_CONSTRUCTOR = auto()
+    DATATYPE_SELECTOR = auto()
+    DATATYPE_TESTER = auto()
+    THEORY = auto()
+    SYNTH_FUN = auto()
+    SYNTH_INV = auto()
+    UNINTERPRETED = auto()
+    USER_DEFINED = auto()
 
 
 class FunctionDescriptor(SymbolTableEntry):
@@ -291,12 +293,13 @@ class FunctionDescriptor(SymbolTableEntry):
         return None
 
 
+@unique
 class SymbolKind(Enum):
-    UNIVERSAL_VARIABLE = 1
-    PARAMETER = 2
-    QUANTIFIED_VARIABLE = 3
-    LET_BOUND_VARIABLE = 4
-    GRAMMAR_NONTERMINAL = 5
+    GRAMMAR_NONTERMINAL = auto()
+    LET_BOUND_VARIABLE = auto()
+    PARAMETER = auto()
+    QUANTIFIED_VARIABLE = auto()
+    UNIVERSAL_VARIABLE = auto()
 
 
 class SymbolDescriptor(SymbolTableEntry):

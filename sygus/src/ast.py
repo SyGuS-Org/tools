@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from enum import Enum
+from enum import auto, Enum, unique
 from typing import Dict, List, Tuple, Union
 
 from . import utilities
@@ -186,16 +186,15 @@ class EnumSortExpression(AST):
         return visitor.visit_enum_sort_expression(self)
 
 
+@unique
 class LiteralKind(Enum):
-    NUMERAL = 1
-    DECIMAL = 2
-    BOOLEAN = 3
-    HEXADECIMAL = 4
-    BINARY = 5
-    STRING = 6
-
-    # Used only by V1 grammars/ASTs
-    ENUMERATED = 7
+    BINARY = auto()
+    BOOLEAN = auto()
+    DECIMAL = auto()
+    ENUMERATED = auto()     # Used only by V1 grammars/ASTs
+    HEXADECIMAL = auto()
+    NUMERAL = auto()
+    STRING = auto()
 
 
 class Literal(AST):
@@ -256,9 +255,10 @@ class FunctionApplicationTerm(Term):
         return visitor.visit_function_application_term(self)
 
 
+@unique
 class QuantifierKind(Enum):
-    FORALL = 1
-    EXISTS = 2
+    FORALL = auto()
+    EXISTS = auto()
 
 
 class QuantifiedTerm(Term):
@@ -291,24 +291,25 @@ class LetTerm(Term):
         return visitor.visit_let_term(self)
 
 
+@unique
 class CommandKind(Enum):
-    CHECK_SYNTH = 1
-    CONSTRAINT = 2
-    DECLARE_VAR = 3
-    DECLARE_PRIMED_VAR = 4
-    INV_CONSTRAINT = 5
-    SET_FEATURE = 6
-    SET_OPTION = 7
-    SET_OPTIONS = 8
-    SET_LOGIC = 9
-    SYNTH_FUN = 10
-    SYNTH_INV = 11
-    DECLARE_SORT = 12
-    DEFINE_FUN = 13
-    DECLARE_FUN = 14
-    DEFINE_SORT = 15
-    DECLARE_DATATYPES = 16
-    DECLARE_DATATYPE = 17
+    CHECK_SYNTH = auto()
+    CONSTRAINT = auto()
+    DECLARE_DATATYPE = auto()
+    DECLARE_DATATYPES = auto()
+    DECLARE_PRIMED_VAR = auto()
+    DECLARE_FUN = auto()
+    DECLARE_SORT = auto()
+    DECLARE_VAR = auto()
+    DEFINE_FUN = auto()
+    DEFINE_SORT = auto()
+    INV_CONSTRAINT = auto()
+    SET_FEATURE = auto()
+    SET_LOGIC = auto()
+    SET_OPTION = auto()
+    SET_OPTIONS = auto()
+    SYNTH_FUN = auto()
+    SYNTH_INV = auto()
 
 
 class Command(AST, ABC):
@@ -427,10 +428,11 @@ class SetLogicCommand(Command):
         return visitor.visit_set_logic_command(self)
 
 
+@unique
 class GrammarTermKind(Enum):
-    CONSTANT = 1
-    VARIABLE = 2
-    BINDER_FREE = 3
+    CONSTANT = auto()
+    BINDER_FREE = auto()
+    VARIABLE = auto()
 
 
 class GrammarTerm(Term):
