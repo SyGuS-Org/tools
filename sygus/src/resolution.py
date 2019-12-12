@@ -288,7 +288,7 @@ class FunctionDescriptor(SymbolTableEntry):
                 return None
 
         # this function is chainable
-        if len(arg_sorts) >= 2 and utilities.are_all_elements_equal(arg_sorts, self.argument_sorts[0]):
+        if len(arg_sorts) >= 1 and utilities.are_all_elements_equal(arg_sorts, self.argument_sorts[0]):
             return self.range_sort
         return None
 
@@ -704,14 +704,14 @@ class StringResolver(CachedResolver):
         self._add_function(FunctionDescriptor.create_theory_function('str.at', [string_sort, int_sort],
                                                                      string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.from-int', [int_sort], string_sort, False))
-        # audupa: alias for str.from-int: there's some confusion about which version is final,
+        # FIXME: alias for str.from-int: there's some confusion about which version is final,
         # until the confusion is resolved, we'll support both versions
         self._add_function(FunctionDescriptor.create_theory_function('int.to.str', [int_sort], string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.substr', [string_sort, int_sort, int_sort],
                                                                      string_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.len', [string_sort], int_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.to-int', [string_sort], int_sort, False))
-        # audupa: alias for str.to-int. Same confusion, so we support both until someone advises otherwise.
+        # FIXME: alias for str.to-int. Same confusion, so we support both until someone advises otherwise.
         self._add_function(FunctionDescriptor.create_theory_function('str.to.int', [string_sort], int_sort, False))
         self._add_function(FunctionDescriptor.create_theory_function('str.indexof',
                                                                      [string_sort, string_sort, int_sort],
