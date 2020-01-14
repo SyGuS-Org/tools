@@ -12,31 +12,6 @@ from .lexer import SygusV1Lexer
 class SygusV1Parser(SygusParserBase):
     tokens = SygusV1Lexer.tokens
 
-    def _get_position(self, line: int, pos: int) -> utilities.Location:
-        line_start = self.input_string.rfind('\n', 0, pos) + 1
-        end_col = (pos - line_start) + 1
-        return utilities.Location(line, end_col)
-
-    def p_program(self, p):
-        """program : set_logic_command command_plus
-                   | command_plus"""
-        if len(p) == 3:
-            p[0] = ast.Program([p[1]] + p[2])
-        elif len(p) == 2:
-            p[0] = ast.Program(p[1])
-        else:
-            raise NotImplementedError
-
-        self._ast_root = p[0]
-
-    def p_command_plus(self, p):
-        """command_plus : command_plus command
-                        | command"""
-        if len(p) == 2:
-            p[0] = [p[1]]
-        else:
-            p[0] = p[1] + [p[2]]
-
     def p_command(self, p):
         """command : fun_def_command
                    | fun_decl_command
@@ -170,37 +145,23 @@ class SygusV1Parser(SygusParserBase):
         p[0] = p[1]
 
     def p_enum_constructor_list(self, p):
-        """enum_constructor_list : TK_LPAREN symbol_plus_close_paren"""
+        """enum_constructor_list : TK_LPAREN symbol_plus TK_RPAREN"""
         p[0] = p[2]
 
     def p_symbol_plus_close_paren(self, p):
-        """symbol_plus_close_paren : symbol_plus_close_paren symbol TK_RPAREN
-                                   | symbol TK_RPAREN"""
-        if len(p) == 3:
+        """symbol_plus : symbol_plus symbol
+                       | symbol"""
+        if len(p) == 2:
             p[0] = [p[1]]
         else:
             p[0] = p[1] + [p[2]]
 
-    def p_arg_list(self, p):
-        """arg_list : TK_LPAREN symbol_sort_pair_star TK_RPAREN"""
-        p[0] = p[2]
-
-    def p_symbol_sort_pair_star(self, p):
-        """symbol_sort_pair_star : symbol_sort_pair_star symbol_sort_pair
-                                 | """
-        if len(p) == 1:
-            p[0] = []
-        else:
-            p[0] = p[1] + [p[2]]
-
-    def p_symbol_sort_pair(self, p):
-        """symbol_sort_pair : TK_LPAREN symbol sort_expr TK_RPAREN"""
-        p[0] = (p[2], p[3])
-
     def p_term(self, p):
-        """term : TK_LPAREN symbol term_star TK_RPAREN
-                | literal
+        """term : literal
                 | TK_SYMBOL
+                | TK_LPAREN symbol term_star TK_RPAREN
+                | TK_LPAREN TK_EXISTS nonempty_arg_list term TK_RPAREN
+                | TK_LPAREN TK_FORALL nonempty_arg_list term TK_RPAREN
                 | let_term"""
         if len(p) == 2 and isinstance(p[1], ast.Literal):
             p[0] = ast.LiteralTerm(p[1], p[1].start_location, p[1].end_location)
@@ -210,6 +171,11 @@ class SygusV1Parser(SygusParserBase):
             p[0] = ast.IdentifierTerm(p[1], start_location, end_location)
         elif len(p) == 2:
             p[0] = p[1]
+        elif len(p) == 6 and (p[2] == 'forall' or p[2] == 'exists'):
+            start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+            end_position = self._get_position(p.lineno(5), p.lexpos(5))
+            quantifier_kind = ast.QuantifierKind.FORALL if p[2] == 'forall' else ast.QuantifierKind.EXISTS
+            p[0] = ast.QuantifiedTerm(quantifier_kind, p[3], p[4], start_position, end_position)
         else:
             start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
             end_position = self._get_position(p.lineno(4), p.lexpos(4))

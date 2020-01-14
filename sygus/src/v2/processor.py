@@ -6,9 +6,19 @@ class SygusV2Processor(SygusProcessorBase):
     __slots__ = ['symbol_table']
 
     def visit_program(self, program: ast.Program):
-        program.commands = [command for command in program.commands
-                                    if not isinstance(command, ast.DeclarePrimedVarCommand)
-                                    and not isinstance(command, ast.SetOptionsCommand)]
+        commands = []
+        for command in program.commands:
+            if isinstance(command, ast.DeclarePrimedVarCommand):
+                continue
+            elif isinstance(command, ast.SetOptionsCommand):
+                continue
+            elif isinstance(command, ast.DeclareFunCommand):
+                if len(command.parameter_sorts) > 0:
+                    raise NotImplementedError
+                command = ast.DeclareVarCommand(command.function_name, command.function_range_sort,
+                                                command.start_location, command.end_location)
+            commands.append(command)
+        program.commands = commands
         SygusProcessorBase.visit_program(self, program)
 
     def __init__(self, symbol_table: SymbolTable):

@@ -11,8 +11,6 @@ class SygusV2Lexer(SygusLexerBase):
     reserved['declare-datatype'] = 'TK_DECLARE_DATATYPE'
     reserved['declare-datatypes'] = 'TK_DECLARE_DATATYPES'
     reserved['declare-sort'] = 'TK_DECLARE_SORT'
-    reserved['exists'] = 'TK_EXISTS'
-    reserved['forall'] = 'TK_FORALL'
     reserved['par'] = 'TK_PAR'
     reserved['set-feature'] = 'TK_SET_FEATURE'
     reserved['set-option'] = 'TK_SET_OPTION'

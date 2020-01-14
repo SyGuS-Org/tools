@@ -20,6 +20,8 @@ class SygusLexerBase(object):
         'let': 'TK_LET',
         'true': 'TK_BOOL_CONST',
         'false': 'TK_BOOL_CONST',
+        'exists': 'TK_EXISTS',
+        'forall': 'TK_FORALL',
     }
 
     tokens = [

@@ -31,9 +31,10 @@ class SymbolTableBuilder(ast.ASTVisitor):
     # V1 only!
     def visit_declare_fun_command(self, declare_fun_command: ast.DeclareFunCommand):
         func_descriptor = \
-            resolution.FunctionDescriptor.create_uninterpreted_function(declare_fun_command.function_name,
-                                                                        declare_fun_command.parameter_sorts,
-                                                                        declare_fun_command.function_range_sort)
+            resolution.FunctionDescriptor.create_uninterpreted_function(
+                declare_fun_command.function_name,
+                [param.accept(self) for param in declare_fun_command.parameter_sorts],
+                declare_fun_command.function_range_sort.accept(self))
         self.symbol_table.add_function(func_descriptor)
 
     def visit_sort_expression(self, sort_expression: ast.SortExpression) -> SortDescriptor:

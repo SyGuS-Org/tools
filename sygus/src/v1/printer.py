@@ -26,6 +26,19 @@ class SygusV1ASTPrinter(SygusASTPrinterBase):
         let_term.let_body.accept(self)
         self.stream.write(')')
 
+    def visit_declare_fun_command(self, declare_fun_command: ast.DeclareFunCommand):
+        self.stream.write('(declare-fun ')
+        self.stream.write(f'{declare_fun_command.function_name} (')
+        first = True
+        for param in declare_fun_command.parameter_sorts:
+            if not first:
+                self.stream.write(' ')
+            first = False
+            param.accept(self)
+        self.stream.write(') ')
+        declare_fun_command.function_range_sort.accept(self)
+        self.stream.write(')')
+
     def visit_declare_primed_var_command(self, declare_primed_var_command: ast.DeclarePrimedVarCommand):
         self.stream.write('(declare-primed-var ')
         self.stream.write(f'{declare_primed_var_command.symbol} ')

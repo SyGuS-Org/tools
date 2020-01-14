@@ -18,6 +18,26 @@ class SygusParserBase(object):
         end_col = (pos - line_start) + 1
         return utilities.Location(line, end_col)
 
+    def p_program(self, p):
+        """program : set_logic_command command_plus
+                   | command_plus"""
+        if len(p) == 3:
+            p[0] = ast.Program([p[1]] + p[2])
+        elif len(p) == 2:
+            p[0] = ast.Program(p[1])
+        else:
+            raise NotImplementedError
+
+        self._ast_root = p[0]
+
+    def p_command_plus(self, p):
+        """command_plus : command_plus command
+                        | command"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
     def p_check_synth_command(self, p):
         """check_synth_command : TK_LPAREN TK_CHECK_SYNTH TK_RPAREN"""
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
@@ -76,6 +96,34 @@ class SygusParserBase(object):
     def p_literal_string(self, p):
         """literal : TK_STRING_LITERAL"""
         self._p_literal_common(p, ast.LiteralKind.STRING)
+
+    def p_arg_list(self, p):
+        """arg_list : TK_LPAREN sorted_symbol_star TK_RPAREN"""
+        p[0] = p[2]
+
+    def p_sorted_symbol_star(self, p):
+        """sorted_symbol_star : sorted_symbol_star sorted_symbol
+                              | """
+        if len(p) == 1:
+            p[0] = []
+        else:
+            p[0] = p[1] + [p[2]]
+
+    def p_nonempty_arg_list(self, p):
+        """nonempty_arg_list : TK_LPAREN sorted_symbol_plus TK_RPAREN"""
+        p[0] = p[2]
+
+    def p_sorted_symbol_plus(self, p):
+        """sorted_symbol_plus : sorted_symbol_plus sorted_symbol
+                              | sorted_symbol"""
+        if len(p) == 2:
+            p[0] = [p[1]]
+        else:
+            p[0] = p[1] + [p[2]]
+
+    def p_sorted_symbol(self, p):
+        """sorted_symbol : TK_LPAREN TK_SYMBOL sort_expr TK_RPAREN"""
+        p[0] = (p[2], p[3])
 
     def p_error(self, p):
         if p:
