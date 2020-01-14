@@ -44,14 +44,14 @@ class SymbolTableBuilder(ast.ASTVisitor):
                                       sort_expression.identifier.start_location,
                                       sort_expression.identifier.end_location)
 
-        if len(sort_descriptor.sort_arguments) != len(sort_expression.sort_arguments):
+        if len(sort_expression.sort_arguments) != sort_descriptor.num_parameters:
             raise ResolutionException(f'Sort "{sort_descriptor.identifier}" requires ' +
-                                      f'{len(sort_descriptor.sort_arguments)} arguments, but was instantiated ' +
+                                      f'{sort_descriptor.num_parameters} arguments, but was instantiated ' +
                                       f'with {len(sort_expression.sort_arguments)}.',
                                       sort_expression.identifier.start_location,
                                       sort_expression.identifier.end_location)
 
-        if len(sort_descriptor.sort_arguments) == 0:
+        if sort_descriptor.num_parameters == 0:
             return sort_descriptor
 
         sort_argument_descriptors = [x.accept(self) for x in sort_expression.sort_arguments]

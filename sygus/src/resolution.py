@@ -674,13 +674,17 @@ class ArrayResolver(CachedResolver):
 
     # noinspection PyMethodMayBeStatic,PyUnusedLocal
     def _resolve_function_impl_(self, identifier: Identifier, *arg_sorts: SortDescriptor):
-        if (str(identifier) == 'select' and len(arg_sorts) == 2 and str(arg_sorts[0].identifier) == 'Array' and
+        if (str(identifier) == 'select' and
+                len(arg_sorts) == 2 and
+                str(arg_sorts[0].identifier) == 'Array' and
                 arg_sorts[1] == arg_sorts[0].sort_arguments[0]):
             return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts),
                                                              arg_sorts[0].sort_arguments[1], False)
 
-        if (str(identifier) == 'store' and len(arg_sorts) == 3 and str(arg_sorts[0].identifier) == 'Array' and
-                arg_sorts[1] == arg_sorts[0].sort_arguments[1] and arg_sorts[2] == arg_sorts[0].sort_arguments[2]):
+        if (str(identifier) == 'store' and len(arg_sorts) == 3 and
+                str(arg_sorts[0].identifier) == 'Array' and
+                arg_sorts[1] == arg_sorts[0].sort_arguments[0] and
+                arg_sorts[2] == arg_sorts[0].sort_arguments[1]):
             return FunctionDescriptor.create_theory_function(identifier, list(arg_sorts), arg_sorts[0], False)
 
         return None
