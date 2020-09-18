@@ -65,6 +65,10 @@ class ASTVisitor(object):
         raise NotImplementedError
 
     @abstractmethod
+    def visit_set_info_command(self, set_info_command: 'SetInfoCommand'):
+        raise NotImplementedError
+
+    @abstractmethod
     def visit_set_option_command(self, set_option_command: 'SetOptionCommand'):
         raise NotImplementedError
 
@@ -305,6 +309,7 @@ class CommandKind(Enum):
     DEFINE_SORT = auto()
     INV_CONSTRAINT = auto()
     SET_FEATURE = auto()
+    SET_INFO = auto()
     SET_LOGIC = auto()
     SET_OPTION = auto()
     SET_OPTIONS = auto()
@@ -391,6 +396,18 @@ class SetFeatureCommand(Command):
 
     def accept(self, visitor: ASTVisitor):
         return visitor.visit_set_feature_command(self)
+
+
+class SetInfoCommand(Command):
+    __slots__ = ['info_name', 'info_value']
+
+    def __init__(self, info_name: str, info_value: Literal, start_location: Location, end_location: Location):
+        super().__init__(CommandKind.SET_INFO, start_location, end_location)
+        self.info_name: str = info_name
+        self.info_value: Literal = info_value
+
+    def accept(self, visitor: ASTVisitor):
+        return visitor.visit_set_info_command(self)
 
 
 class SetOptionCommand(Command):

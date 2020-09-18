@@ -48,6 +48,9 @@ class SygusProcessorBase(ast.ASTVisitor):
     def visit_set_feature_command(self, set_feature_command: ast.SetFeatureCommand):
         pass
 
+    def visit_set_info_command(self, set_info_command: ast.SetInfoCommand):
+        set_info_command.info_value.accept(self)
+
     def visit_set_option_command(self, set_option_command: ast.SetOptionCommand):
         set_option_command.option_value.accept(self)
 

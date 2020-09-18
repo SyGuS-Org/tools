@@ -31,6 +31,11 @@ class SygusV2ASTPrinter(SygusASTPrinterBase):
         self.stream.write(set_feature_command.feature_name)
         self.stream.write(f' {str(set_feature_command.feature_value).lower()})')
 
+    def visit_set_info_command(self, set_info_command: ast.SetInfoCommand):
+        self.stream.write('(set-info :')
+        self.stream.write(set_info_command.info_name)
+        self.stream.write(f' {str(set_info_command.info_value.literal_value)})')
+
     def visit_set_option_command(self, set_option_command: ast.SetOptionCommand):
         self.stream.write('(set-option :')
         self.stream.write(set_option_command.option_name)

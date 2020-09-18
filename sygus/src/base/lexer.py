@@ -48,7 +48,7 @@ class SygusLexerBase(object):
     _decimal = f'{_numeral}\\.(?:{_digit})+'
     _hexconst = f'[#]x(?:{_hexdigit})+'
     _binconst = f'[#]b(?:{_bit})+'
-    _symbolcc = r'(?:[a-zA-Z_&!~<>=/%]|\+|-|\*|\||\?|\.|\$|\^)'
+    _symbolcc = r'(?:[a-zA-Z_&!~<>=/%]|@|\+|-|\*|\||\?|\.|\$|\^)'
     _symbol = f'{_symbolcc}(?:(?:{_symbolcc})|(?:{_digit}))*'
     _stringconst = r'\"(?:[^\"]*(?:\"\")?)*\"'
 

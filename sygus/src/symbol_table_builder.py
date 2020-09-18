@@ -238,6 +238,10 @@ class SymbolTableBuilder(ast.ASTVisitor):
         else:
             self.symbol_table.disable_feature(set_feature_command.feature_name)
 
+    def visit_set_info_command(self, set_info_command: ast.SetInfoCommand):
+        self.symbol_table.set_info(set_info_command.info_name,
+                                   set_info_command.info_value)
+
     def visit_set_option_command(self, set_option_command: ast.SetOptionCommand):
         self.symbol_table.set_option(set_option_command.option_name,
                                      set_option_command.option_value)

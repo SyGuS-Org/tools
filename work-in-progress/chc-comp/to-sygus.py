@@ -27,7 +27,7 @@ def main(args):
     s_expr = pp.nestedExpr(opener='(', closer=')', ignoreExpr=i_expr)
     s_expr.ignore(';' + pp.restOfLine)
 
-    parser = pp.ZeroOrMore(s_expr)
+    parser = pp.ZeroOrMore(pp.Suppress('(exit)') | s_expr)
     ast = parser.parseFile(args.input_file, parseAll=True).asList()
     
     for statement in ast:

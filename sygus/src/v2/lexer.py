@@ -13,6 +13,7 @@ class SygusV2Lexer(SygusLexerBase):
     reserved['declare-sort'] = 'TK_DECLARE_SORT'
     reserved['par'] = 'TK_PAR'
     reserved['set-feature'] = 'TK_SET_FEATURE'
+    reserved['set-info'] = 'TK_SET_INFO'
     reserved['set-option'] = 'TK_SET_OPTION'
 
     tokens += list(set(reserved.values()))

@@ -23,6 +23,7 @@ class SygusV2Parser(SygusParserBase):
                    | sort_decl_command
                    | fun_def_command
                    | sort_def_command
+                   | set_info_command
                    | set_option_command
                    | declare_datatype_command
                    | declare_datatypes_command"""
@@ -63,6 +64,12 @@ class SygusV2Parser(SygusParserBase):
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
         end_position = self._get_position(p.lineno(6), p.lexpos(6))
         p[0] = ast.DefineSortCommand(p[3], p[4], p[5], start_position, end_position)
+
+    def p_set_info_command(self, p):
+        """set_info_command : TK_LPAREN TK_SET_INFO TK_COLON TK_SYMBOL literal TK_RPAREN"""
+        start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
+        end_position = self._get_position(p.lineno(6), p.lexpos(6))
+        p[0] = ast.SetInfoCommand(p[4], p[5], start_position, end_position)
 
     def p_set_option_command(self, p):
         """set_option_command : TK_LPAREN TK_SET_OPTION TK_COLON TK_SYMBOL literal TK_RPAREN"""

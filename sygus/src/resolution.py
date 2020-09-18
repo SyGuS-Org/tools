@@ -312,13 +312,14 @@ class SymbolDescriptor(SymbolTableEntry):
 
 
 class SymbolTable(object):
-    __slots__ = ['scope_stack', 'logic_name', 'enabled_features', 'options',
+    __slots__ = ['scope_stack', 'logic_name', 'enabled_features', 'options', 'info',
                  'inv_functions', 'synth_functions', 'user_defined_functions']
 
     def __init__(self):
         self.scope_stack = [{}]
         self.logic_name: str = ''
         self.enabled_features: Set[str] = {'grammars'}
+        self.info: Dict[str, ast.Literal] = {}
         self.options: Dict[str, ast.Literal] = {}
         self.inv_functions: Dict[utilities.Identifier, FunctionDescriptor] = {}
         self.synth_functions: Dict[utilities.Identifier, FunctionDescriptor] = {}
@@ -332,6 +333,9 @@ class SymbolTable(object):
 
     def set_logic(self, logic_name: str):
         self.logic_name = logic_name
+
+    def set_info(self, info_name: str, info_value: ast.Literal):
+        self.info[info_name] = info_value
 
     def set_option(self, option_name: str, option_value: ast.Literal):
         self.options[option_name] = option_value
