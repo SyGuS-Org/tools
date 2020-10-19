@@ -1,21 +1,23 @@
 #!/usr/bin/env python3
 
 import pyparsing as pp
+import re
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 from os import linesep
 
 
 sane_idx, sane_table = 0, dict()
+sane_pattern = re.compile(r'__symbol[0-9]+')
 
 def sanitize_and_serialize(node):
     global sane_idx
     if type(node) is not list:
         if type(node) is not str:
             return node
-        if node.startswith('|') and node.endswith('|'):
+        if (node.startswith('|') and node.endswith('|')) or sane_pattern.match(node):
             if node not in sane_table:
-                sane_table[node] = f'cleaned_symbol_{sane_idx}'
+                sane_table[node] = f'__symbol{sane_idx}'
                 sane_idx += 1
             return sane_table[node]
         return node
