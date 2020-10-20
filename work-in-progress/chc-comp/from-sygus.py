@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 
 import pyparsing as pp
+import sys
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
-from os import linesep
 
 
 def serialize(statement):
@@ -24,16 +24,14 @@ def main(args):
             assert(statement[1].startswith('CHC_'))
             statement[1] = 'HORN'
         elif statement[0] == 'constraint':
-            statement[0] == 'assert'
+            statement[0] = 'assert'
         elif statement[0] == 'check-synth':
-            statement[0] == 'check-sat'
+            statement[0] = 'check-sat'
         elif statement[0] == 'synth-fun':
-            statement[0] == 'declare-fun'
+            statement[0] = 'declare-fun'
             statement[2] = [var_decl[1] for var_decl in statement[2]]
 
-
-    serialized_ast = (serialize(statement) for statement in ast)
-    print(f'{linesep}{linesep}'.join(serialized_ast))
+    sys.stdout.writelines(serialize(statement) + '\n' for statement in ast)
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)

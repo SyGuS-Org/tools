@@ -2,9 +2,9 @@
 
 import pyparsing as pp
 import re
+import sys
 
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
-from os import linesep
 
 
 sane_idx, sane_table = 0, dict()
@@ -45,8 +45,7 @@ def main(args):
             statement[2] = [[f'x_{i}', t]
                             for i,t in enumerate(statement[2])]
 
-    serialized_ast = (sanitize_and_serialize(statement) for statement in ast)
-    print(f'{linesep}{linesep}'.join(serialized_ast))
+    sys.stdout.writelines(sanitize_and_serialize(statement) + '\n' for statement in ast)
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
