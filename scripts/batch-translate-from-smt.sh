@@ -9,8 +9,6 @@ ROOT_DIR="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd -P)/.."
 
 SYGUS_EXTENSION="sl"
 SMT_EXTENSION="smt2"
-SOURCE_SYGUS_STANDARD="1"
-TARGET_SYGUS_STANDARD="2"
 
 IS_VERBOSE=""
 DO_COLLECT_ERRORS=""
@@ -35,9 +33,10 @@ for opt in "$@"; do
   case "$opt" in
     "--output-dir")         set -- "$@" "-o" ;;
     "--verbose")            set -- "$@" "-v" ;;
-    "--")             set -- "$@" "--" ;;
-    "--"*)            usage "Unrecognized option: $opt." ;;
-    *)                set -- "$@" "$opt"
+
+    "--")                   set -- "$@" "--" ;;
+    "--"*)                  usage "Unrecognized option: $opt." ;;
+    *)                      set -- "$@" "$opt"
   esac
 done
 
@@ -65,10 +64,9 @@ cd "$ROOT_DIR"
 for FILE in $(find "$SRC_DIR" -name *".$SMT_EXTENSION" | sort) ; do
     FILE_REL_PATH="${FILE#$SRC_DIR/}"
     OUTPUT_REL_PATH=${FILE_REL_PATH%.*}.$SYGUS_EXTENSION
-    echo $OUTPUT_REL_PATH
     mkdir -p "$OUTPUT_DIR/$(dirname $OUTPUT_REL_PATH$)"
 
-    python3 -m chc-comp.to-sygus  \
+    python3 -m work-in-progress.chc-comp.to-sygus  \
             "$FILE"                                                     \
             2> "$OUTPUT_DIR/$OUTPUT_REL_PATH.err" > "$OUTPUT_DIR/$OUTPUT_REL_PATH"
 
