@@ -10,9 +10,12 @@ from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 sane_idx, sane_table = 0, dict()
 sane_pattern = re.compile(r'__symbol[0-9]+')
 
-def sanitize_and_serialize(node):
+def sanitize_and_serialize(args, node):
     global sane_idx
+
     if type(node) is not list:
+        if not args.sanitize_names:
+            return node
         if type(node) is not str:
             return node
         if (node.startswith('|') and node.endswith('|')) or sane_pattern.match(node):
@@ -22,7 +25,7 @@ def sanitize_and_serialize(node):
             return sane_table[node]
         return node
 
-    return f'({" ".join(sanitize_and_serialize(e) for e in node)})'
+    return f'({" ".join(sanitize_and_serialize(args, e) for e in node)})'
 
 def main(args):
     i_expr = pp.QuotedString(quoteChar='"') | pp.QuotedString(quoteChar='|', unquoteResults=False)
@@ -45,11 +48,15 @@ def main(args):
             statement[2] = [[f'x_{i}', t]
                             for i,t in enumerate(statement[2])]
 
-    sys.stdout.writelines(sanitize_and_serialize(statement) + '\n' for statement in ast)
+    sys.stdout.writelines(sanitize_and_serialize(args, statement) + '\n'
+                          for statement in ast)
 
 if __name__ == '__main__':
     parser = ArgumentParser(formatter_class=ArgumentDefaultsHelpFormatter)
 
+    parser.add_argument(
+        '-s', '--sanitize-names', action='store_true',
+        help='Replace SMTLib quoted symbols with simple symbols')
     parser.add_argument(
         'input_file', type=FileType('r'),
         help='Path to an input file (or stdin if "-")')
