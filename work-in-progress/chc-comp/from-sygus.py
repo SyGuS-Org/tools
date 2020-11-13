@@ -6,6 +6,9 @@ import sys
 from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 
+pp.ParserElement.enablePackrat()
+
+
 def serialize(statement):
     if type(statement) is not list:
         return statement
@@ -13,10 +16,11 @@ def serialize(statement):
     return f'({" ".join(serialize(e) for e in statement)})'
 
 def main(args):
-    sexp = pp.nestedExpr(opener='(', closer=')')
-    sexp.ignore(';' + pp.restOfLine)
+    i_expr = pp.QuotedString(quoteChar='"') | pp.QuotedString(quoteChar='|', unquoteResults=False)
+    s_expr = pp.nestedExpr(opener='(', closer=')', ignoreExpr=i_expr)
+    s_expr.ignore(';' + pp.restOfLine)
 
-    parser = pp.ZeroOrMore(sexp)
+    parser = pp.ZeroOrMore(s_expr)
     ast = parser.parseFile(args.input_file, parseAll=True).asList()
     
     for statement in ast:

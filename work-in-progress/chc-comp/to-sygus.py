@@ -9,6 +9,8 @@ from argparse import ArgumentDefaultsHelpFormatter, ArgumentParser, FileType
 
 sane_idx, sane_table = 0, dict()
 sane_pattern = re.compile(r'__symbol[0-9]+')
+pp.ParserElement.enablePackrat()
+
 
 def sanitize_and_serialize(args, node):
     global sane_idx
