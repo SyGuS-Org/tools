@@ -164,7 +164,6 @@ class SygusV2Parser(SygusParserBase):
 
     def p_grammar_def(self, p):
         """grammar_def : nonempty_arg_list TK_LPAREN grouped_rule_list_plus TK_RPAREN"""
-        print("Positions=", p.lexpos(0), p.lexpos(1), p.lexpos(2), "line=", p.lineno(0), p.lineno(1))
         start_position = self._get_position(p.lineno(1), p.lexpos(1) - 1)
         end_position = self._get_position(p.lineno(4), p.lexpos(4))
         p[0] = ast.Grammar(p[1], p[3], start_position, end_position)

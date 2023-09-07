@@ -14,8 +14,14 @@ class SygusParserBase(object):
     tokens = SygusLexerBase.tokens
 
     def _get_position(self, line: int, pos: int) -> utilities.Location:
-        line_start = self.input_string.rfind('\n', 0, pos) + 1
-        end_col = (pos - line_start) + 1
+        if pos < 0:
+            line_start = self.input_string.rfind('\n', 0) + 1
+
+            end_col = line_start + 1
+        else:
+            line_start = self.input_string.rfind('\n', 0, pos) + 1
+
+            end_col = (pos - line_start) + 1
         return utilities.Location(line, end_col)
 
     def p_program(self, p):
